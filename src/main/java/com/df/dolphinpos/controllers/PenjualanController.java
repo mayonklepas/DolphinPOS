@@ -68,9 +68,9 @@ public class PenjualanController {
         return penjualanmasterrepo.findByIdAndIdOutlet(idOutlet, id);
     }
 
-    @GetMapping("/getdatalist")
-    public List<PenjualanMasterEntity> getdatalist() {
-        return penjualanmasterrepo.findPenjualan();
+    @GetMapping("/getdatalist/{idOutlet}")
+    public List<PenjualanMasterEntity> getdatalist(@PathVariable UUID idOutlet) {
+        return penjualanmasterrepo.findPenjualan(idOutlet);
     }
 
     @Transactional
@@ -110,7 +110,7 @@ public class PenjualanController {
 
         res.setCode(0);
         res.setStatus("success");
-        res.setMessage(entityMaster.getId() + " berhasil ditambahkan");
+        res.setMessage("Transaksi berhasil ditambahkan");
         res.setContent(resraw);
 
         return res;
@@ -186,7 +186,7 @@ public class PenjualanController {
 
         res.setCode(0);
         res.setStatus("success");
-        res.setMessage(entityMaster.getId() + " updated");
+        res.setMessage("Transaksi berhasil diperbaharui");
         res.setContent(resraw);
         return res;
     }
@@ -220,7 +220,7 @@ public class PenjualanController {
             penjualanmasterrepo.delete(penjualanmasterentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(penjualanmasterentity.getId() + " deleted");
+            res.setMessage("Transaksi berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");
@@ -239,7 +239,7 @@ public class PenjualanController {
             PenjualanMasterEntity entity = penjualanmasterrepo.save(penjualanmasterentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage("Transaksi berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);

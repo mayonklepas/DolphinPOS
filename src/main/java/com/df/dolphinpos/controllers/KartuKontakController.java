@@ -56,7 +56,7 @@ public class KartuKontakController {
     @GetMapping("/getdatabytipe/{idOutlet}/{tipeKontak}")
     public Page<KartuKontakEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @PathVariable int tipeKontak) {
         Page<KartuKontakEntity> result = null;
-        result = kartukontakrepo.findByIdOutletAndTipeKontak(pg, idOutlet,tipeKontak);
+        result = kartukontakrepo.findByIdOutletAndTipeKontak(pg, idOutlet, tipeKontak);
 
         return result;
     }
@@ -69,7 +69,7 @@ public class KartuKontakController {
             KartuKontakEntity entity = kartukontakrepo.findById(data.getId()).orElseThrow(() -> new ResourceAccessException("Error"));
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getNamaKontak() + "berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -93,7 +93,7 @@ public class KartuKontakController {
             KartuKontakEntity entity = kartukontakrepo.save(kartukontakentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " updated");
+            res.setMessage(entity.getNamaKontak() + " berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -111,7 +111,7 @@ public class KartuKontakController {
             kartukontakrepo.delete(kartukontakentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(kartukontakentity.getNamaKontak() + " deleted");
+            res.setMessage(kartukontakentity.getNamaKontak() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

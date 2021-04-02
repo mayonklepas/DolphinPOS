@@ -110,7 +110,7 @@ public class PembelianController {
 
         res.setCode(0);
         res.setStatus("success");
-        res.setMessage(entityMaster.getId() + " berhasil ditambahkan");
+        res.setMessage(entityMaster.getKodePembelianMaster() + " berhasil ditambah");
         res.setContent(resraw);
 
         return res;
@@ -183,7 +183,7 @@ public class PembelianController {
 
         res.setCode(0);
         res.setStatus("success");
-        res.setMessage(entityMaster.getId() + " updated");
+        res.setMessage(entityMaster.getKodePembelianMaster() + " berhasil diperbaharui");
         res.setContent(resraw);
         return res;
     }
@@ -204,7 +204,7 @@ public class PembelianController {
             pembelianmasterrepo.delete(pembelianmasterentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(pembelianmasterentity.getId() + " deleted");
+            res.setMessage(pembelianmasterentity.getKodePembelianMaster() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");
@@ -231,7 +231,7 @@ public class PembelianController {
             PembelianMasterEntity entity = pembelianmasterrepo.save(pembelianmasterentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getKodePembelianMaster() + " berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);

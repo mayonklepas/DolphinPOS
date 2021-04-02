@@ -3,6 +3,8 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="tanggalDari" class="java.util.Date"/>
+	<parameter name="tanggalHingga" class="java.util.Date"/>
 	<field name="tanggalPembelian" class="java.util.Date"/>
 	<field name="deskripsi" class="java.lang.String"/>
 	<field name="kodePembelian" class="java.lang.String"/>
@@ -13,13 +15,13 @@
 	<field name="tax" class="java.lang.Double"/>
 	<field name="total" class="java.lang.Double"/>
 	<variable name="totalSum" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<variableExpression><![CDATA[($F{total}-$F{disc})+(($F{tax}/100)*($F{total}-$F{disc}))]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="50" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="30" uuid="694375b7-e325-4085-950a-d0e79e1f62e3"/>
 				<textElement>
@@ -34,6 +36,26 @@
 				</textElement>
 				<text><![CDATA[Laporan Pembelian]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="53" width="50" height="15" uuid="5da79847-805d-4b3a-ac64-d19e20874675"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Periode :]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="50" y="53" width="52" height="15" uuid="211661e4-89a4-4e25-bd02-a492c4c83381"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="102" y="53" width="16" height="15" uuid="185c4620-3ed7-4925-9eba-3af5dbfa4ae5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="118" y="53" width="53" height="15" uuid="977454d6-f9d2-49c3-8e88-35aea8705dfb"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>
@@ -180,7 +202,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namaPengguna}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="###0;-###0">
 				<reportElement x="397" y="0" width="42" height="15" uuid="40408d07-da86-4df0-932c-78022eeba8a5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
@@ -198,14 +220,14 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0;-#,##0">
 				<reportElement x="476" y="0" width="78" height="15" uuid="636107db-627e-458a-a827-4db53b5167a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{total}-$F{disc})+(($F{tax}/100)*($F{total}-$F{disc}))]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="15" width="555" height="1" uuid="c504027d-6078-472f-b3e4-233ba2267b03"/>
@@ -235,7 +257,7 @@
 	</pageFooter>
 	<summary>
 		<band height="21">
-			<textField pattern="#,##0.00;-#,##0.00">
+			<textField pattern="#,##0;-#,##0">
 				<reportElement x="454" y="3" width="100" height="15" uuid="052af9fb-6153-43c3-80bb-74686f750b96"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{totalSum}]]></textFieldExpression>

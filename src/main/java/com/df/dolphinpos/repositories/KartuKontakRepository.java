@@ -29,6 +29,6 @@ public interface KartuKontakRepository extends PagingAndSortingRepository<KartuK
     
     Page<KartuKontakEntity> findByIdOutletAndTipeKontak(Pageable page, UUID idOutlet,int tipe);
     
-    @Query("SELECT kk FROM KartuKontakEntity kk WHERE kk.tipeKontak=?1 ORDER BY kk.dateCreated DESC")
-    List<KartuKontakEntity> findKontak(int tipeKontak);
+    @Query("SELECT kk FROM KartuKontakEntity kk WHERE kk.idOutlet=?1 AND kk.tipeKontak=?2 ORDER BY kk.dateCreated DESC")
+    List<KartuKontakEntity> findKontak(UUID idOutlet,int tipeKontak);
 }

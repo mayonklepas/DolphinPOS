@@ -6,6 +6,7 @@
 package com.df.dolphinpos.entities;
 
 import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,7 +33,12 @@ public class DiskonEntity {
     private UUID id;
     private UUID idOutlet;
     private String namaDiskon;
-    private double nominalDiskon;
+    private double minimalPembelianSatu;
+    private double minimalPembelianDua;
+    private int tipeDiskon;
+    private Date tanggalBerlakuHingga;
+    private double nominalDiskonSatu;
+    private double nominalDiskonDua;
 
     @Column(nullable = true)
     private UUID idPengguna;
@@ -67,12 +73,52 @@ public class DiskonEntity {
         this.namaDiskon = namaDiskon;
     }
 
-    public double getNominalDiskon() {
-        return nominalDiskon;
+    public double getMinimalPembelianSatu() {
+        return minimalPembelianSatu;
     }
 
-    public void setNominalDiskon(double nominalDiskon) {
-        this.nominalDiskon = nominalDiskon;
+    public void setMinimalPembelianSatu(double minimalPembelianSatu) {
+        this.minimalPembelianSatu = minimalPembelianSatu;
+    }
+
+    public double getMinimalPembelianDua() {
+        return minimalPembelianDua;
+    }
+
+    public void setMinimalPembelianDua(double minimalPembelianDua) {
+        this.minimalPembelianDua = minimalPembelianDua;
+    }
+
+    public int getTipeDiskon() {
+        return tipeDiskon;
+    }
+
+    public void setTipeDiskon(int tipeDiskon) {
+        this.tipeDiskon = tipeDiskon;
+    }
+
+    public Date getTanggalBerlakuHingga() {
+        return tanggalBerlakuHingga;
+    }
+
+    public void setTanggalBerlakuHingga(Date tanggalBerlakuHingga) {
+        this.tanggalBerlakuHingga = tanggalBerlakuHingga;
+    }
+
+    public double getNominalDiskonSatu() {
+        return nominalDiskonSatu;
+    }
+
+    public void setNominalDiskonSatu(double nominalDiskonSatu) {
+        this.nominalDiskonSatu = nominalDiskonSatu;
+    }
+
+    public double getNominalDiskonDua() {
+        return nominalDiskonDua;
+    }
+
+    public void setNominalDiskonDua(double nominalDiskonDua) {
+        this.nominalDiskonDua = nominalDiskonDua;
     }
 
     public UUID getIdPengguna() {
@@ -94,8 +140,5 @@ public class DiskonEntity {
     public Timestamp getDateCreated() {
         return dateCreated;
     }
-
-
-   
 
 }

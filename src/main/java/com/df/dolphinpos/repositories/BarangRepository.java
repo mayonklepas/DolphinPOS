@@ -33,7 +33,7 @@ public interface BarangRepository extends PagingAndSortingRepository<BarangEntit
     @Query("SELECT be FROM BarangEntity be WHERE idOutlet=?1 AND lower(namaBarang) LIKE %?2% OR lower(kodeBarang) LIKE %?2%")
     Page<BarangEntity> findByKey(Pageable page,UUID idOutlet,String keyword);
   
-    @Query("SELECT be FROM BarangEntity be ORDER BY be.dateCreated DESC")
-    List<BarangEntity> findBarang();
+    @Query("SELECT be FROM BarangEntity be WHERE be.idOutlet=?1 ORDER BY be.dateCreated DESC")
+    List<BarangEntity> findBarang(UUID idOutlet);
     
 }

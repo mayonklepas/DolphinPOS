@@ -51,7 +51,7 @@ public class PenggunaController {
             PenggunaEntity entity = penggunarepo.save(data);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getNamaPengguna() + " berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -76,7 +76,7 @@ public class PenggunaController {
             PenggunaEntity entity = penggunarepo.save(penggunaentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " updated");
+            res.setMessage(entity.getNamaPengguna() + " berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -94,7 +94,7 @@ public class PenggunaController {
             penggunarepo.delete(penggunaentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(penggunaentity.getNamaPengguna() + " deleted");
+            res.setMessage(penggunaentity.getNamaPengguna() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

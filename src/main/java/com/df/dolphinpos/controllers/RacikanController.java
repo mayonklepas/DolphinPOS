@@ -67,7 +67,7 @@ public class RacikanController {
             Iterable<RacikanEntity> entity = racikanrepo.saveAll(data);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage("Update Status " + deletestatus + "with" + entity.iterator().next().getNamaResep() + " added");
+            res.setMessage("Resep " + entity.iterator().next().getNamaResep() + " berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class RacikanController {
             int deletestatus = racikanrepo.deleteBykodeResep(idOutlet, kodeResep);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage("Update status " + deletestatus + " with " + kodeResep + " deleted");
+            res.setMessage("Resep berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

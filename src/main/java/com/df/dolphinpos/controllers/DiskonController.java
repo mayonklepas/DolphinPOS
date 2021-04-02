@@ -36,12 +36,12 @@ public class DiskonController {
     DiskonRepository diskonrepo;
 
     @GetMapping("/getdata/{idOutlet}")
-    public Page<DiskonEntity> getdata(Pageable pg, @PathVariable UUID idOutlet,@RequestParam String keyword) {
+    public Page<DiskonEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
         Page<DiskonEntity> result = null;
         if (keyword.equals("")) {
             result = diskonrepo.findByIdOutlet(pg, idOutlet);
-        }else{
-            result = diskonrepo.findByIdOutletAndNamaDiskonContainingIgnoreCase(pg,idOutlet,keyword);
+        } else {
+            result = diskonrepo.findByIdOutletAndNamaDiskonContainingIgnoreCase(pg, idOutlet, keyword);
         }
 
         return result;
@@ -59,7 +59,7 @@ public class DiskonController {
             DiskonEntity entity = diskonrepo.save(data);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getNamaDiskon() + " berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -75,11 +75,16 @@ public class DiskonController {
         try {
             DiskonEntity diskonentity = diskonrepo.findById(id).orElseThrow(() -> new ResourceAccessException("Error"));
             diskonentity.setNamaDiskon(data.getNamaDiskon());
-            diskonentity.setNominalDiskon(data.getNominalDiskon());
+            diskonentity.setMinimalPembelianSatu(data.getMinimalPembelianSatu());
+            diskonentity.setMinimalPembelianDua(data.getMinimalPembelianDua());
+            diskonentity.setNominalDiskonSatu(data.getNominalDiskonSatu());
+            diskonentity.setNominalDiskonDua(data.getMinimalPembelianDua());
+            diskonentity.setTipeDiskon(data.getTipeDiskon());
+            diskonentity.setTanggalBerlakuHingga(data.getTanggalBerlakuHingga());
             DiskonEntity entity = diskonrepo.save(diskonentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " updated");
+            res.setMessage(entity.getNamaDiskon() + " berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -88,7 +93,6 @@ public class DiskonController {
         }
         return res;
     }
-    
 
     @DeleteMapping("/deletedata/{id}")
     public ResponseResult deletedata(@PathVariable UUID id) {
@@ -98,7 +102,7 @@ public class DiskonController {
             diskonrepo.delete(diskonentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(diskonentity.getNamaDiskon() + " deleted");
+            res.setMessage(diskonentity.getNamaDiskon() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

@@ -60,7 +60,7 @@ public class CatatanController {
             CatatanEntity entity = catatanrepo.save(data);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getDeskripsi() + " berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -83,7 +83,7 @@ public class CatatanController {
             CatatanEntity entity = catatanrepo.save(catatanentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " updated");
+            res.setMessage(entity.getDeskripsi() + " berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -101,7 +101,7 @@ public class CatatanController {
             catatanrepo.delete(catatanentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(catatanentity.getDeskripsi() + " deleted");
+            res.setMessage(catatanentity.getDeskripsi() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

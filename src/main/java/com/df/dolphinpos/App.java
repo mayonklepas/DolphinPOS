@@ -6,7 +6,9 @@
 package com.df.dolphinpos;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,11 +19,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Minami
  */
 @SpringBootApplication
-public class App {
+public class App{
 
     public static void main(String[] args) {
-        SpringApplication springapp = new SpringApplication(App.class);
-        springapp.run(args);
+       new SpringApplicationBuilder(App.class).web(WebApplicationType.SERVLET).run(args);
     }
 
     @Bean

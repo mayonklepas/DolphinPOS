@@ -55,7 +55,7 @@ public class OutletController {
             OutletEntity entity = outletrepo.save(data);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getNamaOutlet() + " berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -77,7 +77,7 @@ public class OutletController {
             OutletEntity entity = outletrepo.save(outletentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " updated");
+            res.setMessage(entity.getNamaOutlet() + " berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -95,7 +95,7 @@ public class OutletController {
             outletrepo.delete(outletentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(outletentity.getNamaOutlet() + " deleted");
+            res.setMessage(outletentity.getNamaOutlet() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

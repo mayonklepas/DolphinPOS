@@ -3,17 +3,22 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="tanggalPenjualan" class="java.util.Date"/>
-	<field name="kodePenjualanMaster" class="java.lang.String"/>
+	<parameter name="tanggalDari" class="java.util.Date"/>
+	<parameter name="tanggalHingga" class="java.util.Date"/>
+	<field name="tanggalCatatan" class="java.util.Date"/>
+	<field name="tipeCatatan" class="java.lang.Integer"/>
 	<field name="deskripsi" class="java.lang.String"/>
-	<field name="namaCustomer" class="java.lang.String"/>
-	<field name="namaAkunHolder" class="java.lang.String"/>
-	<field name="namaPengguna" class="java.lang.String"/>
-	<field name="disc" class="java.lang.Double"/>
-	<field name="tax" class="java.lang.Double"/>
-	<field name="total" class="java.lang.Double"/>
-	<variable name="totalSum" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	<field name="akunHolder.namaAkunHolder" class="java.lang.String"/>
+	<field name="pengguna.namaPengguna" class="java.lang.String"/>
+	<field name="jumlah" class="java.lang.Double"/>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{jumlah}]]></variableExpression>
+	</variable>
+	<variable name="totalPengeluaran" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[($F{tipeCatatan}==0)?$F{jumlah}:0]]></variableExpression>
+	</variable>
+	<variable name="totalPendapatan" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[($F{tipeCatatan}==1)?$F{jumlah}:0]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -32,7 +37,27 @@
 				<textElement textAlignment="Right" markup="none">
 					<font size="15"/>
 				</textElement>
-				<text><![CDATA[Laporan Penjualan]]></text>
+				<text><![CDATA[Laporan Catatan]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="50" y="53" width="52" height="15" uuid="b9e68acd-9301-4ccd-9829-babee1aa5f28"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="118" y="53" width="53" height="15" uuid="dba14ba9-e9d4-4226-af90-82aa2f262695"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="102" y="53" width="16" height="15" uuid="715938a6-5bed-48d8-be25-3aba233137f3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="53" width="50" height="15" uuid="1291f06a-4e57-4f95-80d5-fd332302ad9c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Periode :]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -48,7 +73,7 @@
 				<text><![CDATA[Tanggal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="115" y="1" width="96" height="20" uuid="5d2426dc-b629-4895-8be8-f7d8a97f842d">
+				<reportElement x="120" y="1" width="169" height="20" uuid="5d2426dc-b629-4895-8be8-f7d8a97f842d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -57,46 +82,19 @@
 				<text><![CDATA[Deskripsi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="407" y="1" width="42" height="20" uuid="b2fde70e-9e68-4f08-8703-b6d32232b659">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Disc]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="449" y="1" width="37" height="20" uuid="6b5e3780-af77-4365-92a1-1fc5ef89368a">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Tax]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="486" y="1" width="68" height="20" uuid="8ae00049-870e-490d-87c5-6e2d89e33abc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total]]></text>
+				<text><![CDATA[Jumlah]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="21" width="555" height="1" uuid="fb0314b1-9fd9-466e-9a67-1abe1f1e796b"/>
 			</line>
 			<staticText>
-				<reportElement x="211" y="1" width="78" height="20" uuid="e599bf03-affc-4cb0-adc1-c3ea287025e4">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Customer]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="289" y="1" width="63" height="20" uuid="7f71ebce-215c-4736-9d9f-249f0a3b61d9">
+				<reportElement x="289" y="1" width="109" height="20" uuid="7f71ebce-215c-4736-9d9f-249f0a3b61d9">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -105,7 +103,7 @@
 				<text><![CDATA[Akun]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="352" y="0" width="55" height="20" uuid="f1262246-1040-4bca-ac47-bc672db7a455">
+				<reportElement x="398" y="0" width="88" height="20" uuid="f1262246-1040-4bca-ac47-bc672db7a455">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -114,13 +112,13 @@
 				<text><![CDATA[User]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="51" y="1" width="64" height="20" uuid="7375d760-31b4-4f19-a420-515874b27db4">
+				<reportElement x="51" y="1" width="69" height="20" uuid="7375d760-31b4-4f19-a420-515874b27db4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[No Inv]]></text>
+				<text><![CDATA[Tipe]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -133,10 +131,10 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tanggalPenjualan}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tanggalCatatan}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="115" y="0" width="96" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
+				<reportElement x="120" y="0" width="169" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -145,75 +143,48 @@
 				<textFieldExpression><![CDATA[$F{deskripsi}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="290" y="0" width="62" height="15" uuid="d28cf9d9-7123-4455-b967-fbf184c72211">
+				<reportElement x="290" y="0" width="108" height="15" uuid="d28cf9d9-7123-4455-b967-fbf184c72211">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{namaAkunHolder}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="211" y="0" width="79" height="15" uuid="f4482438-b336-4769-bbf8-30e6c184922f">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{namaCustomer}]]></textFieldExpression>
-			</textField>
-			<textField pattern="###0.00;-###0.00">
-				<reportElement x="407" y="0" width="42" height="15" uuid="40408d07-da86-4df0-932c-78022eeba8a5">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{disc}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{akunHolder.namaAkunHolder}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;-#,##0">
-				<reportElement x="449" y="0" width="37" height="15" uuid="df930a95-9c87-41a7-89c0-3490ec0f519b">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00;-#,##0.00">
 				<reportElement x="486" y="0" width="68" height="15" uuid="636107db-627e-458a-a827-4db53b5167a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{jumlah}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="15" width="555" height="1" uuid="c504027d-6078-472f-b3e4-233ba2267b03"/>
 			</line>
 			<textField>
-				<reportElement x="353" y="0" width="54" height="15" uuid="76da9a3a-a001-4d5c-8c2e-e64fc0837506">
+				<reportElement x="399" y="0" width="87" height="15" uuid="76da9a3a-a001-4d5c-8c2e-e64fc0837506">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{namaPengguna}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{pengguna.namaPengguna}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="51" y="0" width="64" height="15" uuid="82328d91-29f2-43b7-8c74-943d3964f5c2">
+			<textField pattern="#,###.###">
+				<reportElement x="51" y="0" width="69" height="15" uuid="82328d91-29f2-43b7-8c74-943d3964f5c2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{kodePenjualanMaster}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{tipeCatatan}==0)? "Pengeluaran":"Pendapatan"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="64" splitType="Stretch">
+		<band height="63" splitType="Stretch">
 			<textField>
 				<reportElement x="180" y="40" width="100" height="21" uuid="77d9a35b-9eca-4057-a3a3-3f0730550bf4"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -234,17 +205,27 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="21">
-			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="454" y="3" width="100" height="15" uuid="052af9fb-6153-43c3-80bb-74686f750b96"/>
+		<band height="45">
+			<staticText>
+				<reportElement x="371" y="11" width="93" height="15" uuid="7b20f475-b2ea-4c1f-9873-ba6f5b3330ed"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Total Pengeluaran : ]]></text>
+			</staticText>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="464" y="11" width="90" height="15" uuid="e4af8bc4-4a41-464e-a53e-88934e781f9d"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{totalSum}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{totalPengeluaran}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="354" y="3" width="100" height="15" uuid="7b20f475-b2ea-4c1f-9873-ba6f5b3330ed"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Total Penjualan : ]]></text>
+				<reportElement x="371" y="27" width="93" height="15" uuid="4d3c4d30-6c9b-4703-9ee0-e191cf42ca0e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Total Pendapatan  : ]]></text>
 			</staticText>
+			<textField pattern="#,##0;-#,##0">
+				<reportElement x="464" y="27" width="90" height="15" uuid="b2406c2a-07e0-46be-902b-161788bf2fe6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalPendapatan}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

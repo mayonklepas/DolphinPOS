@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PembelianDetail" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="72"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -34,9 +34,11 @@
 		<field name="barang.satuanBarang" class="java.lang.String"/>
 		<field name="barang.hargaJual" class="java.lang.Double"/>
 		<variable name="totalpembelian" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[((($F{hargaBeliBeli}*$F{jumlahBeli})-$F{disc})-$P{gdisc})+($P{gtax}/100)*((($F{hargaBeliBeli}*$F{jumlahBeli})-$F{disc})-$P{gdisc})]]></variableExpression>
+			<variableExpression><![CDATA[($F{hargaBeliBeli}*$F{jumlahBeli})-($F{disc}*$F{jumlahBeli})]]></variableExpression>
 		</variable>
 	</subDataset>
+	<parameter name="tanggalDari" class="java.util.Date"/>
+	<parameter name="tanggalHingga" class="java.util.Date"/>
 	<field name="tanggalPembelian" class="java.util.Date"/>
 	<field name="kodePembelianMaster" class="java.lang.String"/>
 	<field name="deskripsi" class="java.lang.String"/>
@@ -50,7 +52,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="66" splitType="Stretch">
+		<band height="68" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="30" uuid="694375b7-e325-4085-950a-d0e79e1f62e3"/>
 				<textElement>
@@ -65,6 +67,26 @@
 				</textElement>
 				<text><![CDATA[Laporan Pembelian Detail]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="52" width="50" height="15" uuid="f8b9bfbc-eb17-4eda-9805-09d7f4f2db73"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Periode :]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="50" y="52" width="52" height="15" uuid="447627fa-b659-4769-9d29-4e59d1ced106"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="102" y="52" width="16" height="15" uuid="f385aa91-a699-4cd1-a8d7-68345ad01ed5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="118" y="52" width="53" height="15" uuid="f6e0d2a0-febf-4c8d-bfca-77b2d6e3be68"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -105,7 +127,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kartuKontak.namaKontak}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="#,##0;-#,##0">
 				<reportElement x="475" y="24" width="42" height="15" uuid="40408d07-da86-4df0-932c-78022eeba8a5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
@@ -145,6 +167,7 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{pembelianDetail})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="100" uuid="5a254d0e-fc89-4403-8e18-957f81ef6d26">
+						<jr:tableFooter height="20" rowSpan="1"/>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="100" height="20" uuid="086028ad-3197-4134-831f-b48104d14b15"/>
@@ -152,6 +175,7 @@
 								<text><![CDATA[Kode]]></text>
 							</staticText>
 						</jr:columnHeader>
+						<jr:columnFooter height="20" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="100" height="20" uuid="ccb86a3c-e03e-4ba6-adfc-82cd6532f5e6"/>
@@ -161,6 +185,15 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="139" uuid="720377c7-c401-43e8-b15d-62cfd8774878">
+						<jr:tableFooter height="20" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="139" height="20" uuid="2c4d9c0f-ca1b-427e-a8df-b266e93400a4"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total + Disc + Tax]]></text>
+							</staticText>
+						</jr:tableFooter>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="137" height="20" uuid="40512306-bf21-40f8-a56d-bbd9e948a436"/>
@@ -186,6 +219,7 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="42" uuid="553a2416-4690-4529-84e6-0fb23bf58d90">
+						<jr:tableFooter height="20" rowSpan="1"/>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="41" height="20" uuid="3b22123e-a6e5-4862-83e7-b852bbfb5e45"/>
@@ -193,6 +227,7 @@
 								<text><![CDATA[ Jumlah]]></text>
 							</staticText>
 						</jr:columnHeader>
+						<jr:columnFooter height="20" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
 							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="41" height="20" uuid="db3b88f5-aeaa-4109-9a3d-dd3fa32139b5"/>
@@ -202,6 +237,7 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="36" uuid="e4c6964f-b9a6-415b-bf6b-61327d0ca962">
+						<jr:tableFooter height="20" rowSpan="1"/>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="36" height="20" uuid="6cd754c2-08e2-4f45-b36c-9622f8f937d5"/>
@@ -209,8 +245,9 @@
 								<text><![CDATA[Disc]]></text>
 							</staticText>
 						</jr:columnHeader>
+						<jr:columnFooter height="20" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0.00;-#,##0.00">
+							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="36" height="20" uuid="0c3fa4f1-38ab-4f50-9f58-33c1497d95f2"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{disc}]]></textFieldExpression>
@@ -218,6 +255,7 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="72" uuid="8424b09f-0ecf-4519-ac86-f163ed94d9ae">
+						<jr:tableFooter height="20" rowSpan="1"/>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="72" height="20" uuid="96c18d37-ca68-404a-9f77-35daaa2f1acc"/>
@@ -225,8 +263,9 @@
 								<text><![CDATA[Harga Jual ]]></text>
 							</staticText>
 						</jr:columnHeader>
+						<jr:columnFooter height="20" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0.00;-#,##0.00">
+							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="68" height="20" uuid="0869f10c-54ff-4567-a26b-74b5637d8b74"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{hargaBeliBeli}]]></textFieldExpression>
@@ -234,6 +273,7 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="67" uuid="d76e607c-d014-47c4-9521-7eeba45b1d95">
+						<jr:tableFooter height="20" rowSpan="1"/>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="67" height="20" uuid="3438bc7a-1c1f-44f0-87c5-ce464bb49d3b"/>
@@ -241,8 +281,9 @@
 								<text><![CDATA[Harga Beli ]]></text>
 							</staticText>
 						</jr:columnHeader>
+						<jr:columnFooter height="20" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0.00;-#,##0.00">
+							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="64" height="20" uuid="3b0e9bd6-a3df-440b-b175-61e0e75770db"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{hargaBeliBeli}]]></textFieldExpression>
@@ -250,6 +291,20 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="97" uuid="04ee6e65-b793-401c-ab38-c9ce2f6d14f6">
+						<jr:tableFooter height="20" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5"/>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+								<rightPen lineWidth="0.5"/>
+							</box>
+							<textField pattern="#,##0;-#,##0">
+								<reportElement x="0" y="0" width="95" height="20" uuid="b7363fc5-18b4-4213-bc65-3be3edbdc162"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[($V{totalpembelian} - $P{gdisc}) + (($P{gtax}/100)*($V{totalpembelian} - $P{gdisc}))]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
 						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="97" height="20" uuid="071b3cb2-853a-463d-8d50-b53b440a61ae"/>
@@ -258,17 +313,17 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table_TH" height="20" rowSpan="1">
-							<textField pattern="#,##0.00;-#,##0.00">
+							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="95" height="20" uuid="79dd4916-fc78-4679-beb5-6ed04bcc3854"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$V{totalpembelian}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0.00;-#,##0.00">
+							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="95" height="20" uuid="e472f16c-cdeb-4bb8-bd37-b81abd8a9aae"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[($F{hargaBeliBeli}*$F{jumlahBeli})-$F{disc}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[($F{hargaBeliBeli}*$F{jumlahBeli})-($F{disc}*$F{jumlahBeli})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

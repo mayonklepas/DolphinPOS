@@ -59,7 +59,7 @@ public class AkunHolderController {
             AkunHolderEntity entity = akunholderrepo.save(data);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " added");
+            res.setMessage(entity.getNamaAkunHolder()+" berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -79,7 +79,7 @@ public class AkunHolderController {
             AkunHolderEntity entity = akunholderrepo.save(akunholderentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getId() + " updated");
+            res.setMessage(entity.getNamaAkunHolder()+" berhasil diperbaharui");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);
@@ -97,7 +97,7 @@ public class AkunHolderController {
             akunholderrepo.delete(akunholderentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(akunholderentity.getNamaAkunHolder() + " deleted");
+            res.setMessage(akunholderentity.getNamaAkunHolder() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");

@@ -5,6 +5,8 @@
  */
 package com.df.dolphinpos.repositories;
 
+import com.df.dolphinpos.dto.ChartDto;
+import com.df.dolphinpos.dto.StrukDto;
 import com.df.dolphinpos.entities.PembelianDetailEntity;
 import com.df.dolphinpos.entities.PenjualanDetailEntity;
 import java.util.List;
@@ -30,4 +32,11 @@ public interface PenjualanDetailRepository extends JpaRepository<PenjualanDetail
     @Modifying()
     @Query("DELETE FROM PenjualanDetailEntity pde WHERE pde.idPenjualanMaster=?1")
     int deleteByIdPenjualanMaster(UUID idPenjualanMaster);
+
+    @Query("SELECT new com.df.dolphinpos.dto.ChartDto(be.namaBarang,SUM(pd.jumlahJual)) "
+            + "FROM PenjualanDetailEntity pd JOIN pd.barang be "
+            + "WHERE pd.idOutlet=?1 AND EXTRACT(MONTH FROM pd.dateCreated)= EXTRACT(MONTH FROM CURRENT_DATE) "
+            + "GROUP BY be.namaBarang")
+    List<ChartDto> getTopselling(UUID idOutlet);
+
 }
