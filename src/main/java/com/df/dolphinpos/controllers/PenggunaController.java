@@ -5,6 +5,7 @@
  */
 package com.df.dolphinpos.controllers;
 
+import com.df.dolphinpos.dto.LoginFormDto;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.PenggunaEntity;
 import com.df.dolphinpos.repositories.PenggunaRepository;
@@ -102,4 +103,28 @@ public class PenggunaController {
         }
         return res;
     }
+
+    @PostMapping("/login")
+    public ResponseResult login(@RequestBody LoginFormDto data) {
+        ResponseResult res = new ResponseResult();
+        try {
+            PenggunaEntity entity = penggunarepo.findLogin(data.getKodeOutlet(), data.getUsername(), data.getPassword());
+            if (entity != null) {
+                res.setCode(0);
+                res.setStatus("success");
+                res.setMessage("berhasil login");
+                res.setContent(entity);
+            } else {
+                res.setCode(1);
+                res.setStatus("failed");
+                res.setMessage("gagal login");
+            }
+        } catch (Exception e) {
+            res.setCode(1);
+            res.setStatus("failed");
+            res.setMessage(e.getMessage());
+        }
+        return res;
+    }
+
 }

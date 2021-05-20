@@ -39,8 +39,8 @@ public class DashboardController {
     @Autowired
     CatatanRepository catatanRepo;
     
-    @Autowired
-    DashboardService dashService;
+    //@Autowired
+    //DashboardService dashService;
     
     @Autowired
     PenjualanDetailRepository penjualanDetailRepo;

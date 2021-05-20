@@ -30,18 +30,21 @@ public class RacikanEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false)
     private UUID idOutlet;
+    @Column(nullable = false)
     private String kodeResep;
+    @Column(nullable = false)
     private String namaResep;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private UUID idBarang;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idBarang", nullable = false, updatable = false, insertable = false)
     private BarangEntity barang;
-
+    @Column(nullable = false)
     private double jumlahIsi;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private UUID idPengguna;
 
     @OneToOne(cascade = CascadeType.PERSIST)
@@ -126,7 +129,5 @@ public class RacikanEntity {
     public Timestamp getDateCreated() {
         return dateCreated;
     }
-
-    
 
 }

@@ -5,18 +5,25 @@
  */
 package com.df.dolphinpos.service;
 
+import com.df.dolphinpos.dto.BukuBesarDTO;
+import com.df.dolphinpos.dto.MarginPenjualanDTO;
 import com.df.dolphinpos.dto.PembelianReportDTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
 import com.df.dolphinpos.dto.StrukDto;
+import com.df.dolphinpos.entities.AkunKeuanganEntity;
 import com.df.dolphinpos.entities.BarangEntity;
 import com.df.dolphinpos.entities.CatatanEntity;
 import com.df.dolphinpos.entities.KartuKontakEntity;
+import com.df.dolphinpos.entities.OutletEntity;
 import com.df.dolphinpos.entities.PembelianMasterEntity;
 import com.df.dolphinpos.entities.PenjualanDetailEntity;
 import com.df.dolphinpos.entities.PenjualanMasterEntity;
+import com.df.dolphinpos.repositories.AkunKeuanganRepository;
 import com.df.dolphinpos.repositories.BarangRepository;
 import com.df.dolphinpos.repositories.CatatanRepository;
+import com.df.dolphinpos.repositories.JurnalUmumDetailRepository;
 import com.df.dolphinpos.repositories.KartuKontakRepository;
+import com.df.dolphinpos.repositories.OutletRepository;
 import com.df.dolphinpos.repositories.PembelianMasterRepository;
 import com.df.dolphinpos.repositories.PenjualanDetailRepository;
 import com.df.dolphinpos.repositories.PenjualanMasterRepository;
@@ -53,6 +60,9 @@ import org.springframework.util.ResourceUtils;
 public class ReportService {
 
     @Autowired
+    OutletRepository outletRepo;
+
+    @Autowired
     BarangRepository barangrepo;
 
     @Autowired
@@ -73,7 +83,23 @@ public class ReportService {
     @Autowired
     ResourceLoader resLoad;
 
+    @Autowired
+    AkunKeuanganRepository akunKeuanganRepo;
+
+    @Autowired
+    JurnalUmumDetailRepository jurnalDetailRepo;
+
+    public Map getOutlet(UUID idOutlet) {
+        OutletEntity outletEntity = outletRepo.findById(idOutlet).get();
+        Map map = new HashMap();
+        map.put("nama", outletEntity.getNamaOutlet());
+        map.put("alamat", outletEntity.getAlamatOutlet());
+        map.put("nohp", outletEntity.getNohpOutlet());
+        return map;
+    }
+
     public byte[] barangReport(UUID idOutlet) throws FileNotFoundException, JRException, IOException {
+
         List<BarangEntity> entity = barangrepo.findBarang(idOutlet);
         Resource fileRes = resLoad.getResource("classpath:report/barang.jrxml");
         InputStream inputStream = fileRes.getInputStream();
@@ -81,6 +107,9 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
         return JasperExportManager.exportReportToPdf(jp);
     }
@@ -93,6 +122,9 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         map.put("tanggalDari", tanggalDari);
         map.put("tanggalHingga", tanggalHingga);
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
@@ -107,6 +139,9 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         String tipeKontakLabel = "";
         if (tipe == 0) {
             tipeKontakLabel = "Data Suplier";
@@ -119,13 +154,16 @@ public class ReportService {
     }
 
     public byte[] penjualanReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga) throws FileNotFoundException, JRException, IOException {
-        List<PenjualanReportDTO> entity = penjualanrepo.findPenjualanReport(idOutlet, tanggalDari, tanggalHingga);
+        List<PenjualanReportDTO> entity = penjualanrepo.findPenjualanMasterReport(idOutlet, tanggalDari, tanggalHingga);
         Resource fileRes = resLoad.getResource("classpath:report/penjualan.jrxml");
         InputStream inputStream = fileRes.getInputStream();
         JasperReport jr = JasperCompileManager.compileReport(inputStream);
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         map.put("tanggalDari", tanggalDari);
         map.put("tanggalHingga", tanggalHingga);
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
@@ -140,6 +178,9 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         map.put("tanggalDari", tanggalDari);
         map.put("tanggalHingga", tanggalHingga);
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
@@ -154,6 +195,9 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         map.put("tanggalDari", tanggalDari);
         map.put("tanggalHingga", tanggalHingga);
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
@@ -168,6 +212,26 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
+
+    public byte[] penjualanMarginReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga) throws FileNotFoundException, JRException, IOException {
+        List<MarginPenjualanDTO> entity = penjualanDetailRepo.findMarginPenjualan(idOutlet, tanggalDari, tanggalHingga);
+        Resource fileRes = resLoad.getResource("classpath:report/penjualan-barang.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         map.put("tanggalDari", tanggalDari);
         map.put("tanggalHingga", tanggalHingga);
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
@@ -182,6 +246,9 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
         return JasperExportManager.exportReportToPdf(jp);
     }
@@ -194,6 +261,38 @@ public class ReportService {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
+
+    public byte[] bukuBesar(UUID idOutlet, Date tanggalDari, Date tanggalHingga) throws FileNotFoundException, JRException, IOException {
+        List<AkunKeuanganEntity> dataAkunKeuangan = akunKeuanganRepo.getDataAkunKeuangan(idOutlet);
+        List<BukuBesarDTO> lsbb = new ArrayList<>();
+        for (int i = 0; i < dataAkunKeuangan.size(); i++) {
+            BukuBesarDTO bb = new BukuBesarDTO();
+            bb.setKodeAkun(dataAkunKeuangan.get(i).getKodeAkunKeuangan());
+            bb.setNamaAkun(dataAkunKeuangan.get(i).getNamaAkunKeuangan());
+            bb.setOpeningBalance(dataAkunKeuangan.get(i).getOpeningBalance());
+            bb.setDetailJurnal(jurnalDetailRepo.getJurnalByAkunKeuangan(idOutlet, dataAkunKeuangan.get(i).getId(), tanggalDari, tanggalHingga));
+            lsbb.add(bb);
+        }
+
+        System.out.println(lsbb);
+
+        Resource fileRes = resLoad.getResource("classpath:report/bukubesar.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lsbb);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
         return JasperExportManager.exportReportToPdf(jp);
     }

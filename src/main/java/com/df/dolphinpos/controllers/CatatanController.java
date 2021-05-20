@@ -7,7 +7,6 @@ package com.df.dolphinpos.controllers;
 
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.CatatanEntity;
-import com.df.dolphinpos.repositories.AkunHolderRepository;
 import com.df.dolphinpos.repositories.CatatanRepository;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
+import com.df.dolphinpos.repositories.AkunKeuanganRepository;
 
 /**
  *
@@ -79,7 +79,7 @@ public class CatatanController {
             catatanentity.setTipeCatatan(data.getTipeCatatan());
             catatanentity.setDeskripsi(data.getDeskripsi());
             catatanentity.setJumlah(data.getJumlah());
-            catatanentity.setIdAkunHolder(data.getIdAkunHolder());
+            catatanentity.setIdAkunKeuangan(data.getIdAkunKeuangan());
             CatatanEntity entity = catatanrepo.save(catatanentity);
             res.setCode(0);
             res.setStatus("success");

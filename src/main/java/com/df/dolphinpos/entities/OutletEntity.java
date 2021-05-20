@@ -27,10 +27,19 @@ public class OutletEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false,unique = true)
+    private String kodeOutlet;
+    @Column(nullable = false)
     private String namaOutlet;
+    @Column(nullable = false)
     private String alamatOutlet;
+    @Column(nullable = false)
     private String nohpOutlet;
+    @Column(nullable = false)
     private double tax;
+    @Column(nullable = true,columnDefinition="TEXT")
+    private String settings;
+
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
 
@@ -40,6 +49,14 @@ public class OutletEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getKodeOutlet() {
+        return kodeOutlet;
+    }
+
+    public void setKodeOutlet(String kodeOutlet) {
+        this.kodeOutlet = kodeOutlet;
     }
 
     public String getNamaOutlet() {
@@ -74,6 +91,16 @@ public class OutletEntity {
         this.tax = tax;
     }
 
+    public String getSettings() {
+        return settings;
+    }
+
+    public void setSettings(String settings) {
+        this.settings = settings;
+    }
+    
+    
+
     public Timestamp getDateCreated() {
         return dateCreated;
     }
@@ -82,7 +109,4 @@ public class OutletEntity {
         this.dateCreated = dateCreated;
     }
 
-
-    
-  
 }

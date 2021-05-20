@@ -15,6 +15,7 @@ import com.df.dolphinpos.repositories.BarangRepository;
 import com.df.dolphinpos.repositories.PenjualanDetailRepository;
 import com.df.dolphinpos.repositories.PenjualanMasterRepository;
 import com.df.dolphinpos.repositories.RacikanRepository;
+import com.df.dolphinpos.service.UtilService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,6 +52,9 @@ public class PenjualanController {
 
     @Autowired
     RacikanRepository racikarepo;
+    
+    @Autowired
+    UtilService utilServ;
 
     @GetMapping("/getdata/{idOutlet}")
     public Page<PenjualanMasterEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
@@ -77,6 +81,7 @@ public class PenjualanController {
     @PostMapping("/adddata")
     public ResponseResult adddata(@RequestBody MasterDetailPenjualanDTO data) {
         ResponseResult res = new ResponseResult();
+        data.getMaster().setKodePenjualanMaster(utilServ.getNoInvoice(data.getMaster().getIdOutlet()));
         PenjualanMasterEntity entityMaster = penjualanmasterrepo.save(data.getMaster());
         for (int i = 0; i < data.getDetail().size(); i++) {
             data.getDetail().get(i).setIdPenjualanMaster(entityMaster.getId());
@@ -122,14 +127,16 @@ public class PenjualanController {
         ResponseResult res = new ResponseResult();
         PenjualanMasterEntity penjualanmasterentity = penjualanmasterrepo.findById(id).get();
         penjualanmasterentity.setTanggalPenjualan(data.getMaster().getTanggalPenjualan());
-        penjualanmasterentity.setKodePenjualanMaster(data.getMaster().getKodePenjualanMaster());
-        penjualanmasterentity.setIdAkunHolder(data.getMaster().getIdAkunHolder());
+        penjualanmasterentity.setIdAkunKeuangan(data.getMaster().getIdAkunKeuangan());
         penjualanmasterentity.setIdKartuKontak(data.getMaster().getIdKartuKontak());
         penjualanmasterentity.setDeskripsi(data.getMaster().getDeskripsi());
         penjualanmasterentity.setIdPengguna(data.getMaster().getIdPengguna());
         penjualanmasterentity.setStatus(data.getMaster().getStatus());
         penjualanmasterentity.setTax(data.getMaster().getTax());
         penjualanmasterentity.setDisc(data.getMaster().getDisc());
+        penjualanmasterentity.setTotalBelanja(data.getMaster().getTotalBelanja());
+        penjualanmasterentity.setJumlahUang(data.getMaster().getJumlahUang());
+        penjualanmasterentity.setKembalian(data.getMaster().getKembalian());
         PenjualanMasterEntity entityMaster = penjualanmasterrepo.save(penjualanmasterentity);
 
         List<PenjualanDetailEntity> entityDetailSelect = penjualandetailrepo.findByIdPenjualanMaster(id);
@@ -247,6 +254,11 @@ public class PenjualanController {
             res.setMessage(e.getMessage());
         }
         return res;
+    }
+    
+    @GetMapping("/getinvoice/{idOutlet}")
+    public String getInvoice(@PathVariable UUID idOutlet){
+        return utilServ.getNoInvoice(idOutlet);
     }
 
 }

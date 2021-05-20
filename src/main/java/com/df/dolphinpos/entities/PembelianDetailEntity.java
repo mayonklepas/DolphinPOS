@@ -6,6 +6,7 @@
 package com.df.dolphinpos.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -31,46 +32,42 @@ public class PembelianDetailEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
+    @Column(nullable = false)
     private UUID idOutlet;
-
+    @Column(nullable = false)
+    private Date tanggalTransaksi;
     @Column(nullable = false)
     private UUID idPembelianMaster;
-
-    @Column(nullable = false)
-    private UUID idBarang;
-
-    private String kodeBarang;
-
-    private String namaBarang;
-
-    private String satuanBarang;
-
-    private int tipeBarang;
-
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPembelianMaster", nullable = false, insertable = false, updatable = false)
     @JsonIgnoreProperties("pembelianDetail")
     private PembelianMasterEntity pembelianMaster;
-
+    @Column(nullable = false)
+    private UUID idBarang;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idBarang", nullable = false, insertable = false, updatable = false)
     private BarangEntity barang;
-
+    @Column(nullable = false)
+    private String kodeBarang;
+    @Column(nullable = false)
+    private String namaBarang;
+    @Column(nullable = false)
+    private String satuanBarang;
+    @Column(nullable = false)
+    private int tipeBarang;
+    @Column(nullable = false)
     private double jumlahBeli;
-
+    @Column(nullable = false)
     private double hargaBeliBeli;
-
+    @Column(nullable = false)
     private double hargaJualBeli;
-
+    @Column(nullable = false)
     private double disc;
-
+    @Column(nullable = false)
     private UUID idPengguna;
-
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
     private PenggunaEntity pengguna;
-
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
 
@@ -89,6 +86,16 @@ public class PembelianDetailEntity {
     public void setIdOutlet(UUID idOutlet) {
         this.idOutlet = idOutlet;
     }
+
+    public Date getTanggalTransaksi() {
+        return tanggalTransaksi;
+    }
+
+    public void setTanggalTransaksi(Date tanggalTransaksi) {
+        this.tanggalTransaksi = tanggalTransaksi;
+    }
+    
+    
 
     public UUID getIdPembelianMaster() {
         return idPembelianMaster;

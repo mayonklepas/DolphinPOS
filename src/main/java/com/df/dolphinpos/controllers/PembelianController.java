@@ -123,13 +123,14 @@ public class PembelianController {
         PembelianMasterEntity pembelianmasterentity = pembelianmasterrepo.findById(id).get();
         pembelianmasterentity.setTanggalPembelian(data.getMaster().getTanggalPembelian());
         pembelianmasterentity.setKodePembelianMaster(data.getMaster().getKodePembelianMaster());
-        pembelianmasterentity.setIdAkunHolder(data.getMaster().getIdAkunHolder());
+        pembelianmasterentity.setIdAkunKeuangan(data.getMaster().getIdAkunKeuangan());
         pembelianmasterentity.setIdKartuKontak(data.getMaster().getIdKartuKontak());
         pembelianmasterentity.setDeskripsi(data.getMaster().getDeskripsi());
         pembelianmasterentity.setIdPengguna(data.getMaster().getIdPengguna());
         pembelianmasterentity.setStatus(2);
         pembelianmasterentity.setTax(data.getMaster().getTax());
         pembelianmasterentity.setDisc(data.getMaster().getDisc());
+        pembelianmasterentity.setTotalBelanja(data.getMaster().getTotalBelanja());
         PembelianMasterEntity entityMaster = pembelianmasterrepo.save(pembelianmasterentity);
 
         List<PembelianDetailEntity> entityDetailSelect = pembeliandetailrepo.findByIdPembelianMaster(id);

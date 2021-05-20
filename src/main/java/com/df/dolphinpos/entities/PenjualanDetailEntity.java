@@ -6,6 +6,7 @@
 package com.df.dolphinpos.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -31,34 +32,34 @@ public class PenjualanDetailEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false)
     private UUID idOutlet;
     @Column(nullable = false)
+    private Date tanggalTransaksi;
+    @Column(nullable = false)
     private UUID idPenjualanMaster;
-    @Column(nullable = true)
-    private UUID idBarang;
-
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPenjualanMaster", nullable = false, insertable = false, updatable = false)
     @JsonIgnoreProperties("penjualanDetail")
     private PenjualanMasterEntity penjualanMaster;
-
+    @Column(nullable = true)
+    private UUID idBarang;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idBarang", nullable = false, insertable = false, updatable = false)
     private BarangEntity barang;
-
+    @Column(nullable = false)
     private double jumlahJual;
+    @Column(nullable = false)
     private double hargaBeliJual;
+    @Column(nullable = false)
     private double hargaJualJual;
+    @Column(nullable = false)
     private double disc;
-
-
     @Column(nullable = false)
     private UUID idPengguna;
-
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
     private PenggunaEntity pengguna;
-
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
 
@@ -77,6 +78,16 @@ public class PenjualanDetailEntity {
     public void setIdOutlet(UUID idOutlet) {
         this.idOutlet = idOutlet;
     }
+
+    public Date getTanggalTransaksi() {
+        return tanggalTransaksi;
+    }
+
+    public void setTanggalTransaksi(Date tanggalTransaksi) {
+        this.tanggalTransaksi = tanggalTransaksi;
+    }
+    
+    
 
     public UUID getIdPenjualanMaster() {
         return idPenjualanMaster;
@@ -142,7 +153,6 @@ public class PenjualanDetailEntity {
         this.disc = disc;
     }
 
-    
     public UUID getIdPengguna() {
         return idPengguna;
     }
@@ -163,6 +173,4 @@ public class PenjualanDetailEntity {
         return dateCreated;
     }
 
-
-   
 }

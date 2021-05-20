@@ -31,17 +31,25 @@ public class DiskonEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false)
     private UUID idOutlet;
+    @Column(nullable = false)
     private String namaDiskon;
+    @Column(nullable = false)
     private double minimalPembelianSatu;
+    @Column(nullable = false)
     private double minimalPembelianDua;
-    private int tipeDiskon;
-    private Date tanggalBerlakuHingga;
-    private double nominalDiskonSatu;
-    private double nominalDiskonDua;
-
     @Column(nullable = true)
+    private int tipeDiskon;
+    @Column(nullable = false)
+    private Date tanggalBerlakuHingga;
+    @Column(nullable = false)
+    private double nominalDiskonSatu;
+    @Column(nullable = false)
+    private double nominalDiskonDua;
+    @Column(nullable = false)
     private UUID idPengguna;
+    
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
     private PenggunaEntity pengguna;

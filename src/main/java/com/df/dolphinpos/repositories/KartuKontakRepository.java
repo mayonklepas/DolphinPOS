@@ -5,7 +5,7 @@
  */
 package com.df.dolphinpos.repositories;
 
-import com.df.dolphinpos.entities.AkunHolderEntity;
+import com.df.dolphinpos.entities.AkunKeuanganEntity;
 import com.df.dolphinpos.entities.KartuKontakEntity;
 import java.util.List;
 import java.util.Optional;

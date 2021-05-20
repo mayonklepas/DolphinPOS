@@ -32,14 +32,23 @@ public class BarangEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false)
     private UUID idOutlet;
+    @Column(nullable = false)
     private String kodeBarang;
+    @Column(nullable = false)
     private String namaBarang;
+    @Column(nullable = false)
     private String satuanBarang;
+    @Column(nullable = false)
     private double jumlahBarang;
+    @Column(nullable = false)
     private double hargaBeli;
+    @Column(nullable = false)
     private double hargaJual;
+    @Column(nullable = false)
     private int tipeBarang;
+    @Column(nullable = true)
     private String kodeResep;
     
     @Column(nullable = true)
@@ -48,7 +57,7 @@ public class BarangEntity {
     @JoinColumn(name = "kodeDiskon", nullable = true, insertable = false, updatable = false)
     private DiskonEntity diskon;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private UUID idPengguna;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)

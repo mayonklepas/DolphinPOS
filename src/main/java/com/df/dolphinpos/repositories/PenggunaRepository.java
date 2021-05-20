@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -22,4 +23,7 @@ public interface PenggunaRepository extends PagingAndSortingRepository<PenggunaE
     Page<PenggunaEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
     Optional<PenggunaEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
+
+    @Query("SELECT pe FROM PenggunaEntity pe WHERE pe.outlet.kodeOutlet=?1 AND pe.username=?2 AND pe.password=?3")
+    PenggunaEntity findLogin(String kodeOutlet,String username, String password);
 }

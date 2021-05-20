@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="penjualan-faktur" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="74"/>
+	<property name="ireport.x" value="53"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -39,11 +39,12 @@
 	</subDataset>
 	<parameter name="tanggalDari" class="java.util.Date"/>
 	<parameter name="tanggalHingga" class="java.util.Date"/>
+	<parameter name="namaOutlet" class="java.lang.String"/>
 	<field name="tanggalPenjualan" class="java.util.Date"/>
 	<field name="kodePenjualanMaster" class="java.lang.String"/>
 	<field name="deskripsi" class="java.lang.String"/>
 	<field name="kartuKontak.namaKontak" class="java.lang.String"/>
-	<field name="akunHolder.namaAkunHolder" class="java.lang.String"/>
+	<field name="akunKeuangan.namaAkunKeuangan" class="java.lang.String"/>
 	<field name="pengguna.username" class="java.lang.String"/>
 	<field name="disc" class="java.lang.Double"/>
 	<field name="tax" class="java.lang.Double"/>
@@ -53,13 +54,13 @@
 	</background>
 	<title>
 		<band height="51" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="467" height="30" uuid="694375b7-e325-4085-950a-d0e79e1f62e3"/>
-				<textElement>
+			<textField>
+				<reportElement x="0" y="0" width="467" height="30" uuid="da115253-98aa-4017-a74d-41220a928391"/>
+				<textElement markup="none">
 					<font size="23" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DOLPHIN POS]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{namaOutlet}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="0" y="30" width="555" height="20" uuid="6a6461e2-cbd3-4ba8-99fe-e8fbe6bf978d"/>
 				<textElement textAlignment="Right" markup="none">
@@ -85,7 +86,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tanggalPenjualan}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="114" y="24" width="128" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
@@ -94,16 +95,16 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{deskripsi}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="331" y="24" width="75" height="15" uuid="d28cf9d9-7123-4455-b967-fbf184c72211">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{akunHolder.namaAkunHolder}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{akunKeuangan.namaAkunKeuangan}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="242" y="24" width="89" height="15" uuid="f4482438-b336-4769-bbf8-30e6c184922f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
@@ -130,7 +131,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tax}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="406" y="24" width="69" height="15" uuid="76da9a3a-a001-4d5c-8c2e-e64fc0837506">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
@@ -170,7 +171,7 @@
 						</jr:columnHeader>
 						<jr:columnFooter height="20" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="78" height="20" uuid="ccb86a3c-e03e-4ba6-adfc-82cd6532f5e6"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{barang.kodeBarang}]]></textFieldExpression>
@@ -211,7 +212,7 @@
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField>
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="159" height="20" uuid="75f060c9-bfcf-41bc-844a-57ff6a94c15b"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{barang.namaBarang}]]></textFieldExpression>

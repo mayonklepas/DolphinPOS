@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kartu-kontak" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="tipeKontak" class="java.lang.String"/>
+	<parameter name="namaOutlet" class="java.lang.String"/>
 	<field name="namaKontak" class="java.lang.String"/>
 	<field name="alamatKontak" class="java.lang.String"/>
 	<field name="emailKontak" class="java.lang.String"/>
@@ -15,13 +15,13 @@
 	</background>
 	<title>
 		<band height="54" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="555" height="30" uuid="694375b7-e325-4085-950a-d0e79e1f62e3"/>
-				<textElement>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="324b9d15-a846-4eb5-9c1e-600bb5ac915b"/>
+				<textElement markup="none">
 					<font size="23" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DOLPHIN POS]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{namaOutlet}]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="0" y="30" width="555" height="20" uuid="18f205cc-5761-4150-a0aa-2bbf9fb6b8fb"/>
 				<textElement textAlignment="Right" markup="none">
@@ -85,7 +85,7 @@
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="0" width="97" height="15" uuid="aab264a2-8603-45dc-9f2b-89547a942e6b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
@@ -94,7 +94,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namaKontak}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="97" y="0" width="140" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
@@ -121,7 +121,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nohpKontak}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.###;#,##0.###-">
+			<textField isStretchWithOverflow="true" pattern="#,##0.###;#,##0.###-">
 				<reportElement x="422" y="0" width="132" height="15" uuid="636107db-627e-458a-a827-4db53b5167a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>

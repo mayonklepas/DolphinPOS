@@ -18,22 +18,28 @@ public class StrukDto {
     double hargaJual;
     double diskonMaster;
     double tax;
+    double jumlahUang;
+    double kembalian;
     String kodeTransaksi;
     Date tanggalPenjualan;
     String user;
 
-    public StrukDto(String namaBarang, double diskonDetail, double jumlahJual, double hargaJual, double diskonMaster, double tax, String kodeTransaksi, Date tanggalPenjualan, String user) {
+    public StrukDto(String namaBarang, double diskonDetail, double jumlahJual, double hargaJual, double diskonMaster, double tax, double jumlahUang, double kembalian, String kodeTransaksi, Date tanggalPenjualan, String user) {
         this.namaBarang = namaBarang;
         this.diskonDetail = diskonDetail;
         this.jumlahJual = jumlahJual;
         this.hargaJual = hargaJual;
         this.diskonMaster = diskonMaster;
         this.tax = tax;
+        this.jumlahUang = jumlahUang;
+        this.kembalian = kembalian;
         this.kodeTransaksi = kodeTransaksi;
         this.tanggalPenjualan = tanggalPenjualan;
         this.user = user;
     }
 
+    
+   
     public String getNamaBarang() {
         return namaBarang;
     }
@@ -82,6 +88,22 @@ public class StrukDto {
         this.tax = tax;
     }
 
+    public double getJumlahUang() {
+        return jumlahUang;
+    }
+
+    public void setJumlahUang(double jumlahUang) {
+        this.jumlahUang = jumlahUang;
+    }
+
+    public double getKembalian() {
+        return kembalian;
+    }
+
+    public void setKembalian(double kembalian) {
+        this.kembalian = kembalian;
+    }
+    
     public String getKodeTransaksi() {
         return kodeTransaksi;
     }
@@ -97,7 +119,6 @@ public class StrukDto {
     public void setTanggalPenjualan(Date tanggalPenjualan) {
         this.tanggalPenjualan = tanggalPenjualan;
     }
-
 
     public String getUser() {
         return user;

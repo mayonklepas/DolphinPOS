@@ -69,7 +69,7 @@ public class KartuKontakController {
             KartuKontakEntity entity = kartukontakrepo.findById(data.getId()).orElseThrow(() -> new ResourceAccessException("Error"));
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(entity.getNamaKontak() + "berhasil ditambahkan");
+            res.setMessage(entity.getNamaKontak() + " berhasil ditambahkan");
             res.setContent(entity);
         } catch (Exception e) {
             res.setCode(1);

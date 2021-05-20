@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package com.df.dolphinpos.dto;
-;
+
 
 import java.util.Date;
 
@@ -16,18 +16,18 @@ public class PembelianReportDTO {
     Date tanggalPembelian;
     String kodePembelian;
     String deskripsi;
-    String namaAkunHolder;
+    String namaAkunKeuangan;
     String namaCustomer;
     String namaPengguna;
     double disc;
     double tax;
     double total;
 
-    public PembelianReportDTO(Date tanggalPembelian,String kodePembelian, String deskripsi, String namaAkunHolder, String namaCustomer, String namaPengguna, double disc, double tax, double total) {
+    public PembelianReportDTO(Date tanggalPembelian,String kodePembelian, String deskripsi, String namaAkunKeuangan, String namaCustomer, String namaPengguna, double disc, double tax, double total) {
         this.tanggalPembelian = tanggalPembelian;
         this.kodePembelian = kodePembelian;
         this.deskripsi = deskripsi;
-        this.namaAkunHolder = namaAkunHolder;
+        this.namaAkunKeuangan = namaAkunKeuangan;
         this.namaCustomer = namaCustomer;
         this.namaPengguna = namaPengguna;
         this.disc = disc;
@@ -53,7 +53,6 @@ public class PembelianReportDTO {
 
     
     
-    
     public String getDeskripsi() {
         return deskripsi;
     }
@@ -62,12 +61,12 @@ public class PembelianReportDTO {
         this.deskripsi = deskripsi;
     }
 
-    public String getNamaAkunHolder() {
-        return namaAkunHolder;
+    public String getNamaAkunKeuangan() {
+        return namaAkunKeuangan;
     }
 
-    public void setNamaAkunHolder(String namaAkunHolder) {
-        this.namaAkunHolder = namaAkunHolder;
+    public void setNamaAkunKeuangan(String namaAkunKeuangan) {
+        this.namaAkunKeuangan = namaAkunKeuangan;
     }
 
     public String getNamaCustomer() {

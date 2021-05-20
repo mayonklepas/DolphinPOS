@@ -74,6 +74,7 @@ public class OutletController {
             outletentity.setAlamatOutlet(data.getAlamatOutlet());
             outletentity.setNohpOutlet(data.getNohpOutlet());
             outletentity.setTax(data.getTax());
+            outletentity.setSettings(data.getSettings());
             OutletEntity entity = outletrepo.save(outletentity);
             res.setCode(0);
             res.setStatus("success");

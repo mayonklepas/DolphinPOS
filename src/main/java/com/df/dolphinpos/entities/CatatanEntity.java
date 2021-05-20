@@ -31,19 +31,24 @@ public class CatatanEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false)
     private UUID idOutlet;
+    @Column(nullable = false)
     private Date tanggalCatatan;
+    @Column(nullable = false)
     private int tipeCatatan;
-    private String deskripsi;
-    private double jumlah;
     @Column(nullable = true)
-    private UUID idAkunHolder;
+    private String deskripsi;
+    @Column(nullable = false)
+    private double jumlah;
+    @Column(nullable = false)
+    private UUID idAkunKeuangan;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idAkunHolder", nullable = false, insertable = false, updatable = false)
-    private AkunHolderEntity akunHolder;
+    @JoinColumn(name = "idAkunKeuangan", nullable = false, insertable = false, updatable = false)
+    private AkunKeuanganEntity akunKeuangan;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private UUID idPengguna;
 
     @OneToOne(cascade = CascadeType.PERSIST)
@@ -101,20 +106,20 @@ public class CatatanEntity {
         this.jumlah = jumlah;
     }
 
-    public UUID getIdAkunHolder() {
-        return idAkunHolder;
+    public UUID getIdAkunKeuangan() {
+        return idAkunKeuangan;
     }
 
-    public void setIdAkunHolder(UUID idAkunHolder) {
-        this.idAkunHolder = idAkunHolder;
+    public void setIdAkunKeuangan(UUID idAkunKeuangan) {
+        this.idAkunKeuangan = idAkunKeuangan;
     }
 
-    public AkunHolderEntity getAkunHolder() {
-        return akunHolder;
+    public AkunKeuanganEntity getAkunKeuangan() {
+        return akunKeuangan;
     }
 
-    public void setAkunHolder(AkunHolderEntity akunHolder) {
-        this.akunHolder = akunHolder;
+    public void setAkunKeuangan(AkunKeuanganEntity akunKeuangan) {
+        this.akunKeuangan = akunKeuangan;
     }
 
     public UUID getIdPengguna() {

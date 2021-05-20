@@ -25,13 +25,13 @@
 	</background>
 	<title>
 		<band height="71" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="555" height="30" uuid="694375b7-e325-4085-950a-d0e79e1f62e3"/>
-				<textElement>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="f06c4317-67cc-4a21-8a1a-d9e4cd2d955c"/>
+				<textElement markup="none">
 					<font size="23" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DOLPHIN POS]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{namaOutlet}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="0" y="30" width="555" height="20" uuid="6a6461e2-cbd3-4ba8-99fe-e8fbe6bf978d"/>
 				<textElement textAlignment="Right" markup="none">

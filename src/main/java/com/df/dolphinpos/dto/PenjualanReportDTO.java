@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package com.df.dolphinpos.dto;
-;
+
 
 import java.util.Date;
 
@@ -16,18 +16,18 @@ public class PenjualanReportDTO {
     Date tanggalPenjualan;
     String kodePenjualanMaster;
     String deskripsi;
-    String namaAkunHolder;
+    String namaAkunKeuangan;
     String namaCustomer;
     String namaPengguna;
     double disc;
     double tax;
     double total;
 
-    public PenjualanReportDTO(Date tanggalPenjualan,String kodePenjualanMaster, String deskripsi, String namaAkunHolder, String namaCustomer, String namaPengguna, double disc, double tax, double total) {
+    public PenjualanReportDTO(Date tanggalPenjualan,String kodePenjualanMaster, String deskripsi, String namaAkunKeuangan, String namaCustomer, String namaPengguna, double disc, double tax, double total) {
         this.tanggalPenjualan = tanggalPenjualan;
         this.kodePenjualanMaster=kodePenjualanMaster;
         this.deskripsi = deskripsi;
-        this.namaAkunHolder = namaAkunHolder;
+        this.namaAkunKeuangan = namaAkunKeuangan;
         this.namaCustomer = namaCustomer;
         this.namaPengguna = namaPengguna;
         this.disc = disc;
@@ -50,11 +50,6 @@ public class PenjualanReportDTO {
     public void setKodePenjualanMaster(String kodePenjualanMaster) {
         this.kodePenjualanMaster = kodePenjualanMaster;
     }
-
-    
-    
-
-    
     
     public String getDeskripsi() {
         return deskripsi;
@@ -64,12 +59,12 @@ public class PenjualanReportDTO {
         this.deskripsi = deskripsi;
     }
 
-    public String getNamaAkunHolder() {
-        return namaAkunHolder;
+    public String getNamaAkunKeuangan() {
+        return namaAkunKeuangan;
     }
 
-    public void setNamaAkunHolder(String namaAkunHolder) {
-        this.namaAkunHolder = namaAkunHolder;
+    public void setNamaAkunKeuangan(String namaAkunKeuangan) {
+        this.namaAkunKeuangan = namaAkunKeuangan;
     }
 
     public String getNamaCustomer() {

@@ -5,11 +5,12 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="tanggalDari" class="java.util.Date"/>
 	<parameter name="tanggalHingga" class="java.util.Date"/>
+	<parameter name="namaOutlet" class="java.lang.String"/>
 	<field name="tanggalPenjualan" class="java.util.Date"/>
 	<field name="kodePenjualanMaster" class="java.lang.String"/>
 	<field name="deskripsi" class="java.lang.String"/>
 	<field name="namaCustomer" class="java.lang.String"/>
-	<field name="namaAkunHolder" class="java.lang.String"/>
+	<field name="namaAkunKeuangan" class="java.lang.String"/>
 	<field name="namaPengguna" class="java.lang.String"/>
 	<field name="disc" class="java.lang.Double"/>
 	<field name="tax" class="java.lang.Double"/>
@@ -22,13 +23,13 @@
 	</background>
 	<title>
 		<band height="71" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="555" height="30" uuid="694375b7-e325-4085-950a-d0e79e1f62e3"/>
-				<textElement>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="160957d9-554c-4d08-b274-99a71512ff8f"/>
+				<textElement markup="none">
 					<font size="23" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DOLPHIN POS]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{namaOutlet}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="0" y="30" width="555" height="20" uuid="6a6461e2-cbd3-4ba8-99fe-e8fbe6bf978d"/>
 				<textElement textAlignment="Right" markup="none">
@@ -157,7 +158,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tanggalPenjualan}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="115" y="0" width="96" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
@@ -166,16 +167,16 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{deskripsi}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="290" y="0" width="62" height="15" uuid="d28cf9d9-7123-4455-b967-fbf184c72211">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{namaAkunHolder}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{namaAkunKeuangan}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="211" y="0" width="79" height="15" uuid="f4482438-b336-4769-bbf8-30e6c184922f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
@@ -209,12 +210,12 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{total}-$F{disc})+(($F{tax}/100)*($F{total}-$F{disc}))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="15" width="555" height="1" uuid="c504027d-6078-472f-b3e4-233ba2267b03"/>
 			</line>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="353" y="0" width="54" height="15" uuid="76da9a3a-a001-4d5c-8c2e-e64fc0837506">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
@@ -223,7 +224,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namaPengguna}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
 				<reportElement x="51" y="0" width="64" height="15" uuid="82328d91-29f2-43b7-8c74-943d3964f5c2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>

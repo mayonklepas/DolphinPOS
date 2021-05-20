@@ -30,14 +30,21 @@ public class KartuKontakEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
+    @Column(nullable = false)
     private UUID idOutlet;
+    @Column(nullable = false)
     private String namaKontak;
+    @Column(nullable = false)
     private String alamatKontak;
+    @Column(nullable = false)
     private String emailKontak;
+    @Column(nullable = false)
     private String nohpKontak;
-    private String deskripsi;
-    private int tipeKontak;
     @Column(nullable = true)
+    private String deskripsi;
+    @Column(nullable = false)
+    private int tipeKontak;
+    @Column(nullable = false)
     private UUID idPengguna;
 
     @OneToOne(cascade = CascadeType.PERSIST)

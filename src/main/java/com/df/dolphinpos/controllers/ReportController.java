@@ -164,4 +164,35 @@ public class ReportController {
                 .contentLength(bytes.length)
                 .body(resource);
     }
+
+    @GetMapping("/penjualan-margin/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getpenjualanMargin(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.penjualanMarginReport(idOutlet, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-margin.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/bukubesar/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getBukuBesar(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.bukuBesar(idOutlet, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=bukubesar.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
 }

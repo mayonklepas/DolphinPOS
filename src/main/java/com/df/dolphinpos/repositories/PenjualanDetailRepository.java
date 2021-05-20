@@ -6,9 +6,11 @@
 package com.df.dolphinpos.repositories;
 
 import com.df.dolphinpos.dto.ChartDto;
+import com.df.dolphinpos.dto.MarginPenjualanDTO;
 import com.df.dolphinpos.dto.StrukDto;
 import com.df.dolphinpos.entities.PembelianDetailEntity;
 import com.df.dolphinpos.entities.PenjualanDetailEntity;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,5 +40,16 @@ public interface PenjualanDetailRepository extends JpaRepository<PenjualanDetail
             + "WHERE pd.idOutlet=?1 AND EXTRACT(MONTH FROM pd.dateCreated)= EXTRACT(MONTH FROM CURRENT_DATE) "
             + "GROUP BY be.namaBarang")
     List<ChartDto> getTopselling(UUID idOutlet);
+
+    @Query("SELECT new com.df.dolphinpos.dto.MarginPenjualanDTO("
+            + "be.kodeBarang,"
+            + "be.namaBarang,"
+            + "be.satuanBarang,"
+            + "be.hargaBeli,"
+            + "be.hargaJual,"
+            + "SUM(pd.jumlahJual)) FROM PenjualanDetailEntity pd JOIN pd.barang be "
+            + "WHERE pd.idOutlet=?1 AND pd.tanggalTransaksi >= ?2 AND pd.tanggalTransaksi <=?3 "
+            + "GROUP BY be.id")
+    List<MarginPenjualanDTO> findMarginPenjualan(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
 
 }
