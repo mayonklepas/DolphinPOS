@@ -87,11 +87,16 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
             + "pm.kembalian,"
             + "pm.kodePenjualanMaster,"
             + "pm.tanggalPenjualan,"
-            + "pn.namaPengguna) "
+            + "pn.namaPengguna,"
+            + "kk.namaKontak,"
+            + "kk.alamatKontak,"
+            + "kk.nohpKontak) "
             + "FROM PenjualanMasterEntity pm "
             + "JOIN pm.penjualanDetail pd "
             + "JOIN pd.barang be "
-            + "JOIN pm.pengguna pn WHERE pm.id=?1 AND pm.idOutlet=?2")
+            + "JOIN pm.pengguna pn "
+            + "JOIN pm.kartuKontak kk "
+            + "WHERE pm.id=?1 AND pm.idOutlet=?2")
     List<StrukDto> findStrukPenjualan(UUID id, UUID idOutlet);
 
     @Query("SELECT new com.df.dolphinpos.dto.ChartDto(CAST(EXTRACT(DAY FROM pm.tanggalPenjualan) as string),"
@@ -106,8 +111,12 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
             + "SUM(pm.totalBelanja)) "
             + "FROM PenjualanMasterEntity pm "
             + "WHERE pm.idOutlet=?1 AND EXTRACT(MONTH FROM pm.tanggalPenjualan)= EXTRACT(MONTH FROM CURRENT_DATE)")
-    ChartDto findTotalPenjualan(UUID idOutlet);
-    
+    ChartDto findTotalPenjualanBulanIni(UUID idOutlet);
 
+    @Query("SELECT new com.df.dolphinpos.dto.ChartDto('label',"
+            + "SUM(pm.totalBelanja)) "
+            + "FROM PenjualanMasterEntity pm "
+            + "WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan = CURRENT_DATE ")
+    ChartDto findTotalPenjualanHariIni(UUID idOutlet);
 
 }

@@ -23,8 +23,11 @@ public class StrukDto {
     String kodeTransaksi;
     Date tanggalPenjualan;
     String user;
+    String namaKontak;
+    String alamatKontak;
+    String nohpKontak;
 
-    public StrukDto(String namaBarang, double diskonDetail, double jumlahJual, double hargaJual, double diskonMaster, double tax, double jumlahUang, double kembalian, String kodeTransaksi, Date tanggalPenjualan, String user) {
+    public StrukDto(String namaBarang, double diskonDetail, double jumlahJual, double hargaJual, double diskonMaster, double tax, double jumlahUang, double kembalian, String kodeTransaksi, Date tanggalPenjualan, String user, String namaKontak, String alamatKontak, String nohpKontak) {
         this.namaBarang = namaBarang;
         this.diskonDetail = diskonDetail;
         this.jumlahJual = jumlahJual;
@@ -36,10 +39,12 @@ public class StrukDto {
         this.kodeTransaksi = kodeTransaksi;
         this.tanggalPenjualan = tanggalPenjualan;
         this.user = user;
+        this.namaKontak = namaKontak;
+        this.alamatKontak = alamatKontak;
+        this.nohpKontak = nohpKontak;
     }
 
     
-   
     public String getNamaBarang() {
         return namaBarang;
     }
@@ -103,7 +108,7 @@ public class StrukDto {
     public void setKembalian(double kembalian) {
         this.kembalian = kembalian;
     }
-    
+
     public String getKodeTransaksi() {
         return kodeTransaksi;
     }
@@ -127,6 +132,32 @@ public class StrukDto {
     public void setUser(String user) {
         this.user = user;
     }
+
+    public String getNamaKontak() {
+        return namaKontak;
+    }
+
+    public void setNamaKontak(String namaKontak) {
+        this.namaKontak = namaKontak;
+    }
+
+    public String getAlamatKontak() {
+        return alamatKontak;
+    }
+
+    public void setAlamatKontak(String alamatKontak) {
+        this.alamatKontak = alamatKontak;
+    }
+
+    public String getNohpKontak() {
+        return nohpKontak;
+    }
+
+    public void setNohpKontak(String nohpKontak) {
+        this.nohpKontak = nohpKontak;
+    }
+
+    
     
     
 }

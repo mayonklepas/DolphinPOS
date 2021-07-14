@@ -124,6 +124,7 @@ public class PembelianController {
         pembelianmasterentity.setTanggalPembelian(data.getMaster().getTanggalPembelian());
         pembelianmasterentity.setKodePembelianMaster(data.getMaster().getKodePembelianMaster());
         pembelianmasterentity.setIdAkunKeuangan(data.getMaster().getIdAkunKeuangan());
+        pembelianmasterentity.setIdAkunKeuanganDebit(data.getMaster().getIdAkunKeuanganDebit());
         pembelianmasterentity.setIdKartuKontak(data.getMaster().getIdKartuKontak());
         pembelianmasterentity.setDeskripsi(data.getMaster().getDeskripsi());
         pembelianmasterentity.setIdPengguna(data.getMaster().getIdPengguna());

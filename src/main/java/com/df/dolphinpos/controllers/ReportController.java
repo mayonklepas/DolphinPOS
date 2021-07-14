@@ -139,7 +139,7 @@ public class ReportController {
                 .body(resource);
     }
 
-    @GetMapping("/faktur-penjualan/{id}/{idOutlet}")
+    @GetMapping("/faktur/{id}/{idOutlet}")
     public ResponseEntity<InputStreamResource> getfakturpenjualan(@PathVariable UUID id, @PathVariable UUID idOutlet) throws FileNotFoundException, JRException, ParseException, IOException {
         byte[] bytes = reportservice.fakturPenjualan(id, idOutlet);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
@@ -188,6 +188,51 @@ public class ReportController {
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=bukubesar.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/neraca-saldo/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getneracaSaldo(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.neracaSaldo(idOutlet, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=neraca-saldo.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/neraca/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getneraca(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.neraca(idOutlet, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=neraca-saldo.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/laba-rugi/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getlabaRugi(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.labaRugi(idOutlet, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=neraca-saldo.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)

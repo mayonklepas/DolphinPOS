@@ -119,6 +119,7 @@ public class ReturPenjualanController {
         returPenjualanmasterentity.setTanggalReturPenjualan(data.getMaster().getTanggalReturPenjualan());
         returPenjualanmasterentity.setKodeReturPenjualanMaster(data.getMaster().getKodeReturPenjualanMaster());
         returPenjualanmasterentity.setIdAkunKeuangan(data.getMaster().getIdAkunKeuangan());
+        returPenjualanmasterentity.setIdAkunKeuanganDebit(data.getMaster().getIdAkunKeuanganDebit());
         returPenjualanmasterentity.setIdKartuKontak(data.getMaster().getIdKartuKontak());
         returPenjualanmasterentity.setDeskripsi(data.getMaster().getDeskripsi());
         returPenjualanmasterentity.setIdPengguna(data.getMaster().getIdPengguna());

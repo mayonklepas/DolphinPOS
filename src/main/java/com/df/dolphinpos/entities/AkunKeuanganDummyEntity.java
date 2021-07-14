@@ -23,36 +23,25 @@ import org.hibernate.annotations.Type;
  * @author Minami
  */
 @Entity
-@Table(name = "akun_keuangan")
-public class AkunKeuanganEntity {
+@Table(name = "akun_keuangan_dummy")
+public class AkunKeuanganDummyEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-    @Column(nullable = false)
-    private UUID idOutlet;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String kodeAkunKeuangan;
     @Column(nullable = false)
     private String namaAkunKeuangan;
-    @Column(nullable = false)
-    private double openingBalance;
-    @Column(nullable = false)
-    private double currentBalance;
     @Column(nullable = false)
     private int tipeAkun;
     @Column(nullable = false)
     private int groupAkun;
     private String deskripsiAkunKeuangan;
-    @Column(nullable = false)
-    private UUID idPengguna;
-    
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idPengguna",nullable = false,updatable = false,insertable = false)
-    private PenggunaEntity pengguna;
-    
+
+   
     @Column(nullable = false,updatable = false,insertable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
 
@@ -62,14 +51,6 @@ public class AkunKeuanganEntity {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getIdOutlet() {
-        return idOutlet;
-    }
-
-    public void setIdOutlet(UUID idOutlet) {
-        this.idOutlet = idOutlet;
     }
 
     public String getKodeAkunKeuangan() {
@@ -86,22 +67,6 @@ public class AkunKeuanganEntity {
 
     public void setNamaAkunKeuangan(String namaAkunKeuangan) {
         this.namaAkunKeuangan = namaAkunKeuangan;
-    }
-
-    public double getOpeningBalance() {
-        return openingBalance;
-    }
-
-    public void setOpeningBalance(double openingBalance) {
-        this.openingBalance = openingBalance;
-    }
-
-    public double getCurrentBalance() {
-        return currentBalance;
-    }
-
-    public void setCurrentBalance(double currentBalance) {
-        this.currentBalance = currentBalance;
     }
 
     public int getTipeAkun() {
@@ -126,22 +91,6 @@ public class AkunKeuanganEntity {
 
     public void setDeskripsiAkunKeuangan(String deskripsiAkunKeuangan) {
         this.deskripsiAkunKeuangan = deskripsiAkunKeuangan;
-    }
-
-    public UUID getIdPengguna() {
-        return idPengguna;
-    }
-
-    public void setIdPengguna(UUID idPengguna) {
-        this.idPengguna = idPengguna;
-    }
-
-    public PenggunaEntity getPengguna() {
-        return pengguna;
-    }
-
-    public void setPengguna(PenggunaEntity pengguna) {
-        this.pengguna = pengguna;
     }
 
     public Timestamp getDateCreated() {

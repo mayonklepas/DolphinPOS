@@ -24,6 +24,8 @@
 		</box>
 	</style>
 	<parameter name="namaOutlet" class="java.lang.String"/>
+	<parameter name="alamatOutlet" class="java.lang.String"/>
+	<parameter name="nohpOutlet" class="java.lang.String"/>
 	<field name="namaBarang" class="java.lang.String"/>
 	<field name="diskonDetail" class="java.lang.Double"/>
 	<field name="jumlahJual" class="java.lang.Double"/>
@@ -35,6 +37,9 @@
 	<field name="kodeTransaksi" class="java.lang.String"/>
 	<field name="tanggalPenjualan" class="java.util.Date"/>
 	<field name="user" class="java.lang.String"/>
+	<field name="namaKontak" class="java.lang.String"/>
+	<field name="nohpKontak" class="java.lang.String"/>
+	<field name="alamatKontak" class="java.lang.String"/>
 	<variable name="totalTransaksi" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[($F{hargaJual}*$F{jumlahJual})-($F{diskonDetail}*$F{jumlahJual})]]></variableExpression>
 	</variable>
@@ -42,7 +47,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="61" splitType="Stretch">
+		<band height="105" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="156" height="20" uuid="ebcae0ec-61aa-4307-bb70-ed9192ad8d56"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -51,36 +56,58 @@
 				<textFieldExpression><![CDATA[$P{namaOutlet}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="2" y="21" width="154" height="15" uuid="c23202f8-a4c2-4d3b-b8bf-5f0d5754733e"/>
+				<reportElement x="1" y="50" width="154" height="15" uuid="c23202f8-a4c2-4d3b-b8bf-5f0d5754733e"/>
 				<textFieldExpression><![CDATA[$F{tanggalPenjualan}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="36" width="31" height="12" uuid="ac33dd57-c563-4382-872d-c03dc3142af7"/>
+				<reportElement x="1" y="65" width="31" height="12" uuid="ac33dd57-c563-4382-872d-c03dc3142af7"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Kasir  : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="33" y="36" width="123" height="12" uuid="aef2d5fe-23ce-4674-875f-0370f3eabeb8"/>
+				<reportElement x="32" y="65" width="123" height="12" uuid="aef2d5fe-23ce-4674-875f-0370f3eabeb8"/>
 				<textElement verticalAlignment="Top" markup="none">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{user}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="48" width="31" height="12" uuid="28a792f6-25c6-4949-a2ae-d49428489ee4"/>
+				<reportElement x="1" y="77" width="31" height="12" uuid="28a792f6-25c6-4949-a2ae-d49428489ee4"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[No Tx : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="33" y="48" width="123" height="12" uuid="5380f0ca-871a-42ed-acb1-48f5d2fd07e6"/>
+				<reportElement x="32" y="77" width="123" height="12" uuid="5380f0ca-871a-42ed-acb1-48f5d2fd07e6"/>
 				<textElement verticalAlignment="Top" markup="none">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kodeTransaksi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="32" y="89" width="123" height="12" uuid="dbe67983-5b9a-4e48-a024-7ee99e28ee50"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{namaKontak}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="89" width="31" height="12" uuid="37f9cb61-cd93-42e3-82d6-4d5a331f59a0"/>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Cust   : ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="1" y="35" width="154" height="15" uuid="8e90292a-b5ef-4c09-802e-37fbb06b0491"/>
+				<textFieldExpression><![CDATA[$P{nohpOutlet}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="1" y="20" width="154" height="15" uuid="be33dd8e-8577-4c65-a8f7-868ff6b489b3"/>
+				<textFieldExpression><![CDATA[$P{alamatOutlet}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

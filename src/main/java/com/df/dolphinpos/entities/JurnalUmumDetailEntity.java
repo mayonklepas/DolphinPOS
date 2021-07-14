@@ -5,6 +5,7 @@
  */
 package com.df.dolphinpos.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -45,6 +46,7 @@ public class JurnalUmumDetailEntity {
     private UUID idJurnalMaster;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idJurnalMaster", nullable = false, insertable = false, updatable = false)
+    @JsonIgnoreProperties("jurnalUmumDetail")
     private JurnalUmumMasterEntity jurnalUmumMaster;
     @Column(nullable = false)
     private UUID idAkunKeuangan;
@@ -59,6 +61,10 @@ public class JurnalUmumDetailEntity {
     private double kredit;
     @Column(nullable = false)
     private double saldo;
+    @Column (nullable = false)
+    private int urutan;
+    @Column (nullable = true)
+    private int urutanGlobal;
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
 
@@ -164,6 +170,22 @@ public class JurnalUmumDetailEntity {
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+
+    public int getUrutan() {
+        return urutan;
+    }
+
+    public void setUrutan(int urutan) {
+        this.urutan = urutan;
+    }
+
+    public int getUrutanGlobal() {
+        return urutanGlobal;
+    }
+
+    public void setUrutanGlobal(int urutanGlobal) {
+        this.urutanGlobal = urutanGlobal;
     }
 
     public Timestamp getDateCreated() {

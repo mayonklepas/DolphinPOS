@@ -129,6 +129,7 @@ public class ReturPembelianController {
         returpembelianmasterentity.setTanggalReturPembelian(data.getMaster().getTanggalReturPembelian());
         returpembelianmasterentity.setKodeReturPembelianMaster(data.getMaster().getKodeReturPembelianMaster());
         returpembelianmasterentity.setIdAkunKeuangan(data.getMaster().getIdAkunKeuangan());
+        returpembelianmasterentity.setIdAkunKeuanganKredit(data.getMaster().getIdAkunKeuanganKredit());
         returpembelianmasterentity.setIdKartuKontak(data.getMaster().getIdKartuKontak());
         returpembelianmasterentity.setDeskripsi(data.getMaster().getDeskripsi());
         returpembelianmasterentity.setIdPengguna(data.getMaster().getIdPengguna());

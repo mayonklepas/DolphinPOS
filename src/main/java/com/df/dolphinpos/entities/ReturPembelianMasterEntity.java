@@ -69,6 +69,13 @@ public class ReturPembelianMasterEntity {
     @JoinColumn(name = "idAkunKeuangan", nullable = false, updatable = false, insertable = false)
     private AkunKeuanganEntity akunKeuangan;
 
+    @Column(nullable = false)
+    private UUID idAkunKeuanganKredit;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idAkunKeuanganKredit", nullable = false, updatable = false, insertable = false)
+    private AkunKeuanganEntity akunKeuanganKredit;
+
     @OneToMany(mappedBy = "returPembelianMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("returPembelianMaster")
     private List<ReturPembelianDetailEntity> returPembelianDetail;
@@ -165,8 +172,6 @@ public class ReturPembelianMasterEntity {
     public void setTotalBelanja(double totalBelanja) {
         this.totalBelanja = totalBelanja;
     }
-    
-    
 
     public UUID getIdKartuKontak() {
         return idKartuKontak;
@@ -200,6 +205,22 @@ public class ReturPembelianMasterEntity {
         this.akunKeuangan = akunKeuangan;
     }
 
+    public UUID getIdAkunKeuanganKredit() {
+        return idAkunKeuanganKredit;
+    }
+
+    public void setIdAkunKeuanganKredit(UUID idAkunKeuanganKredit) {
+        this.idAkunKeuanganKredit = idAkunKeuanganKredit;
+    }
+
+    public AkunKeuanganEntity getAkunKeuanganKredit() {
+        return akunKeuanganKredit;
+    }
+
+    public void setAkunKeuanganKredit(AkunKeuanganEntity akunKeuanganKredit) {
+        this.akunKeuanganKredit = akunKeuanganKredit;
+    }
+    
     public List<ReturPembelianDetailEntity> getReturPembelianDetail() {
         return returPembelianDetail;
     }

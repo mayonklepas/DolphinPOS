@@ -5,6 +5,8 @@
  */
 package com.df.dolphinpos.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -16,15 +18,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 /**
  *
  * @author Minami
  */
 @Entity
-@Table(name = "akun_keuangan")
-public class AkunKeuanganEntity {
+@Table(name = "pembayaran_hutang_piutang")
+public class PembayaranHutangPiutangEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -34,26 +35,23 @@ public class AkunKeuanganEntity {
     @Column(nullable = false)
     private UUID idOutlet;
     @Column(nullable = false)
-    private String kodeAkunKeuangan;
+    private UUID idHutangPiutang;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idHutangPiutang", nullable = false, insertable = false, updatable = false)
+    @JsonIgnoreProperties("pembayaranHutangPiutang")
+    private HutangPiutangEntity hutangPiutang;
     @Column(nullable = false)
-    private String namaAkunKeuangan;
+    private Date tanggal;
+    @Column(nullable = true)
+    private String deskripsi;
     @Column(nullable = false)
-    private double openingBalance;
-    @Column(nullable = false)
-    private double currentBalance;
-    @Column(nullable = false)
-    private int tipeAkun;
-    @Column(nullable = false)
-    private int groupAkun;
-    private String deskripsiAkunKeuangan;
+    private double jumlah;
     @Column(nullable = false)
     private UUID idPengguna;
-    
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idPengguna",nullable = false,updatable = false,insertable = false)
+    @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
     private PenggunaEntity pengguna;
-    
-    @Column(nullable = false,updatable = false,insertable = false,columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
 
     public UUID getId() {
@@ -72,60 +70,44 @@ public class AkunKeuanganEntity {
         this.idOutlet = idOutlet;
     }
 
-    public String getKodeAkunKeuangan() {
-        return kodeAkunKeuangan;
+    public UUID getIdHutangPiutang() {
+        return idHutangPiutang;
     }
 
-    public void setKodeAkunKeuangan(String kodeAkunKeuangan) {
-        this.kodeAkunKeuangan = kodeAkunKeuangan;
+    public void setIdHutangPiutang(UUID idHutangPiutang) {
+        this.idHutangPiutang = idHutangPiutang;
     }
 
-    public String getNamaAkunKeuangan() {
-        return namaAkunKeuangan;
+    public HutangPiutangEntity getHutangPiutang() {
+        return hutangPiutang;
     }
 
-    public void setNamaAkunKeuangan(String namaAkunKeuangan) {
-        this.namaAkunKeuangan = namaAkunKeuangan;
+    public void setHutangPiutang(HutangPiutangEntity hutangPiutang) {
+        this.hutangPiutang = hutangPiutang;
     }
 
-    public double getOpeningBalance() {
-        return openingBalance;
+    public Date getTanggal() {
+        return tanggal;
     }
 
-    public void setOpeningBalance(double openingBalance) {
-        this.openingBalance = openingBalance;
+    public void setTanggal(Date tanggal) {
+        this.tanggal = tanggal;
     }
 
-    public double getCurrentBalance() {
-        return currentBalance;
+    public String getDeskripsi() {
+        return deskripsi;
     }
 
-    public void setCurrentBalance(double currentBalance) {
-        this.currentBalance = currentBalance;
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
     }
 
-    public int getTipeAkun() {
-        return tipeAkun;
+    public double getJumlah() {
+        return jumlah;
     }
 
-    public void setTipeAkun(int tipeAkun) {
-        this.tipeAkun = tipeAkun;
-    }
-
-    public int getGroupAkun() {
-        return groupAkun;
-    }
-
-    public void setGroupAkun(int groupAkun) {
-        this.groupAkun = groupAkun;
-    }
-
-    public String getDeskripsiAkunKeuangan() {
-        return deskripsiAkunKeuangan;
-    }
-
-    public void setDeskripsiAkunKeuangan(String deskripsiAkunKeuangan) {
-        this.deskripsiAkunKeuangan = deskripsiAkunKeuangan;
+    public void setJumlah(double jumlah) {
+        this.jumlah = jumlah;
     }
 
     public UUID getIdPengguna() {
@@ -151,8 +133,7 @@ public class AkunKeuanganEntity {
     public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
     }
-
-   
+    
     
     
 }

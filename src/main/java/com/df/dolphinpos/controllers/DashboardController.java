@@ -8,7 +8,9 @@ package com.df.dolphinpos.controllers;
 import com.df.dolphinpos.dto.ChartDto;
 import com.df.dolphinpos.dto.ChartDtoInf;
 import com.df.dolphinpos.dto.DashboardResultDto;
+import com.df.dolphinpos.entities.BarangEntity;
 import com.df.dolphinpos.entities.PembelianMasterEntity;
+import com.df.dolphinpos.repositories.BarangRepository;
 import com.df.dolphinpos.repositories.CatatanRepository;
 import com.df.dolphinpos.repositories.PembelianMasterRepository;
 import com.df.dolphinpos.repositories.PenjualanDetailRepository;
@@ -37,31 +39,30 @@ public class DashboardController {
     PembelianMasterRepository pembelianRepo;
 
     @Autowired
-    CatatanRepository catatanRepo;
-    
+    BarangRepository barangRepo;
+
     //@Autowired
     //DashboardService dashService;
-    
     @Autowired
     PenjualanDetailRepository penjualanDetailRepo;
 
     @GetMapping("/chart/{idOutlet}")
     public DashboardResultDto getchart(@PathVariable UUID idOutlet) {
         List<ChartDto> chartPenjualan = penjualanRepo.findChartPenjualan(idOutlet);
-        List<ChartDto> chartPembelian = pembelianRepo.findChartPembelian(idOutlet);
         List<ChartDto> chartTopSelling = penjualanDetailRepo.getTopselling(idOutlet);
-        ChartDto totalPenjualan = penjualanRepo.findTotalPenjualan(idOutlet);
-        ChartDto totalPembelian = pembelianRepo.findTotalPembelian(idOutlet);
-        ChartDto totalCatatanPendapatan = catatanRepo.findTotalPendapatanCatatan(idOutlet);
-        ChartDto totalCatatanPengeluaran = catatanRepo.findTotalPengeluaranCatatan(idOutlet);
+        ChartDto totalPenjualanHariIni = penjualanRepo.findTotalPenjualanHariIni(idOutlet);
+        ChartDto totalPenjualanBulanIni = penjualanRepo.findTotalPenjualanBulanIni(idOutlet);
+        ChartDto totalPembelianHariIni = pembelianRepo.findTotalPembelianHariIni(idOutlet);
+        ChartDto totalPembelianBulanIni = pembelianRepo.findTotalPembelianBulanIni(idOutlet);
+        List<BarangEntity> barang=barangRepo.stokOverview(idOutlet);
         DashboardResultDto drd = new DashboardResultDto();
-        drd.setChartPembelian(chartPembelian);
         drd.setChartPenjualan(chartPenjualan);
         drd.setChartTopSelling(chartTopSelling);
-        drd.setTotalPembelian(totalPembelian);
-        drd.setTotalPenjualan(totalPenjualan);
-        drd.setTotalCatatanPendapatan(totalCatatanPendapatan);
-        drd.setTotalCatatanPengeluaran(totalCatatanPengeluaran);
+        drd.setTotalPembelianHariIni(totalPembelianHariIni);
+        drd.setTotalPembelianBulanIni(totalPembelianBulanIni);
+        drd.setTotalPenjualanHariIni(totalPenjualanHariIni);
+        drd.setTotalPenjualanBulanIni(totalPenjualanBulanIni);
+        drd.setStokOverview(barang);
         return drd;
     }
 

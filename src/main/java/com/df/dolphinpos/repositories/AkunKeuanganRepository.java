@@ -23,12 +23,15 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface AkunKeuanganRepository extends PagingAndSortingRepository<AkunKeuanganEntity, UUID> {
 
     Page<AkunKeuanganEntity> findByIdOutlet(Pageable page, UUID idOutlet);
-    
+
     List<AkunKeuanganEntity> findByIdOutlet(UUID idOutlet);
 
     Optional<AkunKeuanganEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
 
     Optional<AkunKeuanganEntity> findByKodeAkunKeuanganAndIdOutlet(String kodeAkunKeuangan, UUID idOutlet);
+
+    @Query("SELECT ake FROM AkunKeuanganEntity ake WHERE idOutlet=?1 AND tipeAkun <> 3")
+    List<AkunKeuanganEntity> findKasbank(UUID idOutlet);
 
     Page<AkunKeuanganEntity> findByIdOutletAndNamaAkunKeuanganContainingIgnoreCase(Pageable page, UUID idOutlet, String namaAkunKeuangan);
 
@@ -36,7 +39,8 @@ public interface AkunKeuanganRepository extends PagingAndSortingRepository<AkunK
     @Modifying()
     @Query("UPDATE AkunKeuanganEntity SET currentBalance=openingBalance WHERE idOutlet=?1")
     int updateCurbalwithopbal(UUID idOutlet);
-    
+
     @Query("SELECT ake FROM AkunKeuanganEntity ake WHERE idOutlet=?1 ORDER BY kodeAkunKeuangan ASC")
     List<AkunKeuanganEntity> getDataAkunKeuangan(UUID idOutlet);
+
 }

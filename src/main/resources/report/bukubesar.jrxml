@@ -140,7 +140,7 @@
 						<jr:columnHeader style="table_TH" height="21" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="100" height="21" uuid="4201b67f-ae32-454d-81c1-1d839d0f4e81"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<text><![CDATA[Debet]]></text>
 							</staticText>
 						</jr:columnHeader>
@@ -156,7 +156,7 @@
 						<jr:columnHeader style="table_TH" height="21" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="102" height="21" uuid="460257b9-17f3-4abd-a30e-9dc074ebde09"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<text><![CDATA[Kredit]]></text>
 							</staticText>
 						</jr:columnHeader>
@@ -172,7 +172,7 @@
 						<jr:columnHeader style="table_TH" height="21" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="103" height="21" uuid="034ca801-ba7b-42b5-9f70-ae6767a33c4e"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<text><![CDATA[Saldo]]></text>
 							</staticText>
 						</jr:columnHeader>

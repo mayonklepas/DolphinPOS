@@ -24,8 +24,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Minami
  */
 @Entity
-@Table(name = "barang")
-public class BarangEntity {
+@Table(name = "barang_dummy")
+public class BarangDummyEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -33,36 +33,20 @@ public class BarangEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     @Column(nullable = false)
-    private UUID idOutlet;
-    @Column(nullable = false)
     private String kodeBarang;
     @Column(nullable = false)
     private String namaBarang;
     @Column(nullable = false)
     private String satuanBarang;
     @Column(nullable = false)
-    private double jumlahBarang;
-    @Column(nullable = false)
     private double hargaBeli;
     @Column(nullable = false)
     private double hargaJual;
     @Column(nullable = false)
     private int tipeBarang;
-    @Column(nullable = true)
-    private String kodeResep;
-    
-    @Column(nullable = true)
-    private UUID kodeDiskon;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "kodeDiskon", nullable = true, insertable = false, updatable = false)
-    private DiskonEntity diskon;
-
     @Column(nullable = false)
-    private UUID idPengguna;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
-    private PenggunaEntity pengguna;
-   
+    private int tipeToko;
+       
     private String keterangan;
     
     private String gambar;
@@ -77,14 +61,6 @@ public class BarangEntity {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getIdOutlet() {
-        return idOutlet;
-    }
-
-    public void setIdOutlet(UUID idOutlet) {
-        this.idOutlet = idOutlet;
     }
 
     public String getKodeBarang() {
@@ -111,14 +87,6 @@ public class BarangEntity {
         this.satuanBarang = satuanBarang;
     }
 
-    public double getJumlahBarang() {
-        return jumlahBarang;
-    }
-
-    public void setJumlahBarang(double jumlahBarang) {
-        this.jumlahBarang = jumlahBarang;
-    }
-
     public double getHargaBeli() {
         return hargaBeli;
     }
@@ -143,47 +111,6 @@ public class BarangEntity {
         this.tipeBarang = tipeBarang;
     }
 
-    public String getKodeResep() {
-        return kodeResep;
-    }
-
-    public void setKodeResep(String kodeResep) {
-        this.kodeResep = kodeResep;
-    }
-        
-
-    public UUID getKodeDiskon() {
-        return kodeDiskon;
-    }
-
-    public void setKodeDiskon(UUID kodeDiskon) {
-        this.kodeDiskon = kodeDiskon;
-    }
-
-    public DiskonEntity getDiskon() {
-        return diskon;
-    }
-
-    public void setDiskon(DiskonEntity diskon) {
-        this.diskon = diskon;
-    }
-
-    public UUID getIdPengguna() {
-        return idPengguna;
-    }
-
-    public void setIdPengguna(UUID idPengguna) {
-        this.idPengguna = idPengguna;
-    }
-
-    public PenggunaEntity getPengguna() {
-        return pengguna;
-    }
-
-    public void setPengguna(PenggunaEntity pengguna) {
-        this.pengguna = pengguna;
-    }
-
     public Timestamp getDateCreated() {
         return dateCreated;
     }
@@ -204,6 +131,15 @@ public class BarangEntity {
         this.gambar = gambar;
     }
 
+    public int getTipeToko() {
+        return tipeToko;
+    }
+
+    public void setTipeToko(int tipeToko) {
+        this.tipeToko = tipeToko;
+    }
+
+    
     
 
 }

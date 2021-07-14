@@ -64,12 +64,20 @@ public class PenjualanMasterEntity {
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idKartuKontak", nullable = false, updatable = false, insertable = false)
     private KartuKontakEntity kartuKontak;
+
     @Column(nullable = false)
     private UUID idAkunKeuangan;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idAkunKeuangan", nullable = false, updatable = false, insertable = false)
     private AkunKeuanganEntity akunKeuangan;
+
+    @Column(nullable = false)
+    private UUID idAkunKeuanganKredit;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idAkunKeuanganKredit", nullable = false, updatable = false, insertable = false)
+    private AkunKeuanganEntity akunKeuanganKredit;
 
     @OneToMany(mappedBy = "penjualanMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("penjualanMaster")
@@ -144,8 +152,6 @@ public class PenjualanMasterEntity {
         this.deskripsiEkstra = deskripsiEkstra;
     }
 
-    
-    
     public double getTax() {
         return tax;
     }
@@ -217,6 +223,24 @@ public class PenjualanMasterEntity {
     public void setAkunKeuangan(AkunKeuanganEntity akunKeuangan) {
         this.akunKeuangan = akunKeuangan;
     }
+
+    public UUID getIdAkunKeuanganKredit() {
+        return idAkunKeuanganKredit;
+    }
+
+    public void setIdAkunKeuanganKredit(UUID idAkunKeuanganKredit) {
+        this.idAkunKeuanganKredit = idAkunKeuanganKredit;
+    }
+
+    public AkunKeuanganEntity getAkunKeuanganKredit() {
+        return akunKeuanganKredit;
+    }
+
+    public void setAkunKeuanganKredit(AkunKeuanganEntity akunKeuanganKredit) {
+        this.akunKeuanganKredit = akunKeuanganKredit;
+    }
+    
+    
 
     public List<PenjualanDetailEntity> getPenjualanDetail() {
         return penjualanDetail;

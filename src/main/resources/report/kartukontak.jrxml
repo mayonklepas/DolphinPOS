@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kartu-kontak" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="113"/>
 	<parameter name="tipeKontak" class="java.lang.String"/>
 	<parameter name="namaOutlet" class="java.lang.String"/>
 	<field name="namaKontak" class="java.lang.String"/>
@@ -90,7 +90,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namaKontak}]]></textFieldExpression>
 			</textField>
@@ -99,25 +99,25 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{alamatKontak}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement x="237" y="0" width="116" height="15" uuid="40408d07-da86-4df0-932c-78022eeba8a5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{emailKontak}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.###;#,##0.###-">
+			<textField isStretchWithOverflow="true" pattern="#,##0.###;#,##0.###-">
 				<reportElement x="353" y="0" width="69" height="15" uuid="df930a95-9c87-41a7-89c0-3490ec0f519b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nohpKontak}]]></textFieldExpression>
 			</textField>
@@ -126,7 +126,7 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{deskripsi}]]></textFieldExpression>
 			</textField>

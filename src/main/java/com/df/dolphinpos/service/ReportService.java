@@ -7,6 +7,7 @@ package com.df.dolphinpos.service;
 
 import com.df.dolphinpos.dto.BukuBesarDTO;
 import com.df.dolphinpos.dto.MarginPenjualanDTO;
+import com.df.dolphinpos.dto.NeracaSaldoDTO;
 import com.df.dolphinpos.dto.PembelianReportDTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
 import com.df.dolphinpos.dto.StrukDto;
@@ -38,6 +39,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -88,6 +91,9 @@ public class ReportService {
 
     @Autowired
     JurnalUmumDetailRepository jurnalDetailRepo;
+
+    @Autowired
+    EntityManager enma;
 
     public Map getOutlet(UUID idOutlet) {
         OutletEntity outletEntity = outletRepo.findById(idOutlet).get();
@@ -286,6 +292,159 @@ public class ReportService {
         InputStream inputStream = fileRes.getInputStream();
         JasperReport jr = JasperCompileManager.compileReport(inputStream);
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lsbb);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
+
+    public byte[] neracaSaldo(UUID idOutlet, Date tanggalDari, Date tanggalHingga) throws FileNotFoundException, JRException, IOException {
+        List<NeracaSaldoDTO> lns = new ArrayList<>();
+        String sql = "SELECT a.kode_akun_keuangan,a.nama_akun_keuangan, "
+                + "COALESCE((SELECT saldo FROM jurnal_umum_detail WHERE id_outlet=?1 "
+                + "AND id_akun_keuangan=a.id AND "
+                + "tanggal_jurnal >= ?2 AND tanggal_jurnal <= ?3 "
+                + "ORDER BY urutan_global DESC LIMIT 1 ),0)"
+                + "FROM akun_keuangan a WHERE a.id_outlet=?1 ORDER BY a.kode_akun_keuangan ASC";
+        Query q = enma.createNativeQuery(sql);
+        q.setParameter(1, idOutlet);
+        q.setParameter(2, tanggalDari);
+        q.setParameter(3, tanggalHingga);
+        List<Object[]> lsData = q.getResultList();
+
+        for (int i = 0; i < lsData.size(); i++) {
+            NeracaSaldoDTO ns = new NeracaSaldoDTO();
+            Object[] o = lsData.get(i);
+            String kodeAkun = String.valueOf(o[0]);
+            String namaAkun = String.valueOf(o[1]);
+            double saldo = Double.parseDouble(String.valueOf(o[2]));
+            double debit = 0;
+            double kredit = 0;
+            if (saldo >= 0) {
+                debit = saldo;
+                kredit = 0;
+            } else if (saldo < 0) {
+                debit = 0;
+                kredit = saldo * -1;
+            }
+            ns.setKodeAkun(kodeAkun);
+            ns.setNamaAkun(namaAkun);
+            ns.setDebit(debit);
+            ns.setKredit(kredit);
+            lns.add(ns);
+        }
+
+        Resource fileRes = resLoad.getResource("classpath:report/neraca-saldo.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lns);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
+
+    public byte[] neraca(UUID idOutlet, Date tanggalDari, Date tanggalHingga) throws FileNotFoundException, JRException, IOException {
+        List<NeracaSaldoDTO> lns = new ArrayList<>();
+        String sql = "SELECT a.kode_akun_keuangan,a.nama_akun_keuangan, "
+                + "COALESCE((SELECT saldo FROM jurnal_umum_detail WHERE id_outlet=?1 "
+                + "AND id_akun_keuangan=a.id "
+                + "AND tanggal_jurnal >= ?2 AND tanggal_jurnal <= ?3 "
+                + "ORDER BY urutan_global DESC LIMIT 1 ),0)"
+                + "FROM akun_keuangan a WHERE a.id_outlet=?1 AND a.group_akun=1 OR a.group_akun=3 ORDER BY a.kode_akun_keuangan ASC";
+        Query q = enma.createNativeQuery(sql);
+        q.setParameter(1, idOutlet);
+        q.setParameter(2, tanggalDari);
+        q.setParameter(3, tanggalHingga);
+        List<Object[]> lsData = q.getResultList();
+
+        for (int i = 0; i < lsData.size(); i++) {
+            NeracaSaldoDTO ns = new NeracaSaldoDTO();
+            Object[] o = lsData.get(i);
+            String kodeAkun = String.valueOf(o[0]);
+            String namaAkun = String.valueOf(o[1]);
+            double saldo = Double.parseDouble(String.valueOf(o[2]));
+            double debit = 0;
+            double kredit = 0;
+            if (saldo >= 0) {
+                debit = saldo;
+                kredit = 0;
+            } else if (saldo < 0) {
+                debit = 0;
+                kredit = saldo * -1;
+            }
+            ns.setKodeAkun(kodeAkun);
+            ns.setNamaAkun(namaAkun);
+            ns.setDebit(debit);
+            ns.setKredit(kredit);
+            lns.add(ns);
+        }
+
+        Resource fileRes = resLoad.getResource("classpath:report/neraca.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lns);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
+
+    public byte[] labaRugi(UUID idOutlet, Date tanggalDari, Date tanggalHingga) throws FileNotFoundException, JRException, IOException {
+        List<NeracaSaldoDTO> lns = new ArrayList<>();
+        String sql = "SELECT a.kode_akun_keuangan,a.nama_akun_keuangan, "
+                + "COALESCE((SELECT saldo FROM jurnal_umum_detail WHERE id_outlet=?1 "
+                + "AND id_akun_keuangan=a.id "
+                + "AND tanggal_jurnal >= ?2 AND tanggal_jurnal <= ?3 "
+                + "ORDER BY urutan_global DESC LIMIT 1 ),0)"
+                + "FROM akun_keuangan a WHERE a.id_outlet=?1 AND a.group_akun=2 OR a.group_akun=4 ORDER BY a.kode_akun_keuangan ASC";
+        Query q = enma.createNativeQuery(sql);
+        q.setParameter(1, idOutlet);
+        q.setParameter(2, tanggalDari);
+        q.setParameter(3, tanggalHingga);
+        List<Object[]> lsData = q.getResultList();
+
+        for (int i = 0; i < lsData.size(); i++) {
+            NeracaSaldoDTO ns = new NeracaSaldoDTO();
+            Object[] o = lsData.get(i);
+            String kodeAkun = String.valueOf(o[0]);
+            String namaAkun = String.valueOf(o[1]);
+            double saldo = Double.parseDouble(String.valueOf(o[2]));
+            double debit = 0;
+            double kredit = 0;
+            if (saldo >= 0) {
+                debit = saldo;
+                kredit = 0;
+            } else if (saldo < 0) {
+                debit = 0;
+                kredit = saldo * -1;
+            }
+            ns.setKodeAkun(kodeAkun);
+            ns.setNamaAkun(namaAkun);
+            ns.setDebit(debit);
+            ns.setKredit(kredit);
+            lns.add(ns);
+        }
+
+        Resource fileRes = resLoad.getResource("classpath:report/labarugi.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(lns);
         Map<String, Object> map = new HashMap<>();
         map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
         map.put("namaOutlet", getOutlet(idOutlet).get("nama"));

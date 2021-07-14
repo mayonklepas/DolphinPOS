@@ -5,6 +5,8 @@
  */
 package com.df.dolphinpos.repositories;
 
+import com.df.dolphinpos.dto.BarangTotalDTO;
+import com.df.dolphinpos.dto.BukuBesarDTO;
 import com.df.dolphinpos.entities.BarangEntity;
 import java.util.List;
 import java.util.Optional;
@@ -36,4 +38,14 @@ public interface BarangRepository extends PagingAndSortingRepository<BarangEntit
     @Query("SELECT be FROM BarangEntity be WHERE be.idOutlet=?1 ORDER BY be.dateCreated DESC")
     List<BarangEntity> findBarang(UUID idOutlet);
     
+    @Query("SELECT be FROM BarangEntity be WHERE be.idOutlet=?1 ORDER BY be.jumlahBarang ASC")
+    List<BarangEntity> stokOverview(UUID idOulet);
+    
+    @Query("SELECT new com.df.dolphinpos.dto.BarangTotalDTO("
+            + "SUM(be.hargaBeli*be.jumlahBarang),"
+            + "SUM(be.hargaJual*be.jumlahBarang),"
+            + "COUNT(be.jumlahBarang)) "
+            + "FROM BarangEntity be WHERE be.idOutlet=?1")
+    BarangTotalDTO getTotal(UUID idOutlet);
+   
 }

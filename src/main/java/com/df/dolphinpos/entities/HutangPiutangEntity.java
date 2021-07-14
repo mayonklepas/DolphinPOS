@@ -29,8 +29,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Minami
  */
 @Entity
-@Table(name = "pembelian_master")
-public class PembelianMasterEntity {
+@Table(name = "hutang_piutang")
+public class HutangPiutangEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -40,21 +40,15 @@ public class PembelianMasterEntity {
     @Column(nullable = false)
     private UUID idOutlet;
     @Column(nullable = false, unique = true)
-    private String kodePembelianMaster;
+    private String kode;
     @Column(nullable = false)
-    private Date tanggalPembelian;
+    private Date tanggal;
     @Column(nullable = false)
-    private int status;
-    @Column(nullable = true)
-    private String statusMessage;
+    private int tipe;
     @Column(nullable = true)
     private String deskripsi;
     @Column(nullable = false)
-    private double tax;
-    @Column(nullable = false)
-    private double disc;
-    @Column(nullable = false)
-    private double totalBelanja;
+    private double jumlah;
     @Column(nullable = false)
     private UUID idKartuKontak;
 
@@ -69,16 +63,9 @@ public class PembelianMasterEntity {
     @JoinColumn(name = "idAkunKeuangan", nullable = false, updatable = false, insertable = false)
     private AkunKeuanganEntity akunKeuangan;
 
-    @Column(nullable = false)
-    private UUID idAkunKeuanganDebit;
-
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idAkunKeuanganDebit", nullable = false, updatable = false, insertable = false)
-    private AkunKeuanganEntity akunKeuanganDebit;
-
-    @OneToMany(mappedBy = "pembelianMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("pembelianMaster")
-    private List<PembelianDetailEntity> pembelianDetail;
+    @OneToMany(mappedBy = "hutangPiutang", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("hutangPiutang")
+    private List<PembayaranHutangPiutangEntity> pembayaranHutangPiutangEntity;
 
     @Column(nullable = false)
     private UUID idPengguna;
@@ -89,9 +76,6 @@ public class PembelianMasterEntity {
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
-
-    @Column(nullable = false, columnDefinition = "integer default 0")
-    private int isPosting;
 
     public UUID getId() {
         return id;
@@ -109,36 +93,28 @@ public class PembelianMasterEntity {
         this.idOutlet = idOutlet;
     }
 
-    public String getKodePembelianMaster() {
-        return kodePembelianMaster;
+    public String getKode() {
+        return kode;
     }
 
-    public void setKodePembelianMaster(String kodePembelianMaster) {
-        this.kodePembelianMaster = kodePembelianMaster;
+    public void setKode(String kode) {
+        this.kode = kode;
     }
 
-    public Date getTanggalPembelian() {
-        return tanggalPembelian;
+    public Date getTanggal() {
+        return tanggal;
     }
 
-    public void setTanggalPembelian(Date tanggalPembelian) {
-        this.tanggalPembelian = tanggalPembelian;
+    public void setTanggal(Date tanggal) {
+        this.tanggal = tanggal;
     }
 
-    public int getStatus() {
-        return status;
+    public int getTipe() {
+        return tipe;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getStatusMessage() {
-        return statusMessage;
-    }
-
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
+    public void setTipe(int tipe) {
+        this.tipe = tipe;
     }
 
     public String getDeskripsi() {
@@ -149,28 +125,12 @@ public class PembelianMasterEntity {
         this.deskripsi = deskripsi;
     }
 
-    public double getTax() {
-        return tax;
+    public double getJumlah() {
+        return jumlah;
     }
 
-    public void setTax(double tax) {
-        this.tax = tax;
-    }
-
-    public double getDisc() {
-        return disc;
-    }
-
-    public void setDisc(double disc) {
-        this.disc = disc;
-    }
-
-    public double getTotalBelanja() {
-        return totalBelanja;
-    }
-
-    public void setTotalBelanja(double totalBelanja) {
-        this.totalBelanja = totalBelanja;
+    public void setJumlah(double jumlah) {
+        this.jumlah = jumlah;
     }
 
     public UUID getIdKartuKontak() {
@@ -205,28 +165,12 @@ public class PembelianMasterEntity {
         this.akunKeuangan = akunKeuangan;
     }
 
-    public UUID getIdAkunKeuanganDebit() {
-        return idAkunKeuanganDebit;
+    public List<PembayaranHutangPiutangEntity> getPembayaranHutangPiutangEntity() {
+        return pembayaranHutangPiutangEntity;
     }
 
-    public void setIdAkunKeuanganDebit(UUID idAkunKeuanganDebit) {
-        this.idAkunKeuanganDebit = idAkunKeuanganDebit;
-    }
-
-    public AkunKeuanganEntity getAkunKeuanganDebit() {
-        return akunKeuanganDebit;
-    }
-
-    public void setAkunKeuanganDebit(AkunKeuanganEntity akunKeuanganDebit) {
-        this.akunKeuanganDebit = akunKeuanganDebit;
-    }
-    
-    public List<PembelianDetailEntity> getPembelianDetail() {
-        return pembelianDetail;
-    }
-
-    public void setPembelianDetail(List<PembelianDetailEntity> pembelianDetail) {
-        this.pembelianDetail = pembelianDetail;
+    public void setPembayaranHutangPiutangEntity(List<PembayaranHutangPiutangEntity> pembayaranHutangPiutangEntity) {
+        this.pembayaranHutangPiutangEntity = pembayaranHutangPiutangEntity;
     }
 
     public UUID getIdPengguna() {
@@ -249,12 +193,11 @@ public class PembelianMasterEntity {
         return dateCreated;
     }
 
-    public int getIsPosting() {
-        return isPosting;
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public void setIsPosting(int isPosting) {
-        this.isPosting = isPosting;
-    }
+    
+    
 
 }

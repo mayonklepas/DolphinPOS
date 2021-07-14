@@ -128,6 +128,7 @@ public class PenjualanController {
         PenjualanMasterEntity penjualanmasterentity = penjualanmasterrepo.findById(id).get();
         penjualanmasterentity.setTanggalPenjualan(data.getMaster().getTanggalPenjualan());
         penjualanmasterentity.setIdAkunKeuangan(data.getMaster().getIdAkunKeuangan());
+        penjualanmasterentity.setIdAkunKeuanganKredit(data.getMaster().getIdAkunKeuanganKredit());
         penjualanmasterentity.setIdKartuKontak(data.getMaster().getIdKartuKontak());
         penjualanmasterentity.setDeskripsi(data.getMaster().getDeskripsi());
         penjualanmasterentity.setIdPengguna(data.getMaster().getIdPengguna());

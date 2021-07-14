@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="penjualan-faktur" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="53"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -40,10 +40,13 @@
 	<parameter name="tanggalDari" class="java.util.Date"/>
 	<parameter name="tanggalHingga" class="java.util.Date"/>
 	<parameter name="namaOutlet" class="java.lang.String"/>
+	<parameter name="alamatOutlet" class="java.lang.String"/>
+	<parameter name="nohpOutlet" class="java.lang.String"/>
 	<field name="tanggalPenjualan" class="java.util.Date"/>
 	<field name="kodePenjualanMaster" class="java.lang.String"/>
 	<field name="deskripsi" class="java.lang.String"/>
 	<field name="kartuKontak.namaKontak" class="java.lang.String"/>
+	<field name="kartuKontak.nohpKontak" class="java.lang.String"/>
 	<field name="akunKeuangan.namaAkunKeuangan" class="java.lang.String"/>
 	<field name="pengguna.username" class="java.lang.String"/>
 	<field name="disc" class="java.lang.Double"/>
@@ -53,16 +56,16 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="51" splitType="Stretch">
+		<band height="90" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="467" height="30" uuid="da115253-98aa-4017-a74d-41220a928391"/>
+				<reportElement x="0" y="0" width="467" height="26" uuid="da115253-98aa-4017-a74d-41220a928391"/>
 				<textElement markup="none">
-					<font size="23" isBold="true"/>
+					<font size="20" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{namaOutlet}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="30" width="555" height="20" uuid="6a6461e2-cbd3-4ba8-99fe-e8fbe6bf978d"/>
+				<reportElement x="0" y="68" width="555" height="20" uuid="6a6461e2-cbd3-4ba8-99fe-e8fbe6bf978d"/>
 				<textElement textAlignment="Right" markup="none">
 					<font size="15"/>
 				</textElement>
@@ -72,6 +75,20 @@
 				<reportElement x="467" y="0" width="87" height="20" uuid="c23202f8-a4c2-4d3b-b8bf-5f0d5754733e"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="26" width="467" height="20" uuid="91cf0ab9-9377-4132-bbca-34e83b7d5c35"/>
+				<textElement markup="none">
+					<font size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{alamatOutlet}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="46" width="467" height="20" uuid="560c067b-5b0a-472a-b443-b19dff5ae004"/>
+				<textElement markup="none">
+					<font size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nohpOutlet}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -102,7 +119,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{akunKeuangan.namaAkunKeuangan}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{kartuKontak.nohpKontak}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="242" y="24" width="89" height="15" uuid="f4482438-b336-4769-bbf8-30e6c184922f">
@@ -141,7 +158,7 @@
 				<textFieldExpression><![CDATA[$F{pengguna.username}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement key="table" style="table" x="0" y="39" width="554" height="62" uuid="da20d441-caed-4c8b-bab9-fe503f9bda54"/>
+				<reportElement key="table" style="table" x="0" y="39" width="554" height="62" forecolor="#FFFFFF" uuid="da20d441-caed-4c8b-bab9-fe503f9bda54"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="subds" uuid="54fdf027-46cb-4943-ac42-918908acca76">
 						<datasetParameter name="gdisc">
@@ -188,7 +205,7 @@
 								<rightPen lineWidth="0.0"/>
 							</box>
 							<staticText>
-								<reportElement style="table_CH" mode="Opaque" x="0" y="0" width="159" height="22" uuid="134d3555-bdf1-48ef-9dfc-2e67a4cdf316"/>
+								<reportElement mode="Transparent" x="0" y="0" width="159" height="22" uuid="134d3555-bdf1-48ef-9dfc-2e67a4cdf316"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
@@ -300,11 +317,11 @@
 					<jr:column width="120" uuid="04ee6e65-b793-401c-ab38-c9ce2f6d14f6">
 						<jr:tableFooter style="table_CH" height="22" rowSpan="1">
 							<box>
-								<pen lineWidth="0.0"/>
-								<topPen lineWidth="0.0"/>
-								<leftPen lineWidth="0.0"/>
-								<bottomPen lineWidth="0.0"/>
-								<rightPen lineWidth="0.0"/>
+								<pen lineWidth="0.25"/>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="0.25"/>
+								<bottomPen lineWidth="0.25"/>
+								<rightPen lineWidth="0.25"/>
 							</box>
 							<textField pattern="#,##0;-#,##0">
 								<reportElement x="0" y="0" width="118" height="22" uuid="bf9789d5-adf0-40d1-92b6-046f50a6a2ab"/>
@@ -388,7 +405,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Akun]]></text>
+				<text><![CDATA[No. Phone]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="406" y="2" width="69" height="20" uuid="f1262246-1040-4bca-ac47-bc672db7a455">

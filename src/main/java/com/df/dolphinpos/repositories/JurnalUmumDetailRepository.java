@@ -6,6 +6,7 @@
 package com.df.dolphinpos.repositories;
 
 import com.df.dolphinpos.dto.JurnalUmumDTO;
+import com.df.dolphinpos.dto.NeracaSaldoDTO;
 import com.df.dolphinpos.entities.JurnalUmumDetailEntity;
 import java.util.Date;
 import java.util.List;
@@ -29,13 +30,13 @@ public interface JurnalUmumDetailRepository extends JpaRepository<JurnalUmumDeta
     int deleteByIdJurnalMaster(UUID idJurnalMaster);
     
     @Query("SELECT jude FROM JurnalUmumDetailEntity jude WHERE idOutlet=?1 AND idAkunKeuangan=?2 "
-            + "AND EXTRACT(YEAR FROM tanggalJurnal)=?3 ORDER BY tanggalJurnal,dateCreated ASC")
+            + "AND EXTRACT(YEAR FROM tanggalJurnal)=?3 ORDER BY tanggalJurnal,dateCreated,urutan ASC")
     List<JurnalUmumDetailEntity> getJurnalByAkunKeuangan(UUID idOutlet,UUID idAkunKeuangan,int tahun);
     
     @Query("SELECT jude FROM JurnalUmumDetailEntity jude "
             + "WHERE idOutlet=?1 AND idAkunKeuangan=?2 "
             + "AND tanggalJurnal >= ?3 AND tanggalJurnal <= ?4  "
-            + "ORDER BY tanggalJurnal,dateCreated ASC")
+            + "ORDER BY tanggalJurnal,dateCreated,urutan ASC")
     List<JurnalUmumDetailEntity> getJurnalByAkunKeuangan(UUID idOutlet,UUID idAkunKeuangan,Date tanggalDari,Date tanggalHingga);
     
     /*@Query("SELECT com.df.dolphinpos.dto.JurnalUmumDTO("
@@ -51,6 +52,7 @@ public interface JurnalUmumDetailRepository extends JpaRepository<JurnalUmumDeta
             + "AND jue.tanggalJurnal <= ?3 "
             + "ORDER BY dateCreated DESC ")
     List<JurnalUmumDTO> getJurnalUmum();*/
+    
     
 
 }

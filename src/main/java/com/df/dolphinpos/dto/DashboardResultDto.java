@@ -14,12 +14,12 @@ import java.util.List;
 public class DashboardResultDto {
 
     Object chartPenjualan;
-    Object chartPembelian;
     Object chartTopSelling;
-    Object totalPenjualan;
-    Object totalPembelian;
-    Object totalCatatanPendapatan;
-    Object totalCatatanPengeluaran;
+    Object stokOverview;
+    Object totalPenjualanBulanIni;
+    Object totalPenjualanHariIni;
+    Object totalPembelianBulanIni;
+    Object totalPembelianHariIni;
 
     public Object getChartPenjualan() {
         return chartPenjualan;
@@ -29,14 +29,6 @@ public class DashboardResultDto {
         this.chartPenjualan = chartPenjualan;
     }
 
-    public Object getChartPembelian() {
-        return chartPembelian;
-    }
-
-    public void setChartPembelian(Object chartPembelian) {
-        this.chartPembelian = chartPembelian;
-    }
-
     public Object getChartTopSelling() {
         return chartTopSelling;
     }
@@ -44,39 +36,48 @@ public class DashboardResultDto {
     public void setChartTopSelling(Object chartTopSelling) {
         this.chartTopSelling = chartTopSelling;
     }
+
+    public Object getStokOverview() {
+        return stokOverview;
+    }
+
+    public void setStokOverview(Object stokOverview) {
+        this.stokOverview = stokOverview;
+    }
+
+    public Object getTotalPenjualanBulanIni() {
+        return totalPenjualanBulanIni;
+    }
+
+    public void setTotalPenjualanBulanIni(Object totalPenjualanBulanIni) {
+        this.totalPenjualanBulanIni = totalPenjualanBulanIni;
+    }
+
+    public Object getTotalPenjualanHariIni() {
+        return totalPenjualanHariIni;
+    }
+
+    public void setTotalPenjualanHariIni(Object totalPenjualanHariIni) {
+        this.totalPenjualanHariIni = totalPenjualanHariIni;
+    }
+
+    public Object getTotalPembelianBulanIni() {
+        return totalPembelianBulanIni;
+    }
+
+    public void setTotalPembelianBulanIni(Object totalPembelianBulanIni) {
+        this.totalPembelianBulanIni = totalPembelianBulanIni;
+    }
+
+    public Object getTotalPembelianHariIni() {
+        return totalPembelianHariIni;
+    }
+
+    public void setTotalPembelianHariIni(Object totalPembelianHariIni) {
+        this.totalPembelianHariIni = totalPembelianHariIni;
+    }
+
+    
     
 
-    public Object getTotalPenjualan() {
-        return totalPenjualan;
-    }
-
-    public void setTotalPenjualan(Object totalPenjualan) {
-        this.totalPenjualan = totalPenjualan;
-    }
-
-    public Object getTotalPembelian() {
-        return totalPembelian;
-    }
-
-    public void setTotalPembelian(Object totalPembelian) {
-        this.totalPembelian = totalPembelian;
-    }
-
-    public Object getTotalCatatanPendapatan() {
-        return totalCatatanPendapatan;
-    }
-
-    public void setTotalCatatanPendapatan(Object totalCatatanPendapatan) {
-        this.totalCatatanPendapatan = totalCatatanPendapatan;
-    }
-
-    public Object getTotalCatatanPengeluaran() {
-        return totalCatatanPengeluaran;
-    }
-
-    public void setTotalCatatanPengeluaran(Object totalCatatanPengeluaran) {
-        this.totalCatatanPengeluaran = totalCatatanPengeluaran;
-    }
-
-                
 }
