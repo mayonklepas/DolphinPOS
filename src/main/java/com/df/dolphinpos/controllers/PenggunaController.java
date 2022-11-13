@@ -5,15 +5,23 @@
  */
 package com.df.dolphinpos.controllers;
 
+import com.df.dolphinpos.config.security.JwtUtil;
 import com.df.dolphinpos.dto.LoginFormDto;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.PenggunaEntity;
 import com.df.dolphinpos.repositories.PenggunaRepository;
+import com.df.dolphinpos.service.UserService;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +42,15 @@ public class PenggunaController {
 
     @Autowired
     PenggunaRepository penggunarepo;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @GetMapping("/getdata/{idOutlet}")
     public Page<PenggunaEntity> getdata(Pageable pg, @PathVariable UUID idOutlet) {
@@ -110,9 +127,13 @@ public class PenggunaController {
         try {
             PenggunaEntity entity = penggunarepo.findLogin(data.getKodeOutlet(), data.getUsername(), data.getPassword());
             if (entity != null) {
+                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                UserDetails userDetails = userService.loadUserByUsername(data.getUsername());
+                final String jwt = jwtUtil.generateToken(userDetails);
                 res.setCode(0);
                 res.setStatus("success");
-                res.setMessage("berhasil login");
+                res.setMessage(jwt);
                 res.setContent(entity);
             } else {
                 res.setCode(1);

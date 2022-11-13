@@ -19,6 +19,8 @@ import com.df.dolphinpos.service.DashboardService;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +56,7 @@ public class DashboardController {
         ChartDto totalPenjualanBulanIni = penjualanRepo.findTotalPenjualanBulanIni(idOutlet);
         ChartDto totalPembelianHariIni = pembelianRepo.findTotalPembelianHariIni(idOutlet);
         ChartDto totalPembelianBulanIni = pembelianRepo.findTotalPembelianBulanIni(idOutlet);
-        List<BarangEntity> barang=barangRepo.stokOverview(idOutlet);
+        List<BarangEntity> barang=barangRepo.stokOverview(PageRequest.of(0,25,Sort.by("jumlahBarang").ascending()),idOutlet);
         DashboardResultDto drd = new DashboardResultDto();
         drd.setChartPenjualan(chartPenjualan);
         drd.setChartTopSelling(chartTopSelling);

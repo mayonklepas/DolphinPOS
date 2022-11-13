@@ -6,10 +6,13 @@
 package com.df.dolphinpos.repositories;
 
 import com.df.dolphinpos.entities.KoreksiStokEntity;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -23,4 +26,9 @@ public interface KoreksiStokRepository extends PagingAndSortingRepository<Koreks
     Optional<KoreksiStokEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
 
     Page<KoreksiStokEntity> findByIdOutletAndDeskripsiContainingIgnoreCase(Pageable page, UUID idOutlet, String deskripsi);
+
+    @Query("SELECT kse FROM KoreksiStokEntity kse "
+            + "WHERE kse.idOutlet=?1 AND kse.tanggalKoreksi >= ?2 "
+            + "AND kse.tanggalKoreksi <= ?3")
+    List<KoreksiStokEntity> findKoreksiStokReport(UUID idOutlet,Date tanggalDari, Date tanggalHingga);
 }

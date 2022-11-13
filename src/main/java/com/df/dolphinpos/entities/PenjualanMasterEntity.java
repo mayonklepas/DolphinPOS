@@ -239,8 +239,6 @@ public class PenjualanMasterEntity {
     public void setAkunKeuanganKredit(AkunKeuanganEntity akunKeuanganKredit) {
         this.akunKeuanganKredit = akunKeuanganKredit;
     }
-    
-    
 
     public List<PenjualanDetailEntity> getPenjualanDetail() {
         return penjualanDetail;

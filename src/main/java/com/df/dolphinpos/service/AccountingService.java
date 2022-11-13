@@ -72,27 +72,28 @@ public class AccountingService {
         String kodeReturPembelianDebit = joSetting.getJSONObject("akunReturPembelianDebit").getString("id");
         String kodeReturPembelianKredit = joSetting.getJSONObject("akunReturPembelianKredit").getString("id");*/
         String sqlGetakun
-                = "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'penjualan' AS tipe FROM penjualan_master WHERE is_posting=0 GROUP BY id_akun_keuangan,id_akun_keuangan_kredit "
+                = "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'penjualan' AS tipe FROM penjualan_master WHERE is_posting=0 and status!=1 GROUP BY id_akun_keuangan,id_akun_keuangan_kredit "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'pembelian' AS tipe FROM pembelian_master WHERE is_posting=0 GROUP BY id_akun_keuangan_debit,id_akun_keuangan "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'pembelian' AS tipe FROM pembelian_master WHERE is_posting=0 and status!=1 GROUP BY id_akun_keuangan_debit,id_akun_keuangan "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_penjualan' AS tipe FROM retur_penjualan_master WHERE is_posting=0 GROUP BY id_akun_keuangan_debit,id_akun_keuangan "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_penjualan' AS tipe FROM retur_penjualan_master WHERE is_posting=0 and status!=1 GROUP BY id_akun_keuangan_debit,id_akun_keuangan "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_pembelian' AS tipe FROM retur_pembelian_master WHERE is_posting=0 GROUP BY id_akun_keuangan,id_akun_keuangan_kredit ORDER BY tipe";
+                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_pembelian' AS tipe FROM retur_pembelian_master WHERE is_posting=0 and status!=1 GROUP BY id_akun_keuangan,id_akun_keuangan_kredit ORDER BY tipe";
         Query queryGetAkun = enma.createNativeQuery(sqlGetakun);
         List<Object[]> lsDataPosting = queryGetAkun.getResultList();
 
         if (lsDataPosting.size() > 0) {
 
-            String currentDate = new SimpleDateFormat("yyyyMMddHms").format(new Date());
+            String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 
             JurnalUmumMasterEntity jurnalUmumMasterEntity = new JurnalUmumMasterEntity();
             jurnalUmumMasterEntity.setIdOutlet(outlet);
             jurnalUmumMasterEntity.setIdPengguna(pengguna);
             jurnalUmumMasterEntity.setTanggalJurnal(new java.sql.Date(System.currentTimeMillis()));
             jurnalUmumMasterEntity.setTanggalRef(new java.sql.Date(System.currentTimeMillis()));
-            jurnalUmumMasterEntity.setNoRef(currentDate);
-            jurnalUmumMasterEntity.setDeskripsi("Posting Data " + currentDate);
+            jurnalUmumMasterEntity.setNoRef(new SimpleDateFormat("ddMMyyyy").format(new Date()));
+            jurnalUmumMasterEntity.setDeskripsi("Posting Data Transaksi " + currentDate);
+            jurnalUmumMasterEntity.setIsPosting(1);
             UUID idJurnal = jurnalUmumMasterRepo.save(jurnalUmumMasterEntity).getId();
 
             //jurnal detail
@@ -134,10 +135,10 @@ public class AccountingService {
             }
             jurnalUmumDetailRepo.saveAll(jurnalDetailList);
 
-            String sqlupdatePosting = "UPDATE penjualan_master SET is_posting=1 WHERE is_posting=0;"
-                    + "UPDATE pembelian_master SET is_posting=1 WHERE is_posting=0;"
-                    + "UPDATE retur_penjualan_master SET is_posting=1 WHERE is_posting=0;"
-                    + "UPDATE retur_pembelian_master SET is_posting=1 WHERE is_posting=0;";
+            String sqlupdatePosting = "UPDATE penjualan_master SET is_posting=1 WHERE is_posting=0 AND status!=1;"
+                    + "UPDATE pembelian_master SET is_posting=1 WHERE is_posting=0 AND status!=1;"
+                    + "UPDATE retur_penjualan_master SET is_posting=1 WHERE is_posting=0 AND status!=1;"
+                    + "UPDATE retur_pembelian_master SET is_posting=1 WHERE is_posting=0 AND status!=1;";
             Query queryUpdatePosting = enma.createNativeQuery(sqlupdatePosting);
             queryUpdatePosting.executeUpdate();
         }

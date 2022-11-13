@@ -27,6 +27,7 @@ import org.springframework.web.client.ResourceAccessException;
 import com.df.dolphinpos.repositories.AkunKeuanganRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  *

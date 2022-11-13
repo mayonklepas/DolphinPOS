@@ -23,6 +23,8 @@ public interface PenggunaRepository extends PagingAndSortingRepository<PenggunaE
     Page<PenggunaEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
     Optional<PenggunaEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
+    
+    PenggunaEntity findByUsername(String username);
 
     @Query("SELECT pe FROM PenggunaEntity pe WHERE pe.outlet.kodeOutlet=?1 AND pe.username=?2 AND pe.password=?3")
     PenggunaEntity findLogin(String kodeOutlet,String username, String password);

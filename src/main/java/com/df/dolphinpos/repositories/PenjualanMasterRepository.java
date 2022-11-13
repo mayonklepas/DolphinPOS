@@ -7,6 +7,7 @@ package com.df.dolphinpos.repositories;
 
 import com.df.dolphinpos.dto.ChartDto;
 import com.df.dolphinpos.dto.MarginPenjualanDTO;
+import com.df.dolphinpos.dto.PenjualanMasterListDTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
 import com.df.dolphinpos.dto.StrukDto;
 import com.df.dolphinpos.entities.PenjualanMasterEntity;
@@ -24,10 +25,24 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author Minami
  */
 public interface PenjualanMasterRepository extends PagingAndSortingRepository<PenjualanMasterEntity, UUID> {
-
+    
+    @Query("SELECT new com.df.dolphinpos.dto.PenjualanMasterListDTO("
+            + "pme.id,pme.idOutlet,pme.tanggalPenjualan,pme.kodePenjualanMaster,"
+            + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
+            + "FROM PenjualanMasterEntity pme "
+            + "WHERE pme.idOutlet = ?1 ")
+    Page<PenjualanMasterListDTO> findAllPenjualan(Pageable page,UUID idOutlet);
+    
+    @Query("SELECT new com.df.dolphinpos.dto.PenjualanMasterListDTO("
+            + "pme.id,pme.idOutlet,pme.tanggalPenjualan,pme.kodePenjualanMaster,"
+            + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
+            + "FROM PenjualanMasterEntity pme "
+            + "WHERE pme.idOutlet = ?1 AND lower(pme.kodePenjualanMaster) LIKE %?2% ")
+    Page<PenjualanMasterListDTO> findAllPenjualanByKey(Pageable page,UUID idOutlet,String keyword);
+    
     Page<PenjualanMasterEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
-    Optional<PenjualanMasterEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
+    Optional<PenjualanMasterEntity> findByIdOutletAndId(UUID idOutlet,UUID id);
 
     Page<PenjualanMasterEntity> findByIdOutletAndKodePenjualanMasterContainingIgnoreCase(Pageable page, UUID idOutlet, String kodePenjualanMaster);
 
@@ -72,6 +87,10 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
 
     @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan >= ?2 and pm.tanggalPenjualan <= ?3 ORDER BY pm.dateCreated DESC")
     List<PenjualanMasterEntity> findPenjualanReportDetail(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
+    
+    @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan >= ?2 and pm.tanggalPenjualan <= ?3 AND pm.idKartuKontak = ?4 ORDER BY pm.dateCreated DESC")
+    List<PenjualanMasterEntity> findPenjualanReportDetailPerKontak(UUID idOutlet, Date tanggalDari, Date tanggalHingga,UUID idKartuKontak);
+    
 
     @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.id=?1 AND pm.idOutlet=?2 ORDER BY pm.tanggalPenjualan DESC")
     List<PenjualanMasterEntity> findPenjualanFakturById(UUID id, UUID idOutlet);

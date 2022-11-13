@@ -6,6 +6,7 @@
 package com.df.dolphinpos.controllers;
 
 import com.df.dolphinpos.dto.MasterDetailPembelianDTO;
+import com.df.dolphinpos.dto.PembelianMasterListDTO;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.BarangEntity;
 import com.df.dolphinpos.entities.PembelianDetailEntity;
@@ -48,19 +49,24 @@ public class PembelianController {
     BarangRepository barangrepo;
 
     @GetMapping("/getdata/{idOutlet}")
-    public Page<PembelianMasterEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
-        Page<PembelianMasterEntity> result = null;
+    public Page<PembelianMasterListDTO> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
+        Page<PembelianMasterListDTO> result = null;
         if (keyword.equals("")) {
-            result = pembelianmasterrepo.findByIdOutlet(pg, idOutlet);
+            result = pembelianmasterrepo.findAllPembelian(pg, idOutlet);
         } else {
-            result = pembelianmasterrepo.findByIdOutletAndKodePembelianMasterContainingIgnoreCase(pg, idOutlet, keyword);
+            result = pembelianmasterrepo.findAllPembelianByKey(pg, idOutlet, keyword.toLowerCase());
         }
         return result;
     }
 
     @GetMapping("/getdatabyid/{idOutlet}/{id}")
     public Optional<PembelianMasterEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
-        return pembelianmasterrepo.findByIdAndIdOutlet(idOutlet, id);
+        return pembelianmasterrepo.findByIdOutletAndId(idOutlet, id);
+    }
+
+    @GetMapping("/getdatadetailbyidpembelian/{idOutlet}/{idPembelian}")
+    public List<PembelianDetailEntity> getDataDetailByIdPenjualan(@PathVariable UUID idOutlet, @PathVariable UUID idPembelian) {
+        return pembeliandetailrepo.findByIdPembelianMaster(idPembelian);
     }
 
     @Transactional

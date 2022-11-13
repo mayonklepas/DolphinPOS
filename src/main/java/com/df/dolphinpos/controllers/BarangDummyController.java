@@ -69,7 +69,7 @@ public class BarangDummyController {
     }
 
     @PutMapping("/updatedata/{id}")
-    public ResponseResult updatedata(@RequestBody BarangDummyEntity data, @PathVariable UUID id) {
+    public ResponseResult updatedata(@RequestBody BarangDummyEntity data, @PathVariable long id) {
         ResponseResult res = new ResponseResult();
         try {
             BarangDummyEntity barangdummyentity = barangdummyrepo.findById(id).get();
@@ -95,7 +95,7 @@ public class BarangDummyController {
     }
 
     @DeleteMapping("/deletedata/{id}")
-    public ResponseResult deletedata(@PathVariable UUID id) {
+    public ResponseResult deletedata(@PathVariable long id) {
         ResponseResult res = new ResponseResult();
         try {
             BarangDummyEntity barangdummyentity = barangdummyrepo.findById(id).get();

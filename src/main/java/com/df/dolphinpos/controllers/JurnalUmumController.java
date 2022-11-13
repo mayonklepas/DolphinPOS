@@ -5,6 +5,7 @@
  */
 package com.df.dolphinpos.controllers;
 
+import com.df.dolphinpos.dto.JurnalUmumMasterDTO;
 import com.df.dolphinpos.dto.MasterDetailJurnalUmumDTO;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.BarangEntity;
@@ -51,19 +52,19 @@ public class JurnalUmumController {
     AccountingService accServ;
 
     @GetMapping("/getdata/{idOutlet}")
-    public Page<JurnalUmumMasterEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
-        Page<JurnalUmumMasterEntity> result = null;
+    public Page<JurnalUmumMasterDTO> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
+        Page<JurnalUmumMasterDTO> result = null;
         if (keyword.equals("")) {
-            result = jurnalumummasterrepo.findByIdOutlet(pg, idOutlet);
+            result = jurnalumummasterrepo.findAllJurnal(pg, idOutlet);
         } else {
-            result = jurnalumummasterrepo.findByIdOutletAndNoRefContainingIgnoreCase(pg, idOutlet, keyword);
+            result = jurnalumummasterrepo.findAllJurnal(pg, idOutlet);
         }
         return result;
     }
 
     @GetMapping("/getdatabyid/{idOutlet}/{id}")
     public Optional<JurnalUmumMasterEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
-        return jurnalumummasterrepo.findByIdAndIdOutlet(idOutlet, id);
+        return jurnalumummasterrepo.findByIdOutletAndId(idOutlet, id);
     }
 
     @Transactional

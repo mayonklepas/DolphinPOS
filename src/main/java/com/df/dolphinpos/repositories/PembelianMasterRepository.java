@@ -6,6 +6,7 @@
 package com.df.dolphinpos.repositories;
 
 import com.df.dolphinpos.dto.ChartDto;
+import com.df.dolphinpos.dto.PembelianMasterListDTO;
 import com.df.dolphinpos.dto.PembelianReportDTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
 import com.df.dolphinpos.entities.PembelianDetailEntity;
@@ -24,10 +25,24 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author Minami
  */
 public interface PembelianMasterRepository extends PagingAndSortingRepository<PembelianMasterEntity, UUID> {
+    
+    @Query("SELECT new com.df.dolphinpos.dto.PembelianMasterListDTO("
+            + "pme.id,pme.idOutlet,pme.tanggalPembelian,pme.kodePembelianMaster,"
+            + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
+            + "FROM PembelianMasterEntity pme "
+            + "WHERE pme.idOutlet = ?1 ")
+    Page<PembelianMasterListDTO> findAllPembelian(Pageable page,UUID idOutlet);
+    
+    @Query("SELECT new com.df.dolphinpos.dto.PembelianMasterListDTO("
+            + "pme.id,pme.idOutlet,pme.tanggalPembelian,pme.kodePembelianMaster,"
+            + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
+            + "FROM PembelianMasterEntity pme "
+            + "WHERE pme.idOutlet = ?1 AND lower(pme.kodePembelianMaster) LIKE %?2%")
+    Page<PembelianMasterListDTO> findAllPembelianByKey(Pageable page,UUID idOutlet,String keyword);
 
     Page<PembelianMasterEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
-    Optional<PembelianMasterEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
+    Optional<PembelianMasterEntity> findByIdOutletAndId(UUID idOutlet,UUID id);
 
     Page<PembelianMasterEntity> findByIdOutletAndKodePembelianMasterContainingIgnoreCase(Pageable page, UUID idOutlet, String kodePembelianMaster);
 

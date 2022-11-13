@@ -54,12 +54,12 @@ public class KartuKontakController {
     }
 
     @GetMapping("/getdatabytipe/{idOutlet}/{tipeKontak}")
-    public Page<KartuKontakEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @PathVariable int tipeKontak) {
+    public Page<KartuKontakEntity> getdataByTipe(Pageable pg, @PathVariable UUID idOutlet, @PathVariable int tipeKontak) {
         Page<KartuKontakEntity> result = null;
-        result = kartukontakrepo.findByIdOutletAndTipeKontak(pg, idOutlet, tipeKontak);
-
+        result = kartukontakrepo.findKontakByTipe(pg, idOutlet, tipeKontak);
         return result;
     }
+    
 
     @PostMapping("/adddata")
     public ResponseResult adddata(@RequestBody KartuKontakEntity data) {
@@ -119,4 +119,5 @@ public class KartuKontakController {
         }
         return res;
     }
+    
 }

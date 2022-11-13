@@ -22,6 +22,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author Minami
  */
-public interface BarangDummyRepository extends JpaRepository<BarangDummyEntity, UUID> {
+public interface BarangDummyRepository extends JpaRepository<BarangDummyEntity, Long> {
    List<BarangDummyEntity> findByTipeToko(int tipeToko);
 }

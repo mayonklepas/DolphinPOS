@@ -6,6 +6,7 @@
 package com.df.dolphinpos.controllers;
 
 import com.df.dolphinpos.dto.MasterDetailPenjualanDTO;
+import com.df.dolphinpos.dto.PenjualanMasterListDTO;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.BarangEntity;
 import com.df.dolphinpos.entities.PenjualanDetailEntity;
@@ -57,20 +58,26 @@ public class PenjualanController {
     UtilService utilServ;
 
     @GetMapping("/getdata/{idOutlet}")
-    public Page<PenjualanMasterEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
-        Page<PenjualanMasterEntity> result = null;
+    public Page<PenjualanMasterListDTO> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
+        Page<PenjualanMasterListDTO> result = null;
         if (keyword.equals("")) {
-            result = penjualanmasterrepo.findByIdOutlet(pg, idOutlet);
+            result = penjualanmasterrepo.findAllPenjualan(pg, idOutlet);
         } else {
-            result = penjualanmasterrepo.findByIdOutletAndKodePenjualanMasterContainingIgnoreCase(pg, idOutlet, keyword);
+            result = penjualanmasterrepo.findAllPenjualanByKey(pg, idOutlet, keyword.toLowerCase());
         }
         return result;
     }
 
     @GetMapping("/getdatabyid/{idOutlet}/{id}")
     public Optional<PenjualanMasterEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
-        return penjualanmasterrepo.findByIdAndIdOutlet(idOutlet, id);
+        return penjualanmasterrepo.findByIdOutletAndId(idOutlet, id);
     }
+    
+    @GetMapping("/getdatadetailbyidpenjualan/{idOutlet}/{idPenjualan}")
+    public List<PenjualanDetailEntity> getDataDetailByIdPenjualan(@PathVariable UUID idOutlet, @PathVariable UUID idPenjualan){
+        return penjualandetailrepo.findByIdPenjualanMaster(idPenjualan);
+    }
+    
 
     @GetMapping("/getdatalist/{idOutlet}")
     public List<PenjualanMasterEntity> getdatalist(@PathVariable UUID idOutlet) {

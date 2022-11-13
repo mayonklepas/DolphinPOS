@@ -46,8 +46,9 @@ public interface PenjualanDetailRepository extends JpaRepository<PenjualanDetail
             + "be.namaBarang,"
             + "be.satuanBarang,"
             + "be.hargaBeli,"
-            + "be.hargaJual,"
-            + "SUM(pd.jumlahJual)) FROM PenjualanDetailEntity pd JOIN pd.barang be "
+            + "SUM((pd.hargaJualJual*pd.jumlahJual) - (pd.disc*pd.jumlahJual)),"
+            + "SUM(pd.jumlahJual)) "
+            + "FROM PenjualanDetailEntity pd JOIN pd.barang be "
             + "WHERE pd.idOutlet=?1 AND pd.tanggalTransaksi >= ?2 AND pd.tanggalTransaksi <=?3 "
             + "GROUP BY be.id")
     List<MarginPenjualanDTO> findMarginPenjualan(UUID idOutlet, Date tanggalDari, Date tanggalHingga);

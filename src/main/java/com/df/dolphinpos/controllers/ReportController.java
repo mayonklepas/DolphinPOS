@@ -43,7 +43,20 @@ public class ReportController {
         byte[] bytes = reportservice.barangReport(idOutlet);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-stock-barang.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+    
+     @GetMapping("/barcodebarang/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getBarcodeBarang(@PathVariable UUID idOutlet) throws FileNotFoundException, JRException, IOException {
+        byte[] bytes = reportservice.barcodeBarangReport(idOutlet);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=barcode-barang.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -56,7 +69,7 @@ public class ReportController {
         byte[] bytes = reportservice.kontakReport(idOutlet, tipe);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=kartu-kontak.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -71,7 +84,7 @@ public class ReportController {
         byte[] bytes = reportservice.penjualanReport(idOutlet, tanggalDari, tanggalHingga);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -93,6 +106,21 @@ public class ReportController {
                 .contentLength(bytes.length)
                 .body(resource);
     }
+    
+    @GetMapping("/penjualan-detail-perkontak/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getpenjualanDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga,@RequestParam UUID idKartuKontak) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.penjualanDetailPerkontakReport(idOutlet, tanggalDari, tanggalHingga,idKartuKontak);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
 
     @GetMapping("/pembelian/{idOutlet}")
     public ResponseEntity<InputStreamResource> getpenmbelian(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
@@ -101,7 +129,7 @@ public class ReportController {
         byte[] bytes = reportservice.pembelianReport(idOutlet, tanggalDari, tanggalHingga);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-pembelian.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -116,7 +144,7 @@ public class ReportController {
         byte[] bytes = reportservice.pembelianDetailReport(idOutlet, tanggalDari, tanggalHingga);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-pembelian-detail.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -240,4 +268,20 @@ public class ReportController {
                 .body(resource);
     }
 
+    
+    @GetMapping("/koreksi-stok/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getKoreksiStok(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.koreksiStok(idOutlet, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=koreksi-stok.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+    
 }

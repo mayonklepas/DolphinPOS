@@ -39,7 +39,7 @@ public interface BarangRepository extends PagingAndSortingRepository<BarangEntit
     List<BarangEntity> findBarang(UUID idOutlet);
     
     @Query("SELECT be FROM BarangEntity be WHERE be.idOutlet=?1 ORDER BY be.jumlahBarang ASC")
-    List<BarangEntity> stokOverview(UUID idOulet);
+    List<BarangEntity> stokOverview(Pageable page,UUID idOulet);
     
     @Query("SELECT new com.df.dolphinpos.dto.BarangTotalDTO("
             + "SUM(be.hargaBeli*be.jumlahBarang),"

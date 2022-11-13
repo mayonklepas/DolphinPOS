@@ -81,17 +81,17 @@
 				<text><![CDATA[Periode :]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="50" y="52" width="52" height="15" uuid="e8cae9ab-f42f-4f0e-94d3-168fc19d729d"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="50" y="52" width="60" height="15" uuid="e8cae9ab-f42f-4f0e-94d3-168fc19d729d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="102" y="52" width="16" height="15" uuid="b84edfb3-a0c5-431b-b564-c212084ec007"/>
+				<reportElement x="110" y="52" width="16" height="15" uuid="b84edfb3-a0c5-431b-b564-c212084ec007"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[-]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="118" y="52" width="53" height="15" uuid="da739bf9-cf46-4cef-a954-d04035c848b9"/>
+				<reportElement x="126" y="52" width="60" height="15" uuid="da739bf9-cf46-4cef-a954-d04035c848b9"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
 			</textField>

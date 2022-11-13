@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kartu-kontak" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
@@ -34,7 +35,7 @@
 	<columnHeader>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="1" width="97" height="20" uuid="8a5b1d31-31f1-4af2-9a61-a7bffca4ff59">
+				<reportElement x="0" y="1" width="80" height="20" uuid="8a5b1d31-31f1-4af2-9a61-a7bffca4ff59">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -43,7 +44,7 @@
 				<text><![CDATA[Nama]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="97" y="1" width="140" height="20" uuid="5d2426dc-b629-4895-8be8-f7d8a97f842d">
+				<reportElement x="80" y="1" width="140" height="20" uuid="5d2426dc-b629-4895-8be8-f7d8a97f842d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -52,7 +53,7 @@
 				<text><![CDATA[Alamat]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="237" y="1" width="116" height="20" uuid="b2fde70e-9e68-4f08-8703-b6d32232b659">
+				<reportElement x="220" y="1" width="110" height="20" uuid="b2fde70e-9e68-4f08-8703-b6d32232b659">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -61,7 +62,7 @@
 				<text><![CDATA[Email]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="353" y="1" width="69" height="20" uuid="6b5e3780-af77-4365-92a1-1fc5ef89368a">
+				<reportElement x="330" y="1" width="92" height="20" uuid="6b5e3780-af77-4365-92a1-1fc5ef89368a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -85,8 +86,8 @@
 	</columnHeader>
 	<detail>
 		<band height="16" splitType="Stretch">
-			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="0" width="97" height="15" uuid="aab264a2-8603-45dc-9f2b-89547a942e6b">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="80" height="15" uuid="aab264a2-8603-45dc-9f2b-89547a942e6b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -94,8 +95,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namaKontak}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="97" y="0" width="140" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="80" y="0" width="140" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -103,8 +104,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{alamatKontak}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="237" y="0" width="116" height="15" uuid="40408d07-da86-4df0-932c-78022eeba8a5">
+			<textField>
+				<reportElement x="220" y="0" width="110" height="15" uuid="40408d07-da86-4df0-932c-78022eeba8a5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -112,8 +113,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{emailKontak}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.###;#,##0.###-">
-				<reportElement x="353" y="0" width="69" height="15" uuid="df930a95-9c87-41a7-89c0-3490ec0f519b">
+			<textField textAdjust="StretchHeight" pattern="#,##0.###;#,##0.###-">
+				<reportElement x="330" y="0" width="92" height="15" uuid="df930a95-9c87-41a7-89c0-3490ec0f519b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -121,7 +122,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nohpKontak}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="#,##0.###;#,##0.###-">
+			<textField textAdjust="StretchHeight" pattern="#,##0.###;#,##0.###-">
 				<reportElement x="422" y="0" width="132" height="15" uuid="636107db-627e-458a-a827-4db53b5167a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>

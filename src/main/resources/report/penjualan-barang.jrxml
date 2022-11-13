@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Stok-barang" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb82a105-8854-4370-a9f2-49ccaaf1c3e3">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="tanggalDari" class="java.util.Date"/>
@@ -12,12 +12,12 @@
 	<field name="satuan" class="java.lang.String"/>
 	<field name="jumlah" class="java.lang.Double"/>
 	<field name="hargaBeli" class="java.lang.Double"/>
-	<field name="hargaJual" class="java.lang.Double"/>
+	<field name="totalHargaJual" class="java.lang.Double"/>
 	<variable name="sumTotal" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{hargaJual}*$F{jumlah}]]></variableExpression>
+		<variableExpression><![CDATA[$F{totalHargaJual}]]></variableExpression>
 	</variable>
 	<variable name="sumMargin" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[($F{jumlah}*$F{hargaJual})-($F{jumlah}*$F{hargaBeli})]]></variableExpression>
+		<variableExpression><![CDATA[($F{totalHargaJual})-($F{jumlah}*$F{hargaBeli})]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -39,12 +39,12 @@
 				<text><![CDATA[Laporan Margin Penjualan]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="120" y="52" width="53" height="15" uuid="1242e997-9d62-486d-bedf-20e12f24f99a"/>
+				<reportElement x="128" y="52" width="60" height="15" uuid="1242e997-9d62-486d-bedf-20e12f24f99a"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="104" y="52" width="16" height="15" uuid="2700d5be-1e91-4de6-bea5-badee3fe9ef5"/>
+				<reportElement x="112" y="52" width="16" height="15" uuid="2700d5be-1e91-4de6-bea5-badee3fe9ef5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[-]]></text>
 			</staticText>
@@ -54,8 +54,8 @@
 				<text><![CDATA[Periode :]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="52" y="52" width="52" height="15" uuid="3bbcd286-a254-4302-abd8-43d9469e6890"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="52" y="52" width="60" height="15" uuid="3bbcd286-a254-4302-abd8-43d9469e6890"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -90,43 +90,34 @@
 				<text><![CDATA[Satuan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="368" y="0" width="46" height="20" uuid="6b5e3780-af77-4365-92a1-1fc5ef89368a">
+				<reportElement x="351" y="0" width="50" height="20" uuid="6b5e3780-af77-4365-92a1-1fc5ef89368a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Terjual]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="245" y="0" width="60" height="20" uuid="8ae00049-870e-490d-87c5-6e2d89e33abc">
+				<reportElement x="245" y="0" width="106" height="20" uuid="8ae00049-870e-490d-87c5-6e2d89e33abc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Beli]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="305" y="0" width="63" height="20" uuid="9e2af7b9-9597-41a7-90bd-7740086c5ab8">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Jual]]></text>
+				<text><![CDATA[@ Harga Beli ]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="21" width="555" height="1" uuid="fb0314b1-9fd9-466e-9a67-1abe1f1e796b"/>
 			</line>
 			<staticText>
-				<reportElement x="414" y="0" width="70" height="20" uuid="39823c55-eec5-4e89-b065-525e661e3ec7">
+				<reportElement x="401" y="0" width="83" height="20" uuid="39823c55-eec5-4e89-b065-525e661e3ec7">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total]]></text>
+				<text><![CDATA[Total Jual]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="484" y="1" width="70" height="20" uuid="5ec32cff-e379-4c8f-a99d-fca86541af9e">
@@ -163,42 +154,35 @@
 				<textFieldExpression><![CDATA[$F{satuan}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;-#,##0">
-				<reportElement x="368" y="0" width="46" height="15" uuid="df930a95-9c87-41a7-89c0-3490ec0f519b">
+				<reportElement x="351" y="0" width="50" height="15" uuid="df930a95-9c87-41a7-89c0-3490ec0f519b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{jumlah}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;-#,##0">
-				<reportElement x="245" y="0" width="60" height="15" uuid="636107db-627e-458a-a827-4db53b5167a6">
+				<reportElement x="245" y="0" width="106" height="15" uuid="636107db-627e-458a-a827-4db53b5167a6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{hargaBeli}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0;-#,##0">
-				<reportElement x="305" y="0" width="63" height="15" uuid="8587cbcc-18c9-404f-b5e3-11a25a321e1b">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{hargaJual}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="15" width="555" height="1" uuid="c504027d-6078-472f-b3e4-233ba2267b03"/>
 			</line>
 			<textField pattern="#,##0;-#,##0">
-				<reportElement x="414" y="0" width="70" height="15" uuid="cbdb7e34-47ad-4a80-8ee5-a14db36d3046">
+				<reportElement x="401" y="0" width="83" height="15" uuid="cbdb7e34-47ad-4a80-8ee5-a14db36d3046">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{jumlah}*$F{hargaJual}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalHargaJual}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;-#,##0">
 				<reportElement x="484" y="0" width="71" height="15" uuid="a307e8d0-6ccb-4f1e-8731-44628a99f280">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d12dedcf-0708-4590-830e-88d014e195bf"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($F{jumlah}*$F{hargaJual})-($F{jumlah}*$F{hargaBeli})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{totalHargaJual})-($F{jumlah}*$F{hargaBeli})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

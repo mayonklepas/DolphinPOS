@@ -14,19 +14,17 @@ public class MarginPenjualanDTO {
     String namaBarang;
     String satuan;
     double hargaBeli;
-    double hargaJual;
+    double totalHargaJual;
     double jumlah;
 
-    public MarginPenjualanDTO(String kodeBarang, String namaBarang, String satuan, double hargaBeli, double hargaJual, double jumlah) {
+    public MarginPenjualanDTO(String kodeBarang, String namaBarang, String satuan, double hargaBeli, double totalHargaJual, double jumlah) {
         this.kodeBarang = kodeBarang;
         this.namaBarang = namaBarang;
         this.satuan = satuan;
         this.hargaBeli = hargaBeli;
-        this.hargaJual = hargaJual;
+        this.totalHargaJual = totalHargaJual;
         this.jumlah = jumlah;
     }
-    
-    
 
     public String getKodeBarang() {
         return kodeBarang;
@@ -60,12 +58,12 @@ public class MarginPenjualanDTO {
         this.hargaBeli = hargaBeli;
     }
 
-    public double getHargaJual() {
-        return hargaJual;
+    public double getTotalHargaJual() {
+        return totalHargaJual;
     }
 
-    public void setHargaJual(double hargaJual) {
-        this.hargaJual = hargaJual;
+    public void setTotalHargaJual(double totalHargaJual) {
+        this.totalHargaJual = totalHargaJual;
     }
 
     public double getJumlah() {
@@ -75,7 +73,8 @@ public class MarginPenjualanDTO {
     public void setJumlah(double jumlah) {
         this.jumlah = jumlah;
     }
-    
+
+   
     
 
 }

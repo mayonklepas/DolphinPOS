@@ -49,13 +49,14 @@ public class JurnalUmumMasterEntity {
     @Column(nullable = false)
     private Date tanggalRef;
     private int tipeJurnal;
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int isPosting;
     @Column(nullable = true)
     private String deskripsi;
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
-    
-    
-    @OneToMany(mappedBy = "jurnalUmumMaster",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "jurnalUmumMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("jurnalUmumMaster")
     private List<JurnalUmumDetailEntity> jurnalUmumDetail;
 
@@ -123,6 +124,14 @@ public class JurnalUmumMasterEntity {
         this.tipeJurnal = tipeJurnal;
     }
 
+    public int getIsPosting() {
+        return isPosting;
+    }
+
+    public void setIsPosting(int isPosting) {
+        this.isPosting = isPosting;
+    }
+
     public String getDeskripsi() {
         return deskripsi;
     }
@@ -130,8 +139,6 @@ public class JurnalUmumMasterEntity {
     public void setDeskripsi(String deskripsi) {
         this.deskripsi = deskripsi;
     }
-    
-    
 
     public Timestamp getDateCreated() {
         return dateCreated;
@@ -148,9 +155,5 @@ public class JurnalUmumMasterEntity {
     public void setJurnalUmumDetail(List<JurnalUmumDetailEntity> jurnalUmumDetail) {
         this.jurnalUmumDetail = jurnalUmumDetail;
     }
-
-    
-    
-    
 
 }

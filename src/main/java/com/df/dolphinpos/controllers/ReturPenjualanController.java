@@ -8,6 +8,7 @@ package com.df.dolphinpos.controllers;
 import com.df.dolphinpos.dto.MasterDetailPenjualanDTO;
 import com.df.dolphinpos.dto.MasterDetailReturPenjualanDTO;
 import com.df.dolphinpos.dto.ResponseResult;
+import com.df.dolphinpos.dto.ReturPenjualanMasterListDTO;
 import com.df.dolphinpos.entities.BarangEntity;
 import com.df.dolphinpos.entities.PenjualanDetailEntity;
 import com.df.dolphinpos.entities.PenjualanMasterEntity;
@@ -58,19 +59,19 @@ public class ReturPenjualanController {
     RacikanRepository racikarepo;
 
     @GetMapping("/getdata/{idOutlet}")
-    public Page<ReturPenjualanMasterEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
-        Page<ReturPenjualanMasterEntity> result = null;
+    public Page<ReturPenjualanMasterListDTO> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
+        Page<ReturPenjualanMasterListDTO> result = null;
         if (keyword.equals("")) {
-            result = returPenjualanmasterrepo.findByIdOutlet(pg, idOutlet);
+            result = returPenjualanmasterrepo.findAllReturPenjualan(pg, idOutlet);
         } else {
-            result = returPenjualanmasterrepo.findByIdOutletAndKodeReturPenjualanMasterContainingIgnoreCase(pg, idOutlet, keyword);
+            result = returPenjualanmasterrepo.findAllReturPenjualanByKey(pg, idOutlet, keyword);
         }
         return result;
     }
 
     @GetMapping("/getdatabyid/{idOutlet}/{id}")
     public Optional<ReturPenjualanMasterEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
-        return returPenjualanmasterrepo.findByIdAndIdOutlet(idOutlet, id);
+        return returPenjualanmasterrepo.findByIdOutletAndId(idOutlet, id);
     }
 
     @GetMapping("/getdatalist/{idOutlet}")

@@ -7,6 +7,7 @@ package com.df.dolphinpos.repositories;
 
 import com.df.dolphinpos.dto.ChartDto;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
+import com.df.dolphinpos.dto.ReturPenjualanMasterListDTO;
 import com.df.dolphinpos.dto.StrukDto;
 import com.df.dolphinpos.entities.PenjualanMasterEntity;
 import com.df.dolphinpos.entities.ReturPenjualanMasterEntity;
@@ -25,9 +26,23 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface ReturPenjualanMasterRepository extends PagingAndSortingRepository<ReturPenjualanMasterEntity, UUID> {
 
+    @Query("SELECT new com.df.dolphinpos.dto.ReturPenjualanMasterListDTO("
+            + "rpme.id,rpme.idOutlet,rpme.tanggalReturPenjualan,rpme.kodeReturPenjualanMaster,"
+            + "rpme.status,rpme.deskripsi,rpme.totalBelanja,rpme.isPosting) "
+            + "FROM ReturPenjualanMasterEntity rpme "
+            + "WHERE rpme.idOutlet = ?1 ")
+    Page<ReturPenjualanMasterListDTO> findAllReturPenjualan(Pageable page, UUID idOutlet);
+
+    @Query("SELECT new com.df.dolphinpos.dto.ReturPenjualanMasterListDTO("
+            + "rpme.id,rpme.idOutlet,rpme.tanggalReturPenjualan,rpme.kodeReturPenjualanMaster,"
+            + "rpme.status,rpme.deskripsi,rpme.totalBelanja,rpme.isPosting) "
+            + "FROM ReturPenjualanMasterEntity rpme "
+            + "WHERE rpme.idOutlet = ?1 AND lower(rpme.kodeReturPenjualanMaster) LIKE %?2%")
+    Page<ReturPenjualanMasterListDTO> findAllReturPenjualanByKey(Pageable page, UUID idOutlet, String keyword);
+    
     Page<ReturPenjualanMasterEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
-    Optional<ReturPenjualanMasterEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
+    Optional<ReturPenjualanMasterEntity> findByIdOutletAndId(UUID id, UUID idOutlet);
 
     Page<ReturPenjualanMasterEntity> findByIdOutletAndKodeReturPenjualanMasterContainingIgnoreCase(Pageable page, UUID idOutlet, String kodeReturPenjualanMaster);
 

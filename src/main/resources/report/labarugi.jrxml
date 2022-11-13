@@ -36,17 +36,17 @@
 				<text><![CDATA[Laporan Laba Rugi]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="50" y="53" width="52" height="15" uuid="b9e68acd-9301-4ccd-9829-babee1aa5f28"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="50" y="53" width="60" height="15" uuid="b9e68acd-9301-4ccd-9829-babee1aa5f28"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="118" y="53" width="53" height="15" uuid="dba14ba9-e9d4-4226-af90-82aa2f262695"/>
+				<reportElement x="126" y="53" width="60" height="15" uuid="dba14ba9-e9d4-4226-af90-82aa2f262695"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="102" y="53" width="16" height="15" uuid="715938a6-5bed-48d8-be25-3aba233137f3"/>
+				<reportElement x="110" y="53" width="16" height="15" uuid="715938a6-5bed-48d8-be25-3aba233137f3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[-]]></text>
 			</staticText>
