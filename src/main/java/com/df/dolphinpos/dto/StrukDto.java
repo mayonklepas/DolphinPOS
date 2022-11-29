@@ -26,8 +26,10 @@ public class StrukDto {
     String namaKontak;
     String alamatKontak;
     String nohpKontak;
+    int tipeAkunKeuangan;
+    String keterangan;
 
-    public StrukDto(String namaBarang, double diskonDetail, double jumlahJual, double hargaJual, double diskonMaster, double tax, double jumlahUang, double kembalian, String kodeTransaksi, Date tanggalPenjualan, String user, String namaKontak, String alamatKontak, String nohpKontak) {
+    public StrukDto(String namaBarang, double diskonDetail, double jumlahJual, double hargaJual, double diskonMaster, double tax, double jumlahUang, double kembalian, String kodeTransaksi, Date tanggalPenjualan, String user, String namaKontak, String alamatKontak, String nohpKontak, int tipeAkunKeuangan, String keterangan) {
         this.namaBarang = namaBarang;
         this.diskonDetail = diskonDetail;
         this.jumlahJual = jumlahJual;
@@ -42,8 +44,11 @@ public class StrukDto {
         this.namaKontak = namaKontak;
         this.alamatKontak = alamatKontak;
         this.nohpKontak = nohpKontak;
+        this.tipeAkunKeuangan = tipeAkunKeuangan;
+        this.keterangan = keterangan;
     }
 
+   
     
     public String getNamaBarang() {
         return namaBarang;
@@ -156,6 +161,25 @@ public class StrukDto {
     public void setNohpKontak(String nohpKontak) {
         this.nohpKontak = nohpKontak;
     }
+
+    public int getTipeAkunKeuangan() {
+        return tipeAkunKeuangan;
+    }
+
+    public void setTipeAkunKeuangan(int tipeAkunKeuangan) {
+        this.tipeAkunKeuangan = tipeAkunKeuangan;
+    }
+
+    
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+    
+    
 
     
     

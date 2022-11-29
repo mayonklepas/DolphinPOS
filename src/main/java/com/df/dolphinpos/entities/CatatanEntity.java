@@ -1,4 +1,4 @@
-   /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -42,11 +42,18 @@ public class CatatanEntity {
     @Column(nullable = false)
     private double jumlah;
     @Column(nullable = false)
-    private UUID idAkunKeuangan;
+    private UUID idAkunKeuanganKredit;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idAkunKeuangan", nullable = false, insertable = false, updatable = false)
-    private AkunKeuanganEntity akunKeuangan;
+    @JoinColumn(name = "idAkunKeuanganKredit", nullable = false, insertable = false, updatable = false)
+    private AkunKeuanganEntity akunKeuanganKredit;
+
+    @Column(nullable = false)
+    private UUID idAkunKeuanganDebit;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idAkunKeuanganDebit", nullable = false, insertable = false, updatable = false)
+    private AkunKeuanganEntity akunKeuanganDebit;
 
     @Column(nullable = false)
     private UUID idPengguna;
@@ -57,6 +64,9 @@ public class CatatanEntity {
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int isPosting;
 
     public UUID getId() {
         return id;
@@ -106,20 +116,36 @@ public class CatatanEntity {
         this.jumlah = jumlah;
     }
 
-    public UUID getIdAkunKeuangan() {
-        return idAkunKeuangan;
+    public UUID getIdAkunKeuanganKredit() {
+        return idAkunKeuanganKredit;
     }
 
-    public void setIdAkunKeuangan(UUID idAkunKeuangan) {
-        this.idAkunKeuangan = idAkunKeuangan;
+    public void setIdAkunKeuanganKredit(UUID idAkunKeuanganKredit) {
+        this.idAkunKeuanganKredit = idAkunKeuanganKredit;
     }
 
-    public AkunKeuanganEntity getAkunKeuangan() {
-        return akunKeuangan;
+    public AkunKeuanganEntity getAkunKeuanganKredit() {
+        return akunKeuanganKredit;
     }
 
-    public void setAkunKeuangan(AkunKeuanganEntity akunKeuangan) {
-        this.akunKeuangan = akunKeuangan;
+    public void setAkunKeuanganKredit(AkunKeuanganEntity akunKeuanganKredit) {
+        this.akunKeuanganKredit = akunKeuanganKredit;
+    }
+
+    public UUID getIdAkunKeuanganDebit() {
+        return idAkunKeuanganDebit;
+    }
+
+    public void setIdAkunKeuanganDebit(UUID idAkunKeuanganDebit) {
+        this.idAkunKeuanganDebit = idAkunKeuanganDebit;
+    }
+
+    public AkunKeuanganEntity getAkunKeuanganDebit() {
+        return akunKeuanganDebit;
+    }
+
+    public void setAkunKeuanganDebit(AkunKeuanganEntity akunKeuanganDebit) {
+        this.akunKeuanganDebit = akunKeuanganDebit;
     }
 
     public UUID getIdPengguna() {
@@ -142,8 +168,12 @@ public class CatatanEntity {
         return dateCreated;
     }
 
+    public int getIsPosting() {
+        return isPosting;
+    }
 
-   
-    
-    
+    public void setIsPosting(int isPosting) {
+        this.isPosting = isPosting;
+    }
+
 }

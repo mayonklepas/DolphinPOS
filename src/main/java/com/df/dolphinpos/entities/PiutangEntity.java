@@ -29,8 +29,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Minami
  */
 @Entity
-@Table(name = "hutang_piutang")
-public class HutangPiutangEntity {
+@Table(name = "piutang")
+public class PiutangEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -44,8 +44,6 @@ public class HutangPiutangEntity {
     @Column(nullable = false)
     private Date tanggal;
     @Column(nullable = false)
-    private int tipe;
-    @Column(nullable = true)
     private String deskripsi;
     @Column(nullable = false)
     private double jumlah;
@@ -54,6 +52,7 @@ public class HutangPiutangEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idKartuKontak", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("pengguna")
     private KartuKontakEntity kartuKontak;
 
     @Column(nullable = false)
@@ -61,21 +60,34 @@ public class HutangPiutangEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idAkunKeuangan", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("pengguna")
     private AkunKeuanganEntity akunKeuangan;
 
-    @OneToMany(mappedBy = "hutangPiutang", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("hutangPiutang")
-    private List<PembayaranHutangPiutangEntity> pembayaranHutangPiutangEntity;
+    @Column(nullable = false)
+    private UUID idAkunKeuanganDebit;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idAkunKeuanganDebit", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("pengguna")
+    private AkunKeuanganEntity akunKeuanganDebit;
+
+    @OneToMany(mappedBy = "hutang", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("hutang")
+    private List<PembayaranHutangEntity> pembayaranHutang;
 
     @Column(nullable = false)
     private UUID idPengguna;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("outlet")
     private PenggunaEntity pengguna;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
+
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int isPosting;
 
     public UUID getId() {
         return id;
@@ -107,14 +119,6 @@ public class HutangPiutangEntity {
 
     public void setTanggal(Date tanggal) {
         this.tanggal = tanggal;
-    }
-
-    public int getTipe() {
-        return tipe;
-    }
-
-    public void setTipe(int tipe) {
-        this.tipe = tipe;
     }
 
     public String getDeskripsi() {
@@ -165,12 +169,28 @@ public class HutangPiutangEntity {
         this.akunKeuangan = akunKeuangan;
     }
 
-    public List<PembayaranHutangPiutangEntity> getPembayaranHutangPiutangEntity() {
-        return pembayaranHutangPiutangEntity;
+    public UUID getIdAkunKeuanganDebit() {
+        return idAkunKeuanganDebit;
     }
 
-    public void setPembayaranHutangPiutangEntity(List<PembayaranHutangPiutangEntity> pembayaranHutangPiutangEntity) {
-        this.pembayaranHutangPiutangEntity = pembayaranHutangPiutangEntity;
+    public void setIdAkunKeuanganDebit(UUID idAkunKeuanganDebit) {
+        this.idAkunKeuanganDebit = idAkunKeuanganDebit;
+    }
+
+    public AkunKeuanganEntity getAkunKeuanganDebit() {
+        return akunKeuanganDebit;
+    }
+
+    public void setAkunKeuanganKredit(AkunKeuanganEntity akunKeuanganDebit) {
+        this.akunKeuanganDebit = akunKeuanganDebit;
+    }
+
+    public List<PembayaranHutangEntity> getPembayaranHutang() {
+        return pembayaranHutang;
+    }
+
+    public void setPembayaranHutang(List<PembayaranHutangEntity> pembayaranHutang) {
+        this.pembayaranHutang = pembayaranHutang;
     }
 
     public UUID getIdPengguna() {
@@ -197,7 +217,12 @@ public class HutangPiutangEntity {
         this.dateCreated = dateCreated;
     }
 
-    
-    
+    public int getIsPosting() {
+        return isPosting;
+    }
+
+    public void setIsPosting(int isPosting) {
+        this.isPosting = isPosting;
+    }
 
 }

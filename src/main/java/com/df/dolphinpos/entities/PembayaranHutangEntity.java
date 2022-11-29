@@ -24,8 +24,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Minami
  */
 @Entity
-@Table(name = "pembayaran_hutang_piutang")
-public class PembayaranHutangPiutangEntity {
+@Table(name = "pembayaran_hutang")
+public class PembayaranHutangEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -34,12 +34,29 @@ public class PembayaranHutangPiutangEntity {
     private UUID id;
     @Column(nullable = false)
     private UUID idOutlet;
+
+    @Column(nullable = true)
+    private String kodePembayaran;
+
     @Column(nullable = false)
-    private UUID idHutangPiutang;
+    private UUID idHutang;
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idHutangPiutang", nullable = false, insertable = false, updatable = false)
-    @JsonIgnoreProperties("pembayaranHutangPiutang")
-    private HutangPiutangEntity hutangPiutang;
+    @JoinColumn(name = "idHutang", nullable = false, insertable = false, updatable = false)
+    @JsonIgnoreProperties("pembayaranHutang")
+    private HutangEntity hutang;
+
+    @Column(nullable = false)
+    private UUID idAkunKeuangan;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idAkunKeuangan", nullable = false, updatable = false, insertable = false)
+    private AkunKeuanganEntity akunKeuangan;
+
+    @Column(nullable = false)
+    private UUID idAkunKeuanganDebit;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idAkunKeuanganDebit", nullable = false, updatable = false, insertable = false)
+    private AkunKeuanganEntity akunKeuanganDebit;
+
     @Column(nullable = false)
     private Date tanggal;
     @Column(nullable = true)
@@ -53,6 +70,8 @@ public class PembayaranHutangPiutangEntity {
     private PenggunaEntity pengguna;
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp dateCreated;
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int isPosting;
 
     public UUID getId() {
         return id;
@@ -70,20 +89,60 @@ public class PembayaranHutangPiutangEntity {
         this.idOutlet = idOutlet;
     }
 
-    public UUID getIdHutangPiutang() {
-        return idHutangPiutang;
+    public String getKodePembayaran() {
+        return kodePembayaran;
     }
 
-    public void setIdHutangPiutang(UUID idHutangPiutang) {
-        this.idHutangPiutang = idHutangPiutang;
+    public void setKodePembayaran(String kodePembayaran) {
+        this.kodePembayaran = kodePembayaran;
     }
 
-    public HutangPiutangEntity getHutangPiutang() {
-        return hutangPiutang;
+    public UUID getIdHutang() {
+        return idHutang;
     }
 
-    public void setHutangPiutang(HutangPiutangEntity hutangPiutang) {
-        this.hutangPiutang = hutangPiutang;
+    public void setIdHutang(UUID idHutang) {
+        this.idHutang = idHutang;
+    }
+
+    public HutangEntity getHutang() {
+        return hutang;
+    }
+
+    public void setHutang(HutangEntity hutang) {
+        this.hutang = hutang;
+    }
+
+    public UUID getIdAkunKeuangan() {
+        return idAkunKeuangan;
+    }
+
+    public void setIdAkunKeuangan(UUID idAkunKeuangan) {
+        this.idAkunKeuangan = idAkunKeuangan;
+    }
+
+    public AkunKeuanganEntity getAkunKeuangan() {
+        return akunKeuangan;
+    }
+
+    public void setAkunKeuangan(AkunKeuanganEntity akunKeuangan) {
+        this.akunKeuangan = akunKeuangan;
+    }
+
+    public UUID getIdAkunKeuanganDebit() {
+        return idAkunKeuanganDebit;
+    }
+
+    public void setIdAkunKeuanganDebit(UUID idAkunKeuanganDebit) {
+        this.idAkunKeuanganDebit = idAkunKeuanganDebit;
+    }
+
+    public AkunKeuanganEntity getAkunKeuanganDebit() {
+        return akunKeuanganDebit;
+    }
+
+    public void setAkunKeuanganDebit(AkunKeuanganEntity akunKeuanganDebit) {
+        this.akunKeuanganDebit = akunKeuanganDebit;
     }
 
     public Date getTanggal() {
@@ -133,7 +192,13 @@ public class PembayaranHutangPiutangEntity {
     public void setDateCreated(Timestamp dateCreated) {
         this.dateCreated = dateCreated;
     }
-    
-    
-    
+
+    public int getIsPosting() {
+        return isPosting;
+    }
+
+    public void setIsPosting(int isPosting) {
+        this.isPosting = isPosting;
+    }
+
 }

@@ -5,15 +5,13 @@
  */
 package com.df.dolphinpos.controllers;
 
-import com.df.dolphinpos.dto.MasterDetailHutangPiutangDTO;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.BarangEntity;
-import com.df.dolphinpos.entities.PembayaranHutangPiutangEntity;
-import com.df.dolphinpos.entities.HutangPiutangEntity;
+import com.df.dolphinpos.entities.PembayaranPiutangEntity;
+import com.df.dolphinpos.entities.PiutangEntity;
 import com.df.dolphinpos.repositories.BarangRepository;
-import com.df.dolphinpos.repositories.PembayaranHutangPiutangRepository;
-import com.df.dolphinpos.repositories.HutangPiutangRepository;
 import com.df.dolphinpos.service.AccountingService;
+import com.df.dolphinpos.service.UtilService;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -30,65 +28,74 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.df.dolphinpos.repositories.PiutangRepository;
+import com.df.dolphinpos.repositories.PembayaranPiutangRepository;
 
 /**
  *
  * @author Minami
  */
 @RestController
-@RequestMapping("/api/hutangpiutang")
-public class HutangPiutangController {
+@RequestMapping("/api/piutang")
+public class PiutangController {
 
     @Autowired
-    HutangPiutangRepository hutangpiutangmasterrepo;
+    PiutangRepository piutangmasterrepo;
 
     @Autowired
-    PembayaranHutangPiutangRepository hutangpiutangdetailrepo;
+    PembayaranPiutangRepository piutangdetailrepo;
 
-    @GetMapping("/getdata/{idOutlet}/{tipe}")
-    public Page<HutangPiutangEntity> getdata(Pageable pg, @PathVariable UUID idOutlet,@PathVariable int tipe, @RequestParam String keyword) {
-        Page<HutangPiutangEntity> result = null;
+    @Autowired
+    UtilService utilServ;
+
+    @GetMapping("/getdata/{idOutlet}")
+    public Page<PiutangEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
+        Page<PiutangEntity> result = null;
         if (keyword.equals("")) {
-            result = hutangpiutangmasterrepo.findByIdOutletAndTipe(pg, idOutlet, tipe);
+            result = piutangmasterrepo.findByIdOutlet(pg, idOutlet);
         } else {
-            result = hutangpiutangmasterrepo.findBySearch(pg, idOutlet,tipe,keyword);
+            result = piutangmasterrepo.findBySearch(pg, idOutlet, keyword);
         }
         return result;
     }
 
-    @GetMapping("/pembayaran/getdata/{idHutangPiutang{/{idOutlet}")
-    public Page<PembayaranHutangPiutangEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, UUID idHutangPiutang, @RequestParam String keyword) {
-        Page<PembayaranHutangPiutangEntity> result = null;
+    @GetMapping("/pembayaran/getdata/{idOutlet}/{idPiutang}")
+    public Page<PembayaranPiutangEntity> getdata(Pageable pg, @PathVariable UUID idOutlet,@PathVariable UUID idPiutang, @RequestParam String keyword) {
+        Page<PembayaranPiutangEntity> result = null;
         if (keyword.equals("")) {
-            result = hutangpiutangdetailrepo.findByIdHutangPiutangAndIdOutlet(pg, idOutlet, idHutangPiutang);
+            result = piutangdetailrepo.findByIdOutletAndIdPiutang(pg, idOutlet, idPiutang);
         } else {
-            result = hutangpiutangdetailrepo.findByIdHutangPiutangAndDeskripsiContainingIgnoreCase(pg, idHutangPiutang, keyword);
+            result = piutangdetailrepo.findByIdOutletAndIdPiutangAndDeskripsiContainingIgnoreCase(pg, idOutlet, idPiutang, keyword);
         }
         return result;
     }
 
     @GetMapping("/getdatabyid/{idOutlet}/{id}")
-    public Optional<HutangPiutangEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
-        return hutangpiutangmasterrepo.findByIdAndIdOutlet(idOutlet, id);
+    public Optional<PiutangEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
+        return piutangmasterrepo.findByIdAndIdOutlet(idOutlet, id);
     }
 
     @Transactional
-    @PostMapping("/adddata")
-    public ResponseResult adddata(@RequestBody HutangPiutangEntity data) {
+    @PostMapping("/adddata/{idOutlet}")
+    public ResponseResult adddata(@RequestBody PiutangEntity data,@PathVariable UUID idOutlet) {
         ResponseResult res = new ResponseResult();
-        HutangPiutangEntity entity = hutangpiutangmasterrepo.save(data);
+        String invKode = utilServ.getNoInvoice(idOutlet, "piutang");
+        data.setKode(invKode);
+        PiutangEntity entity = piutangmasterrepo.save(data);
         res.setCode(0);
         res.setStatus("success");
-        res.setMessage(entity.getKartuKontak().getNamaKontak() + " " + entity.getDeskripsi() + " berhasil ditambah");
+        res.setMessage(entity.getDeskripsi() + " berhasil ditambah");
         res.setContent(entity);
         return res;
     }
 
     @Transactional
-    @PostMapping("pembayaran/adddata/{idHutangPiutang}")
-    public ResponseResult adddata(@RequestBody PembayaranHutangPiutangEntity data, @PathVariable UUID idHutangPiutang) {
+    @PostMapping("pembayaran/adddata/{idOutlet}")
+    public ResponseResult pembayaranadddata(@RequestBody PembayaranPiutangEntity data, @PathVariable UUID idOutlet) {
         ResponseResult res = new ResponseResult();
-        PembayaranHutangPiutangEntity entity = hutangpiutangdetailrepo.save(data);
+        String kodePembayaran = utilServ.getNoInvoice(idOutlet, "pembayaran_piutang");
+        data.setKodePembayaran(kodePembayaran);
+        PembayaranPiutangEntity entity = piutangdetailrepo.save(data);
         res.setCode(0);
         res.setStatus("success");
         res.setMessage(entity.getDeskripsi() + " berhasil ditambah");
@@ -98,35 +105,36 @@ public class HutangPiutangController {
 
     @Transactional
     @PostMapping("/updatedata/{id}")
-    public ResponseResult updatedatas(@RequestBody HutangPiutangEntity data, @PathVariable UUID id) {
+    public ResponseResult updatedata(@RequestBody PiutangEntity data, @PathVariable UUID id) {
         ResponseResult res = new ResponseResult();
-        HutangPiutangEntity entity = hutangpiutangmasterrepo.findById(id).get();
+        PiutangEntity entity = piutangmasterrepo.findById(id).get();
         entity.setTanggal(data.getTanggal());
-        entity.setTipe(data.getTipe());
         entity.setDeskripsi(data.getDeskripsi());
         entity.setJumlah(data.getJumlah());
         entity.setIdKartuKontak(data.getIdKartuKontak());
         entity.setIdAkunKeuangan(data.getIdAkunKeuangan());
+        entity.setIdAkunKeuanganDebit(data.getIdAkunKeuanganDebit());
         entity.setIdPengguna(data.getIdPengguna());
-        HutangPiutangEntity entitySave = hutangpiutangmasterrepo.save(entity);
-
+        PiutangEntity entitySave = piutangmasterrepo.save(entity);
         res.setCode(0);
         res.setStatus("success");
-        res.setMessage(entity.getKartuKontak().getNamaKontak() + " berhasil diperbaharui");
+        res.setMessage(entity.getDeskripsi() + " berhasil diperbaharui");
         res.setContent(entitySave);
         return res;
     }
 
     @Transactional
-    @PostMapping("pembayaran/updatedata/{idHutangPiutang}/{id}")
-    public ResponseResult updatedatas(@RequestBody PembayaranHutangPiutangEntity data, @PathVariable UUID idHutangPiutang, @PathVariable UUID id) {
+    @PostMapping("pembayaran/updatedata/{id}")
+    public ResponseResult pembayaranupdatedata(@RequestBody PembayaranPiutangEntity data, @PathVariable UUID id) {
         ResponseResult res = new ResponseResult();
-        PembayaranHutangPiutangEntity entity = hutangpiutangdetailrepo.findById(id).get();
+        PembayaranPiutangEntity entity = piutangdetailrepo.findById(id).get();
         entity.setTanggal(data.getTanggal());
-        entity.setIdHutangPiutang(idHutangPiutang);
+        entity.setIdPiutang(data.getIdPiutang());
+        entity.setAkunKeuangan(data.getAkunKeuangan());
+        entity.setAkunKeuanganKredit(data.getAkunKeuanganKredit());
         entity.setDeskripsi(data.getDeskripsi());
         entity.setJumlah(data.getJumlah());
-        PembayaranHutangPiutangEntity entitySave = hutangpiutangdetailrepo.save(entity);
+        PembayaranPiutangEntity entitySave = piutangdetailrepo.save(entity);
         res.setCode(0);
         res.setStatus("success");
         res.setMessage(entity.getDeskripsi() + " berhasil diperbaharui");
@@ -139,11 +147,11 @@ public class HutangPiutangController {
     public ResponseResult deletedata(@PathVariable UUID id) {
         ResponseResult res = new ResponseResult();
         try {
-            HutangPiutangEntity hutangpiutangmasterentity = hutangpiutangmasterrepo.findById(id).get();
-            hutangpiutangmasterrepo.delete(hutangpiutangmasterentity);
+            PiutangEntity piutangpiutangmasterentity = piutangmasterrepo.findById(id).get();
+            piutangmasterrepo.delete(piutangpiutangmasterentity);
             res.setCode(0);
             res.setStatus("success");
-            res.setMessage(hutangpiutangmasterentity.getKartuKontak().getNamaKontak() + " " + hutangpiutangmasterentity.getDeskripsi() + " berhasil dihapus");
+            res.setMessage(piutangpiutangmasterentity.getKartuKontak().getNamaKontak() + " " + piutangpiutangmasterentity.getDeskripsi() + " berhasil dihapus");
         } catch (Exception e) {
             res.setCode(1);
             res.setStatus("failed");
@@ -153,12 +161,12 @@ public class HutangPiutangController {
     }
 
     @Transactional
-    @DeleteMapping("pembayaran/deletedata/{idHutangPiutang}/{id}")
-    public ResponseResult deletedata(@PathVariable UUID id, @PathVariable UUID idHutangPiutang) {
+    @DeleteMapping("pembayaran/deletedata/{idPiutang}/{id}")
+    public ResponseResult pembayarandeletedata(@PathVariable UUID id, @PathVariable UUID idPiutangPiutang) {
         ResponseResult res = new ResponseResult();
         try {
-            PembayaranHutangPiutangEntity entity = hutangpiutangdetailrepo.findById(id).get();
-            hutangpiutangdetailrepo.delete(entity);
+            PembayaranPiutangEntity entity = piutangdetailrepo.findById(id).get();
+            piutangdetailrepo.delete(entity);
             res.setCode(0);
             res.setStatus("success");
             res.setMessage(entity.getDeskripsi() + " berhasil dihapus");

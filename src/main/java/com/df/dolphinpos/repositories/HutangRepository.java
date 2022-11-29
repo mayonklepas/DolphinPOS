@@ -5,7 +5,7 @@
  */
 package com.df.dolphinpos.repositories;
 
-import com.df.dolphinpos.entities.HutangPiutangEntity;
+import com.df.dolphinpos.entities.HutangEntity;
 import com.df.dolphinpos.entities.JurnalUmumMasterEntity;
 import com.df.dolphinpos.entities.PembelianMasterEntity;
 import java.util.List;
@@ -20,16 +20,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author Minami
  */
-public interface HutangPiutangRepository extends PagingAndSortingRepository<HutangPiutangEntity, UUID> {
+public interface HutangRepository extends PagingAndSortingRepository<HutangEntity, UUID> {
 
-    Page<HutangPiutangEntity> findByIdOutlet(Pageable page, UUID idOutlet);
-    
-    Page<HutangPiutangEntity> findByIdOutletAndTipe(Pageable page, UUID idOutlet, int tipe);
+    Page<HutangEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
-    Optional<HutangPiutangEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
+    Optional<HutangEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
 
-    @Query("SELECT hpe FROM HutangPiutangEntity hpe WHERE idOutlet=?2 AND tipe=?3 AND deskripsi=?4")
-    Page<HutangPiutangEntity> findBySearch(Pageable page, UUID idOutlet,int tipe,String deskripsi);
+    @Query("SELECT he FROM HutangEntity he WHERE idOutlet=?1 AND deskripsi LIKE %?2% ")
+    Page<HutangEntity> findBySearch(Pageable page, UUID idOutlet,String deskripsi);
 
     
 

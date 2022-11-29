@@ -39,7 +39,7 @@ public class ReturPembelianMasterEntity {
     private UUID id;
     @Column(nullable = false)
     private UUID idOutlet;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String kodeReturPembelianMaster;
     @Column(nullable = false)
     private Date tanggalReturPembelian;

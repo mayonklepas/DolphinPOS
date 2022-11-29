@@ -5,7 +5,9 @@
  */
 package com.df.dolphinpos.controllers;
 
+import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.service.ReportService;
+import com.df.dolphinpos.service.UtilService;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +40,9 @@ public class ReportController {
     @Autowired
     private ReportService reportservice;
 
+    @Autowired
+    UtilService utilServ;
+
     @GetMapping("/barang/{idOutlet}")
     public ResponseEntity<InputStreamResource> getlaporanstok(@PathVariable UUID idOutlet) throws FileNotFoundException, JRException, IOException {
         byte[] bytes = reportservice.barangReport(idOutlet);
@@ -50,10 +55,28 @@ public class ReportController {
                 .contentLength(bytes.length)
                 .body(resource);
     }
-    
-     @GetMapping("/barcodebarang/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getBarcodeBarang(@PathVariable UUID idOutlet) throws FileNotFoundException, JRException, IOException {
-        byte[] bytes = reportservice.barcodeBarangReport(idOutlet);
+
+    @GetMapping("/barangdetail/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getlaporanstokdetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String kodeBarang,@RequestParam int segment) throws FileNotFoundException, JRException, IOException, ParseException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        if(kodeBarang==null){
+            kodeBarang="";
+        }
+        byte[] bytes = reportservice.barangReportDetail(idOutlet, tanggalDari, tanggalHingga,kodeBarang,segment);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-stock-barang-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/barcodebarang/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getBarcodeBarang(@PathVariable UUID idOutlet, @RequestParam String kodeBarang) throws FileNotFoundException, JRException, IOException {
+        byte[] bytes = reportservice.barcodeBarangReport(idOutlet, kodeBarang);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=barcode-barang.pdf"));
@@ -78,10 +101,10 @@ public class ReportController {
     }
 
     @GetMapping("/penjualan/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getpenjualan(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+    public ResponseEntity<InputStreamResource> getpenjualan(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
-        byte[] bytes = reportservice.penjualanReport(idOutlet, tanggalDari, tanggalHingga);
+        byte[] bytes = reportservice.penjualanReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan.pdf"));
@@ -93,10 +116,10 @@ public class ReportController {
     }
 
     @GetMapping("/penjualan-detail/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getpenjualanDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+    public ResponseEntity<InputStreamResource> getpenjualanDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
-        byte[] bytes = reportservice.penjualanDetailReport(idOutlet, tanggalDari, tanggalHingga);
+        byte[] bytes = reportservice.penjualanDetailReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
@@ -107,14 +130,29 @@ public class ReportController {
                 .body(resource);
     }
     
-    @GetMapping("/penjualan-detail-perkontak/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getpenjualanDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga,@RequestParam UUID idKartuKontak) throws FileNotFoundException, JRException, ParseException, IOException {
+    @GetMapping("/penjualan-detail-dengan-refrensi-pengeluaran/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getpenjualanDetailDenganRefrensiPengeluaran(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
-        byte[] bytes = reportservice.penjualanDetailPerkontakReport(idOutlet, tanggalDari, tanggalHingga,idKartuKontak);
+        byte[] bytes = reportservice.penjualanDetailDenganRefrensiPengeluaranReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail-dengan-refrensi-pengeluaran.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/penjualan-detail-perkontak/{idOutlet}/{idKartuKontak}")
+    public ResponseEntity<InputStreamResource> getpenjualanDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @PathVariable UUID idKartuKontak) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.penjualanDetailPerkontakReport(idOutlet, tanggalDari, tanggalHingga, idKartuKontak);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan-detail-perkontak.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -123,10 +161,10 @@ public class ReportController {
     }
 
     @GetMapping("/pembelian/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getpenmbelian(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+    public ResponseEntity<InputStreamResource> getpenmbelian(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
-        byte[] bytes = reportservice.pembelianReport(idOutlet, tanggalDari, tanggalHingga);
+        byte[] bytes = reportservice.pembelianReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-pembelian.pdf"));
@@ -138,13 +176,28 @@ public class ReportController {
     }
 
     @GetMapping("/pembelian-detail/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getpembelianDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+    public ResponseEntity<InputStreamResource> getpembelianDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
-        byte[] bytes = reportservice.pembelianDetailReport(idOutlet, tanggalDari, tanggalHingga);
+        byte[] bytes = reportservice.pembelianDetailReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-pembelian-detail.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/pembelian-detail-perkontak/{idOutlet}/{idKartuKontak}")
+    public ResponseEntity<InputStreamResource> getPembelianDetailPerkontak(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @PathVariable UUID idKartuKontak) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.pembelianDetailPerkontakReport(idOutlet, tanggalDari, tanggalHingga, idKartuKontak);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-pembelian-detail-perkontak.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -160,6 +213,21 @@ public class ReportController {
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-catatan.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+    @GetMapping("/catatanbytipe/{idOutlet}/{tipe}")
+    public ResponseEntity<InputStreamResource> getCatatan(@PathVariable UUID idOutlet, @PathVariable int tipe, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.catatanReportByTipe(idOutlet, tipe, tanggalDari, tanggalHingga);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-catatan-bytipe.pdf"));
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
         return ResponseEntity.ok()
                 .headers(headers)
@@ -209,10 +277,14 @@ public class ReportController {
     }
 
     @GetMapping("/bukubesar/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getBukuBesar(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
+    public ResponseEntity<InputStreamResource> getBukuBesar(@PathVariable UUID idOutlet, @RequestParam String id, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
-        byte[] bytes = reportservice.bukuBesar(idOutlet, tanggalDari, tanggalHingga);
+        UUID idAkun = null;
+        if (!id.equals("")) {
+            idAkun = UUID.fromString(id);
+        }
+        byte[] bytes = reportservice.bukuBesar(idOutlet, tanggalDari, tanggalHingga, idAkun);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=bukubesar.pdf"));
@@ -268,7 +340,6 @@ public class ReportController {
                 .body(resource);
     }
 
-    
     @GetMapping("/koreksi-stok/{idOutlet}")
     public ResponseEntity<InputStreamResource> getKoreksiStok(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
@@ -283,5 +354,22 @@ public class ReportController {
                 .contentLength(bytes.length)
                 .body(resource);
     }
-    
+
+    @GetMapping("/getinvoice/{idOutlet}/{table}")
+    public ResponseResult getInvoice(@PathVariable UUID idOutlet, @PathVariable String table) {
+        ResponseResult res = new ResponseResult();
+        try {
+            String noInv = utilServ.getNoInvoice(idOutlet, table);
+            res.setCode(0);
+            res.setStatus("success");
+            res.setMessage("Invoice berhasil digenerate");
+            res.setContent(noInv);
+        } catch (Exception e) {
+            res.setCode(1);
+            res.setStatus("failed");
+            res.setMessage(e.getMessage());
+        }
+        return res;
+    }
+
 }

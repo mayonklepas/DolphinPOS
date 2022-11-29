@@ -79,7 +79,8 @@ public class CatatanController {
             catatanentity.setTipeCatatan(data.getTipeCatatan());
             catatanentity.setDeskripsi(data.getDeskripsi());
             catatanentity.setJumlah(data.getJumlah());
-            catatanentity.setIdAkunKeuangan(data.getIdAkunKeuangan());
+            catatanentity.setIdAkunKeuanganDebit(data.getIdAkunKeuanganDebit());
+            catatanentity.setIdAkunKeuanganKredit(data.getIdAkunKeuanganKredit());
             CatatanEntity entity = catatanrepo.save(catatanentity);
             res.setCode(0);
             res.setStatus("success");

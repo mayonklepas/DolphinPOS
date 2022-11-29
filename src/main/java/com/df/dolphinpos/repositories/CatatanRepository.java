@@ -31,6 +31,9 @@ public interface CatatanRepository extends PagingAndSortingRepository<CatatanEnt
 
     @Query("SELECT ce FROM CatatanEntity ce WHERE ce.idOutlet=?1 AND ce.tanggalCatatan >= ?2 AND ce.tanggalCatatan <= ?3 ORDER BY ce.tanggalCatatan DESC")
     List<CatatanEntity> findCatatan(UUID idOutlet,Date tanggalDari, Date tanggalHingga);
+    
+    @Query("SELECT ce FROM CatatanEntity ce WHERE ce.idOutlet=?1 AND ce.tipeCatatan = ?2 AND ce.tanggalCatatan >= ?3 AND ce.tanggalCatatan <= ?4 ORDER BY ce.tanggalCatatan DESC")
+    List<CatatanEntity> findCatatanByTipe(UUID idOutlet,int tipe,Date tanggalDari, Date tanggalHingga);
 
     @Query("SELECT new com.df.dolphinpos.dto.ChartDto('',SUM(ce.jumlah)) "
             + "FROM CatatanEntity ce "

@@ -65,9 +65,33 @@ public interface PembelianMasterRepository extends PagingAndSortingRepository<Pe
             + "WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 AND pm.tanggalPembelian <= ?3 "
             + "ORDER BY pm.dateCreated DESC")
     List<PembelianReportDTO> findPembelianReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
+    
+    @Query("SELECT "
+            + "new com.df.dolphinpos.dto.PembelianReportDTO"
+            + "(pm.tanggalPembelian, "
+            + "pm.kodePembelianMaster, "
+            + "pm.deskripsi, "
+            + "pm.akunKeuangan.namaAkunKeuangan, "
+            + "pm.kartuKontak.namaKontak,"
+            + "pm.pengguna.username, "
+            + "pm.disc, "
+            + "pm.tax,"
+            + "pm.totalBelanja) "
+            + "FROM "
+            + "PembelianMasterEntity pm "
+            + "WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan=?2 AND pm.tanggalPembelian >= ?3 AND pm.tanggalPembelian <= ?4 "
+            + "ORDER BY pm.dateCreated DESC")
+    List<PembelianReportDTO> findPembelianReportByIdAkunKeuangan(UUID idOutlet,UUID idAkunKeuangan,Date tanggalDari, Date tanggalHingga);
 
     @Query("SELECT pm FROM PembelianMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 and pm.tanggalPembelian <= ?3 ORDER BY pm.dateCreated DESC")
     List<PembelianMasterEntity> findPembelianReportDetail(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
+    
+    @Query("SELECT pm FROM PembelianMasterEntity pm WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan=?2 AND pm.tanggalPembelian >= ?3 and pm.tanggalPembelian <= ?4 ORDER BY pm.dateCreated DESC")
+    List<PembelianMasterEntity> findPembelianReportDetailByIdAkunKeuangan(UUID idOutlet, UUID idAKunKeuangan, Date tanggalDari, Date tanggalHingga);
+    
+    @Query("SELECT pm FROM PembelianMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 AND pm.tanggalPembelian <= ?3 AND pm.idKartuKontak = ?4 ORDER BY pm.dateCreated DESC")
+    List<PembelianMasterEntity> findPembelianReportDetailPerkontak(UUID idOutlet, Date tanggalDari, Date tanggalHingga, UUID idKartuKontakÏ);
+
 
     @Query("SELECT new com.df.dolphinpos.dto.ChartDto('label',"
             + "SUM(pm.totalBelanja)) "

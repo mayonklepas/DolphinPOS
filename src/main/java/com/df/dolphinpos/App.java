@@ -30,7 +30,11 @@ public class App{
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080")
+                        .allowedOrigins("http://localhost:8080",
+                                "http://103.226.139.97:80",
+                                "http://dolphin.digitalfantasi.com",
+                                "http://ranimutiara.digitalfantasi.com"
+                        )
                         .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
             }
             

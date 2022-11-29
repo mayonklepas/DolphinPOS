@@ -43,4 +43,7 @@ public interface AkunKeuanganRepository extends PagingAndSortingRepository<AkunK
     @Query("SELECT ake FROM AkunKeuanganEntity ake WHERE idOutlet=?1 ORDER BY kodeAkunKeuangan ASC")
     List<AkunKeuanganEntity> getDataAkunKeuangan(UUID idOutlet);
 
+    @Query("SELECT ake FROM AkunKeuanganEntity ake WHERE ake.idOutlet=?1 AND ake.id=?2 ORDER BY kodeAkunKeuangan ASC")
+    List<AkunKeuanganEntity> getDataAkunKeuanganById(UUID idOutlet, UUID id);
+
 }

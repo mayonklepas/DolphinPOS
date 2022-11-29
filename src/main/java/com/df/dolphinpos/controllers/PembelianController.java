@@ -85,11 +85,15 @@ public class PembelianController {
                 uid = data.getDetail().get(i).getIdBarang();
             }
             boolean isExist = barangrepo.existsById(uid);
+            int tipeBarang = data.getDetail().get(i).getTipeBarang();
+
             if (isExist) {
-                BarangEntity barang = barangrepo.findById(data.getDetail().get(i).getIdBarang()).get();
-                double jumlahbarangkurangi = barang.getJumlahBarang() + data.getDetail().get(i).getJumlahBeli();
-                barang.setJumlahBarang(jumlahbarangkurangi);
-                barangrepo.save(barang);
+                if (tipeBarang != 3) {
+                    BarangEntity barang = barangrepo.findById(data.getDetail().get(i).getIdBarang()).get();
+                    double jumlahbarangtambahi = barang.getJumlahBarang() + data.getDetail().get(i).getJumlahBeli();
+                    barang.setJumlahBarang(jumlahbarangtambahi);
+                    barangrepo.save(barang);
+                }
             } else {
                 BarangEntity barang = new BarangEntity();
                 barang.setKodeBarang(data.getDetail().get(i).getKodeBarang());
@@ -104,6 +108,7 @@ public class PembelianController {
                 barang.setIdPengguna(data.getDetail().get(i).getIdPengguna());
                 BarangEntity newbarang = barangrepo.save(barang);
                 data.getDetail().get(i).setIdBarang(newbarang.getId());
+
             }
 
         }
@@ -153,12 +158,18 @@ public class PembelianController {
             if (data.getDetail().get(i).getIdBarang() != null) {
                 uid = data.getDetail().get(i).getIdBarang();
             }
+
             boolean isExist = barangrepo.existsById(uid);
+
+            int tipeBarang = data.getDetail().get(i).getTipeBarang();
+
             if (isExist) {
-                BarangEntity barang = barangrepo.findById(data.getDetail().get(i).getIdBarang()).get();
-                double jumlahbarangkurangi = barang.getJumlahBarang() + data.getDetail().get(i).getJumlahBeli();
-                barang.setJumlahBarang(jumlahbarangkurangi);
-                barangrepo.save(barang);
+                if (tipeBarang != 3) {
+                    BarangEntity barang = barangrepo.findById(data.getDetail().get(i).getIdBarang()).get();
+                    double jumlahbarangkurangi = barang.getJumlahBarang() + data.getDetail().get(i).getJumlahBeli();
+                    barang.setJumlahBarang(jumlahbarangkurangi);
+                    barangrepo.save(barang);
+                }
             } else {
                 BarangEntity barang = new BarangEntity();
                 barang.setKodeBarang(data.getDetail().get(i).getKodeBarang());

@@ -9,14 +9,20 @@ import com.df.dolphinpos.dto.BarangTotalDTO;
 import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.BarangDummyEntity;
 import com.df.dolphinpos.entities.BarangEntity;
+import com.df.dolphinpos.entities.OutletEntity;
 import com.df.dolphinpos.repositories.BarangDummyRepository;
 import com.df.dolphinpos.repositories.BarangRepository;
+import com.df.dolphinpos.repositories.OutletRepository;
+import com.df.dolphinpos.service.UtilService;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,13 +60,27 @@ public class BarangController {
     @Autowired
     BarangDummyRepository barangdummyrepo;
 
+    @Autowired
+    UtilService utilServe;
+
+    @Autowired
+    OutletRepository outletRepo;
+
     @GetMapping("/getdata/{idOutlet}")
-    public Page<BarangEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword) {
+    public Page<BarangEntity> getdata(Pageable pg, @PathVariable UUID idOutlet, @RequestParam String keyword, @RequestParam String tipe) {
         Page<BarangEntity> result = null;
         if (keyword.equals("")) {
-            result = barangrepo.findByIdOutlet(pg, idOutlet);
+            if (tipe.equals("")) {
+                result = barangrepo.findByIdOutlet(pg, idOutlet);
+            } else {
+                result = barangrepo.findByIdOutletAndTipeBarang(pg, idOutlet, Integer.parseInt(tipe));
+            }
         } else {
-            result = barangrepo.findByIdOutletAndNamaBarangContainingIgnoreCase(pg, idOutlet, keyword);
+            if (tipe.equals("")) {
+                result = barangrepo.findByAll(pg, idOutlet, keyword);
+            } else {
+                result = barangrepo.findByAll(pg, idOutlet, Integer.parseInt(tipe), keyword);
+            }
         }
 
         return result;
@@ -96,6 +116,13 @@ public class BarangController {
     public ResponseResult adddata(@RequestBody BarangEntity data) {
         ResponseResult res = new ResponseResult();
         try {
+            Optional<BarangEntity> barangDetail = barangrepo.findByIdOutletAndKodeBarang(data.getIdOutlet(), data.getKodeBarang());
+            if (barangDetail.isPresent()) {
+                res.setCode(1);
+                res.setStatus("failed");
+                res.setMessage("Barang dengan kode ini sudah ada");
+                return res;
+            }
             BarangEntity entity = barangrepo.save(data);
             res.setCode(0);
             res.setStatus("success");
@@ -165,27 +192,24 @@ public class BarangController {
             int fileNameSplitSize = fileNameSplit.length;
             String ext = fileNameSplit[fileNameSplitSize - 1];
 
-            if (ext.equals("jpg")) {
-                byte[] bytedata = file.getBytes();
-                Path path = Paths.get("images/" + nama + "." + ext);
-                boolean isAda = Files.exists(path);
-                if (isAda == true) {
-                    res.setCode(0);
-                    res.setStatus("Failed");
-                    res.setMessage("Gambar dengan nama ini sudah ada, "
-                            + "silahkan pakai yang sudah ada atau upload gambar "
-                            + "dengan kode barang yang berbeda");
-                } else {
-                    Files.write(path, bytedata);
-                    res.setCode(0);
-                    res.setStatus("Success");
-                    res.setMessage("Gambar berhasil diupload");
-                }
-            } else {
+            Optional<OutletEntity> outlet = outletRepo.findById(idOutlet);
+
+            if (!outlet.isPresent()) {
                 res.setCode(1);
                 res.setStatus("Failed");
-                res.setMessage("Gambar tidak sesuai format, format harus jpg");
+                res.setMessage("Outlet tidak ditemukan");
             }
+
+            byte[] bytedata = file.getBytes();
+            File dest = new File("images/" + outlet.get().getKodeOutlet());
+            if (!dest.exists()) {
+                dest.mkdir();
+            }
+            Path path = Paths.get("images/" + outlet.get().getKodeOutlet() + "/" + nama + ".jpg");
+            Files.write(path, utilServe.resizeImage(bytedata), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            res.setCode(0);
+            res.setStatus("Success");
+            res.setMessage("Gambar berhasil diupload");
 
         } catch (IOException ex) {
             res.setCode(1);
@@ -196,12 +220,12 @@ public class BarangController {
         return res;
     }
 
-    @GetMapping(value = "/getimage/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getFile(@PathVariable String imagename) {
+    @GetMapping(value = "/getimage/{kodeOutlet}/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getFile(@PathVariable String kodeOutlet, @PathVariable String imagename) {
         Path path = null;
         byte[] databyte = null;
         try {
-            path = Paths.get("images/" + imagename);
+            path = Paths.get("images/" + kodeOutlet + "/" + imagename);
             databyte = Files.readAllBytes(path);
         } catch (Exception e) {
             path = Paths.get("images/defimg.jpg");
@@ -215,9 +239,15 @@ public class BarangController {
     }
 
     @GetMapping(value = "/getbarangtotal/{idOutlet}")
-    public BarangTotalDTO getTotal(@PathVariable UUID idOutlet) {
-        BarangTotalDTO data = barangrepo.getTotal(idOutlet);
-        return data;
+    public BarangTotalDTO getTotal(@PathVariable UUID idOutlet, @RequestParam String tipe) {
+        if (tipe.equals("")) {
+            BarangTotalDTO data = barangrepo.getTotal(idOutlet);
+            return data;
+        } else {
+            BarangTotalDTO data = barangrepo.getTotalBytipe(idOutlet, Integer.parseInt(tipe));
+            return data;
+        }
+
     }
 
     @GetMapping("/generatedefault/{idOutlet}/{idPengguna}/{tipeToko)")

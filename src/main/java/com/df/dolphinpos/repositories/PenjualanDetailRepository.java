@@ -30,6 +30,13 @@ public interface PenjualanDetailRepository extends JpaRepository<PenjualanDetail
 
     List<PenjualanDetailEntity> findByIdPenjualanMaster(UUID idPenjualan);
 
+    List<PenjualanDetailEntity> findByIdPenjualanMasterAndIdOutlet(UUID idPenjualan, UUID idOutlet);
+
+    @Transactional
+    @Modifying()
+    @Query("DELETE FROM PenjualanDetailEntity pde WHERE pde.idPenjualanMaster=?1 AND pde.idOutlet = ?2")
+    int deleteByIdPenjualanMasterAndIdOutlet(UUID idPenjualanMaster, UUID idOutlet);
+
     @Transactional
     @Modifying()
     @Query("DELETE FROM PenjualanDetailEntity pde WHERE pde.idPenjualanMaster=?1")
@@ -46,11 +53,25 @@ public interface PenjualanDetailRepository extends JpaRepository<PenjualanDetail
             + "be.namaBarang,"
             + "be.satuanBarang,"
             + "be.hargaBeli,"
+            + "SUM(pd.disc),"
             + "SUM((pd.hargaJualJual*pd.jumlahJual) - (pd.disc*pd.jumlahJual)),"
             + "SUM(pd.jumlahJual)) "
             + "FROM PenjualanDetailEntity pd JOIN pd.barang be "
             + "WHERE pd.idOutlet=?1 AND pd.tanggalTransaksi >= ?2 AND pd.tanggalTransaksi <=?3 "
             + "GROUP BY be.id")
     List<MarginPenjualanDTO> findMarginPenjualan(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
+
+    @Query("SELECT new com.df.dolphinpos.dto.MarginPenjualanDTO("
+            + "be.kodeBarang,"
+            + "be.namaBarang,"
+            + "be.satuanBarang,"
+            + "be.hargaBeli,"
+            + "SUM(pd.disc),"
+            + "SUM((pd.hargaJualJual*pd.jumlahJual) - (pd.disc*pd.jumlahJual)),"
+            + "SUM(pd.jumlahJual)) "
+            + "FROM PenjualanDetailEntity pd JOIN pd.barang be "
+            + "WHERE pd.idOutlet=?1 AND be.kodeBarang=?2  AND pd.tanggalTransaksi >= ?3 AND pd.tanggalTransaksi <=?4 "
+            + "GROUP BY be.id")
+    Optional<MarginPenjualanDTO> findMarginPenjualanByKodeBarang(UUID idOutlet, String kodeBarang, Date tanggalDari, Date tanggalHingga);
 
 }

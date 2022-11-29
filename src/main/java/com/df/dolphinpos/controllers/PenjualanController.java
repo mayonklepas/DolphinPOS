@@ -53,7 +53,7 @@ public class PenjualanController {
 
     @Autowired
     RacikanRepository racikarepo;
-    
+
     @Autowired
     UtilService utilServ;
 
@@ -72,12 +72,11 @@ public class PenjualanController {
     public Optional<PenjualanMasterEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
         return penjualanmasterrepo.findByIdOutletAndId(idOutlet, id);
     }
-    
+
     @GetMapping("/getdatadetailbyidpenjualan/{idOutlet}/{idPenjualan}")
-    public List<PenjualanDetailEntity> getDataDetailByIdPenjualan(@PathVariable UUID idOutlet, @PathVariable UUID idPenjualan){
+    public List<PenjualanDetailEntity> getDataDetailByIdPenjualan(@PathVariable UUID idOutlet, @PathVariable UUID idPenjualan) {
         return penjualandetailrepo.findByIdPenjualanMaster(idPenjualan);
     }
-    
 
     @GetMapping("/getdatalist/{idOutlet}")
     public List<PenjualanMasterEntity> getdatalist(@PathVariable UUID idOutlet) {
@@ -88,7 +87,7 @@ public class PenjualanController {
     @PostMapping("/adddata")
     public ResponseResult adddata(@RequestBody MasterDetailPenjualanDTO data) {
         ResponseResult res = new ResponseResult();
-        data.getMaster().setKodePenjualanMaster(utilServ.getNoInvoice(data.getMaster().getIdOutlet()));
+        data.getMaster().setKodePenjualanMaster(utilServ.getNoInvoice(data.getMaster().getIdOutlet(),"penjualan_master"));
         PenjualanMasterEntity entityMaster = penjualanmasterrepo.save(data.getMaster());
         for (int i = 0; i < data.getDetail().size(); i++) {
             data.getDetail().get(i).setIdPenjualanMaster(entityMaster.getId());
@@ -106,7 +105,7 @@ public class PenjualanController {
                     barangDalamRacikan.setJumlahBarang(jumlahBarangKurangi);
                     barangrepo.save(barangDalamRacikan);
                 }
-            } else {
+            } else if (barang.getTipeBarang() != 3) {
                 double jumlahbarangkurangi = barang.getJumlahBarang() - data.getDetail().get(i).getJumlahJual();
                 barang.setJumlahBarang(jumlahbarangkurangi);
                 barangrepo.save(barang);
@@ -151,6 +150,7 @@ public class PenjualanController {
 
         for (int i = 0; i < entityDetailSelect.size(); i++) {
             BarangEntity barang = barangrepo.findById(entityDetailSelect.get(i).getIdBarang()).get();
+
             if (barang.getTipeBarang() == 2) {
                 List<RacikanEntity> racikan = racikarepo.findByIdOutletAndKodeResep(entityMaster.getIdOutlet(), barang.getKodeResep());
                 for (int j = 0; j < racikan.size(); j++) {
@@ -160,7 +160,7 @@ public class PenjualanController {
                     barangDalamRacikan.setJumlahBarang(jumlahBarangTambahi);
                     barangrepo.save(barangDalamRacikan);
                 }
-            } else {
+            } else if (barang.getTipeBarang() != 3) {
                 double jumlahBarangTambahi = barang.getJumlahBarang() + entityDetailSelect.get(i).getJumlahJual();
                 barang.setJumlahBarang(jumlahBarangTambahi);
                 barangrepo.save(barang);
@@ -178,7 +178,7 @@ public class PenjualanController {
                     barangDalamRacikan.setJumlahBarang(jumlahBarangKurangi);
                     barangrepo.save(barangDalamRacikan);
                 }
-            } else {
+            } else if (barang.getTipeBarang() != 3) {
                 double jumlahbarangkurangi = barang.getJumlahBarang() - data.getDetail().get(i).getJumlahJual();
                 barang.setJumlahBarang(jumlahbarangkurangi);
                 barangrepo.save(barang);
@@ -262,11 +262,6 @@ public class PenjualanController {
             res.setMessage(e.getMessage());
         }
         return res;
-    }
-    
-    @GetMapping("/getinvoice/{idOutlet}")
-    public String getInvoice(@PathVariable UUID idOutlet){
-        return utilServ.getNoInvoice(idOutlet);
     }
 
 }

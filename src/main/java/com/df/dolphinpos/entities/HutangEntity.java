@@ -21,16 +21,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 /**
  *
  * @author Minami
  */
 @Entity
-@Table(name = "penjualan_master")
-public class PenjualanMasterEntity {
+@Table(name = "hutang")
+public class HutangEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -39,31 +39,20 @@ public class PenjualanMasterEntity {
     private UUID id;
     @Column(nullable = false)
     private UUID idOutlet;
-    @Column(nullable = true)
-    private String kodePenjualanMaster;
+    @Column(nullable = false, unique = true)
+    private String kode;
     @Column(nullable = false)
-    private Date tanggalPenjualan;
+    private Date tanggal;
     @Column(nullable = false)
-    private int status;
-    @Column(nullable = true)
     private String deskripsi;
-    @Column(nullable = true)
-    private String deskripsiEkstra;
     @Column(nullable = false)
-    private double tax;
+    private double jumlah;
     @Column(nullable = false)
-    private double disc;
-    @Column(nullable = true)
-    private double totalBelanja;
-    @Column(nullable = true)
-    private double jumlahUang;
-    @Column(nullable = true)
-    private double kembalian;
-    @Column(nullable = true)
-    
     private UUID idKartuKontak;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idKartuKontak", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("pengguna")
     private KartuKontakEntity kartuKontak;
 
     @Column(nullable = false)
@@ -71,6 +60,7 @@ public class PenjualanMasterEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idAkunKeuangan", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("pengguna")
     private AkunKeuanganEntity akunKeuangan;
 
     @Column(nullable = false)
@@ -78,17 +68,19 @@ public class PenjualanMasterEntity {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idAkunKeuanganKredit", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("pengguna")
     private AkunKeuanganEntity akunKeuanganKredit;
 
-    @OneToMany(mappedBy = "penjualanMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("penjualanMaster")
-    private List<PenjualanDetailEntity> penjualanDetail;
+    @OneToMany(mappedBy = "hutang", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties("hutang")
+    private List<PembayaranHutangEntity> pembayaranHutang;
 
     @Column(nullable = false)
     private UUID idPengguna;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPengguna", nullable = false, updatable = false, insertable = false)
+    @JsonIgnoreProperties("outlet")
     private PenggunaEntity pengguna;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -113,28 +105,20 @@ public class PenjualanMasterEntity {
         this.idOutlet = idOutlet;
     }
 
-    public String getKodePenjualanMaster() {
-        return kodePenjualanMaster;
+    public String getKode() {
+        return kode;
     }
 
-    public void setKodePenjualanMaster(String kodePenjualanMaster) {
-        this.kodePenjualanMaster = kodePenjualanMaster;
+    public void setKode(String kode) {
+        this.kode = kode;
     }
 
-    public Date getTanggalPenjualan() {
-        return tanggalPenjualan;
+    public Date getTanggal() {
+        return tanggal;
     }
 
-    public void setTanggalPenjualan(Date tanggalPenjualan) {
-        this.tanggalPenjualan = tanggalPenjualan;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+    public void setTanggal(Date tanggal) {
+        this.tanggal = tanggal;
     }
 
     public String getDeskripsi() {
@@ -145,52 +129,12 @@ public class PenjualanMasterEntity {
         this.deskripsi = deskripsi;
     }
 
-    public String getDeskripsiEkstra() {
-        return deskripsiEkstra;
+    public double getJumlah() {
+        return jumlah;
     }
 
-    public void setDeskripsiEkstra(String deskripsiEkstra) {
-        this.deskripsiEkstra = deskripsiEkstra;
-    }
-
-    public double getTax() {
-        return tax;
-    }
-
-    public void setTax(double tax) {
-        this.tax = tax;
-    }
-
-    public double getDisc() {
-        return disc;
-    }
-
-    public void setDisc(double disc) {
-        this.disc = disc;
-    }
-
-    public double getTotalBelanja() {
-        return totalBelanja;
-    }
-
-    public void setTotalBelanja(double totalBelanja) {
-        this.totalBelanja = totalBelanja;
-    }
-
-    public double getJumlahUang() {
-        return jumlahUang;
-    }
-
-    public void setJumlahUang(double jumlahUang) {
-        this.jumlahUang = jumlahUang;
-    }
-
-    public double getKembalian() {
-        return kembalian;
-    }
-
-    public void setKembalian(double kembalian) {
-        this.kembalian = kembalian;
+    public void setJumlah(double jumlah) {
+        this.jumlah = jumlah;
     }
 
     public UUID getIdKartuKontak() {
@@ -241,12 +185,12 @@ public class PenjualanMasterEntity {
         this.akunKeuanganKredit = akunKeuanganKredit;
     }
 
-    public List<PenjualanDetailEntity> getPenjualanDetail() {
-        return penjualanDetail;
+    public List<PembayaranHutangEntity> getPembayaranHutang() {
+        return pembayaranHutang;
     }
 
-    public void setPenjualanDetail(List<PenjualanDetailEntity> penjualanDetail) {
-        this.penjualanDetail = penjualanDetail;
+    public void setPembayaranHutang(List<PembayaranHutangEntity> pembayaranHutang) {
+        this.pembayaranHutang = pembayaranHutang;
     }
 
     public UUID getIdPengguna() {
