@@ -10,7 +10,9 @@ import com.df.dolphinpos.dto.BukuBesarDTO;
 import com.df.dolphinpos.dto.MarginPenjualanDTO;
 import com.df.dolphinpos.dto.NeracaSaldoDTO;
 import com.df.dolphinpos.dto.PembelianReportDTO;
+import com.df.dolphinpos.dto.PembelianReportV2DTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
+import com.df.dolphinpos.dto.PenjualanReportV2DTO;
 import com.df.dolphinpos.dto.StrukDto;
 import com.df.dolphinpos.entities.AkunKeuanganEntity;
 import com.df.dolphinpos.entities.BarangEntity;
@@ -316,6 +318,31 @@ public class ReportService {
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
         return JasperExportManager.exportReportToPdf(jp);
     }
+    
+        public byte[] penjualanV2Report(UUID idOutlet, Date tanggalDari, Date tanggalHingga, String idAkunKeuangan) throws FileNotFoundException, JRException, IOException {
+
+        List<PenjualanReportV2DTO> entity = null;
+        if (idAkunKeuangan.equals("")) {
+            entity = penjualanrepo.findPenjualanV2Report(idOutlet, tanggalDari, tanggalHingga);
+        } else {
+            UUID idAkun = UUID.fromString(idAkunKeuangan);
+            entity = penjualanrepo.findPenjualanV2ReportByIdAkunKeuangan(idOutlet, idAkun, tanggalDari, tanggalHingga);
+        }
+
+        Resource fileRes = resLoad.getResource("classpath:report/penjualan-v2.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
 
     public byte[] penjualanDetailReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga, String idAkunKeuangan) throws FileNotFoundException, JRException, IOException {
         List<PenjualanMasterEntity> entity = null;
@@ -412,6 +439,33 @@ public class ReportService {
         JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
         return JasperExportManager.exportReportToPdf(jp);
     }
+    
+    public byte[] pembelianV2Report(UUID idOutlet, Date tanggalDari, Date tanggalHingga, String idAkunKeuangan) throws FileNotFoundException, JRException, IOException {
+        List<PembelianReportV2DTO> entity = null;
+
+        if (idAkunKeuangan.equals("")) {
+            entity = pembelianrepo.findPembelianV2Report(idOutlet, tanggalDari, tanggalHingga);
+        } else {
+            UUID idAkun = UUID.fromString(idAkunKeuangan);
+            entity = pembelianrepo.findPembelianV2ReportByIdAkunKeuangan(idOutlet, idAkun, tanggalDari, tanggalHingga);
+        }
+
+        Resource fileRes = resLoad.getResource("classpath:report/pembelian-v2.jrxml");
+        InputStream inputStream = fileRes.getInputStream();
+        JasperReport jr = JasperCompileManager.compileReport(inputStream);
+        JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(entity);
+        Map<String, Object> map = new HashMap<>();
+        map.put(JRParameter.REPORT_LOCALE, new Locale("id", "ID"));
+        map.put("namaOutlet", getOutlet(idOutlet).get("nama"));
+        map.put("alamatOutlet", getOutlet(idOutlet).get("alamat"));
+        map.put("nohpOutlet", getOutlet(idOutlet).get("nohp"));
+        map.put("tanggalDari", tanggalDari);
+        map.put("tanggalHingga", tanggalHingga);
+        JasperPrint jp = JasperFillManager.fillReport(jr, map, ds);
+        return JasperExportManager.exportReportToPdf(jp);
+    }
+    
+    
 
     public byte[] pembelianDetailReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga, String idAkunKeuangan) throws FileNotFoundException, JRException, IOException {
         List<PembelianMasterEntity> entity = null;

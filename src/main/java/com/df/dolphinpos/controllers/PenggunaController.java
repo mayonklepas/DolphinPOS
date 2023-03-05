@@ -11,6 +11,7 @@ import com.df.dolphinpos.dto.ResponseResult;
 import com.df.dolphinpos.entities.PenggunaEntity;
 import com.df.dolphinpos.repositories.PenggunaRepository;
 import com.df.dolphinpos.service.UserService;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,7 @@ public class PenggunaController {
     public ResponseResult login(@RequestBody LoginFormDto data) {
         ResponseResult res = new ResponseResult();
         try {
-            PenggunaEntity entity = penggunarepo.findLogin(data.getKodeOutlet(), data.getUsername(), data.getPassword());
+            PenggunaEntity entity = penggunarepo.findLogin(data.getUsername(), data.getPassword());
             if (entity != null) {
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);

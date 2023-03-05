@@ -55,7 +55,7 @@ public class AccountingService {
     AkunKeuanganRepository akunKeuanganRepo;
 
     @Transactional
-    public void postingData(UUID idOutlet, UUID pengguna) throws JsonProcessingException, JSONException {
+    public void postingData(UUID idOutlet, UUID pengguna) throws JsonProcessingException, JSONException, ParseException {
 
         /*String sqlgetSetting = "SELECT settings FROM outlet WHERE id=?";
         Query querySelectSetting = enma.createNativeQuery(sqlgetSetting);
@@ -72,34 +72,34 @@ public class AccountingService {
         String kodeReturPembelianDebit = joSetting.getJSONObject("akunReturPembelianDebit").getString("id");
         String kodeReturPembelianKredit = joSetting.getJSONObject("akunReturPembelianKredit").getString("id");*/
         String sqlGetakun
-                = "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'penjualan' AS tipe,'total jumlah penjualan' as desc "
-                + "FROM penjualan_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet GROUP BY id_akun_keuangan,id_akun_keuangan_kredit "
+                = "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'penjualan' AS tipe,'total jumlah penjualan' as desc,tanggal_penjualan  "
+                + "FROM penjualan_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet GROUP BY id_akun_keuangan,id_akun_keuangan_kredit,tanggal_penjualan "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'pembelian' AS tipe, 'total jumlah pembelian' as desc "
-                + "FROM pembelian_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet  GROUP BY id_akun_keuangan_debit,id_akun_keuangan "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'pembelian' AS tipe, 'total jumlah pembelian' as desc,tanggal_pembelian "
+                + "FROM pembelian_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet  GROUP BY id_akun_keuangan_debit,id_akun_keuangan,tanggal_pembelian "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_penjualan' AS tipe, 'total jumlah retur penjualan' as desc "
-                + "FROM retur_penjualan_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet GROUP BY id_akun_keuangan_debit,id_akun_keuangan "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_penjualan' AS tipe, 'total jumlah retur penjualan' as desc,tanggal_retur_penjualan "
+                + "FROM retur_penjualan_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet GROUP BY id_akun_keuangan_debit,id_akun_keuangan,tanggal_retur_penjualan "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_pembelian' AS tipe,'total jumlah retur pembelian' as desc "
-                + "FROM retur_pembelian_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet  GROUP BY id_akun_keuangan,id_akun_keuangan_kredit "
+                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,SUM(total_belanja) AS nominal,'retur_pembelian' AS tipe,'total jumlah retur pembelian' as desc,tanggal_retur_pembelian "
+                + "FROM retur_pembelian_master WHERE is_posting=0 and status!=1 and id_outlet=:idOutlet  GROUP BY id_akun_keuangan,id_akun_keuangan_kredit,tanggal_retur_pembelian "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'hutang' AS tipe, deskripsi as desc "
+                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'hutang' AS tipe, deskripsi as desc,tanggal "
                 + "FROM hutang WHERE is_posting=0 and id_outlet=:idOutlet "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,jumlah AS nominal,'pembayaran hutang' AS tipe, deskripsi as desc "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,jumlah AS nominal,'pembayaran hutang' AS tipe, deskripsi as desc,tanggal "
                 + "FROM pembayaran_hutang WHERE is_posting=0 and id_outlet=:idOutlet "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,jumlah AS nominal,'piutang' AS tipe, deskripsi as desc "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan AS text) AS akun_kredit,jumlah AS nominal,'piutang' AS tipe, deskripsi as desc,tanggal "
                 + "FROM piutang WHERE is_posting=0 and id_outlet=:idOutlet  "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'pembayaran piutang' AS tipe, deskripsi as desc "
+                + "SELECT CAST(id_akun_keuangan AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'pembayaran piutang' AS tipe, deskripsi as desc,tanggal "
                 + "FROM pembayaran_piutang WHERE is_posting=0 and id_outlet=:idOutlet "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'pendapatan transaksi lain' AS tipe, deskripsi as desc "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'pendapatan transaksi lain' AS tipe, deskripsi as desc,tanggal_catatan "
                 + "FROM catatan WHERE tipe_catatan=1 AND is_posting=0 and id_outlet=:idOutlet "
                 + "union "
-                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'pengeluaran transaksi lain' AS tipe, deskripsi as desc "
+                + "SELECT CAST(id_akun_keuangan_debit AS text) AS akun_debit,CAST(id_akun_keuangan_kredit AS text) AS akun_kredit,jumlah AS nominal,'pengeluaran transaksi lain' AS tipe, deskripsi as desc,tanggal_catatan "
                 + "FROM catatan WHERE tipe_catatan=2 AND is_posting=0 and id_outlet=:idOutlet "
                 + "ORDER BY tipe";
         Query queryGetAkun = enma.createNativeQuery(sqlGetakun);
@@ -108,57 +108,61 @@ public class AccountingService {
 
         if (lsDataPosting.size() > 0) {
 
-            String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-
-            JurnalUmumMasterEntity jurnalUmumMasterEntity = new JurnalUmumMasterEntity();
-            jurnalUmumMasterEntity.setIdOutlet(idOutlet);
-            jurnalUmumMasterEntity.setIdPengguna(pengguna);
-            jurnalUmumMasterEntity.setTanggalJurnal(new java.sql.Date(System.currentTimeMillis()));
-            jurnalUmumMasterEntity.setTanggalRef(new java.sql.Date(System.currentTimeMillis()));
-            jurnalUmumMasterEntity.setNoRef(new SimpleDateFormat("ddMMyyyy").format(new Date()));
-            jurnalUmumMasterEntity.setDeskripsi("Posting Data Transaksi " + currentDate);
-            jurnalUmumMasterEntity.setIsPosting(1);
-            UUID idJurnal = jurnalUmumMasterRepo.save(jurnalUmumMasterEntity).getId();
-
             //jurnal detail
             List<JurnalUmumDetailEntity> jurnalDetailList = new ArrayList<>();
-            int indexUrutan = 1;
             for (int i = 0; i < lsDataPosting.size(); i++) {
-                indexUrutan = indexUrutan + i;
+                
                 Object[] oDataPosting = lsDataPosting.get(i);
+
                 String akunDebit = String.valueOf(oDataPosting[0]);
                 String akunKredit = String.valueOf(oDataPosting[1]);
                 double nominal = Double.parseDouble(String.valueOf(oDataPosting[2]));
                 String tipeTrans = String.valueOf(oDataPosting[3]);
                 String descTrans = String.valueOf(oDataPosting[4]);
+                java.sql.Date trDate = java.sql.Date.valueOf(String.valueOf(oDataPosting[5]));
+                String strTrDate = new SimpleDateFormat("dd/MM/yyyy").format(trDate);
 
+
+                JurnalUmumMasterEntity jurnalUmumMasterEntity = new JurnalUmumMasterEntity();
+                jurnalUmumMasterEntity.setIdOutlet(idOutlet);
+                jurnalUmumMasterEntity.setIdPengguna(pengguna);
+                jurnalUmumMasterEntity.setTanggalJurnal(trDate);
+                jurnalUmumMasterEntity.setTanggalRef(trDate);
+                jurnalUmumMasterEntity.setNoRef(strTrDate);
+                jurnalUmumMasterEntity.setDeskripsi(""+descTrans+" "+ strTrDate);
+                jurnalUmumMasterEntity.setIsPosting(1);
+                UUID idJurnal = jurnalUmumMasterRepo.save(jurnalUmumMasterEntity).getId();
+                
                 JurnalUmumDetailEntity jurnalDetailDebit = new JurnalUmumDetailEntity();
                 jurnalDetailDebit.setIdOutlet(idOutlet);
                 jurnalDetailDebit.setIdPengguna(pengguna);
-                jurnalDetailDebit.setTanggalJurnal(new java.sql.Date(System.currentTimeMillis()));
+                jurnalDetailDebit.setTanggalJurnal(trDate);
                 jurnalDetailDebit.setIdJurnalMaster(idJurnal);
                 jurnalDetailDebit.setIdAkunKeuangan(UUID.fromString(akunDebit));
-                jurnalDetailDebit.setDeskripsi(descTrans + " " + currentDate);
+                jurnalDetailDebit.setDeskripsi(descTrans + " " + strTrDate);
                 jurnalDetailDebit.setDebit(nominal);
                 jurnalDetailDebit.setKredit(0);
-                jurnalDetailDebit.setUrutan(indexUrutan);
+                jurnalDetailDebit.setUrutan(1);
                 jurnalDetailList.add(jurnalDetailDebit);
 
-                indexUrutan = indexUrutan + 1;
+                
                 JurnalUmumDetailEntity jurnalDetailKredit = new JurnalUmumDetailEntity();
                 jurnalDetailKredit.setIdOutlet(idOutlet);
                 jurnalDetailKredit.setIdPengguna(pengguna);
-                jurnalDetailKredit.setTanggalJurnal(new java.sql.Date(System.currentTimeMillis()));
+                jurnalDetailKredit.setTanggalJurnal(trDate);
                 jurnalDetailKredit.setIdJurnalMaster(idJurnal);
                 jurnalDetailKredit.setIdAkunKeuangan(UUID.fromString(akunKredit));
-                jurnalDetailKredit.setDeskripsi(descTrans + " " + currentDate);
+                jurnalDetailKredit.setDeskripsi(descTrans + " " + strTrDate);
                 jurnalDetailKredit.setDebit(0);
                 jurnalDetailKredit.setKredit(nominal);
-                jurnalDetailKredit.setUrutan(indexUrutan);
+                jurnalDetailKredit.setUrutan(2);
 
                 jurnalDetailList.add(jurnalDetailKredit);
+                
+                jurnalUmumDetailRepo.saveAll(jurnalDetailList);
             }
-            jurnalUmumDetailRepo.saveAll(jurnalDetailList);
+            
+            
 
             String sqlupdatePosting = "UPDATE penjualan_master SET is_posting=1 WHERE is_posting=0 AND status!=1 AND id_outlet=:idOutlet ;"
                     + "UPDATE pembelian_master SET is_posting=1 WHERE is_posting=0 AND status!=1 AND id_outlet=:idOutlet ;"
@@ -168,8 +172,7 @@ public class AccountingService {
                     + "UPDATE pembayaran_hutang SET is_posting=1 WHERE is_posting=0 AND id_outlet=:idOutlet ;"
                     + "UPDATE piutang SET is_posting=1 WHERE is_posting=0 AND id_outlet=:idOutlet ;"
                     + "UPDATE pembayaran_piutang SET is_posting=1 WHERE is_posting=0 AND id_outlet=:idOutlet ;"
-                    + "UPDATE catatan SET is_posting=1 WHERE is_posting=0 AND id_outlet=:idOutlet ;"
-                    ;
+                    + "UPDATE catatan SET is_posting=1 WHERE is_posting=0 AND id_outlet=:idOutlet ;";
             Query queryUpdatePosting = enma.createNativeQuery(sqlupdatePosting);
             queryUpdatePosting.setParameter("idOutlet", idOutlet);
             queryUpdatePosting.executeUpdate();

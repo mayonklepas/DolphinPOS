@@ -9,6 +9,7 @@ import com.df.dolphinpos.dto.ChartDto;
 import com.df.dolphinpos.dto.MarginPenjualanDTO;
 import com.df.dolphinpos.dto.PenjualanMasterListDTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
+import com.df.dolphinpos.dto.PenjualanReportV2DTO;
 import com.df.dolphinpos.dto.StrukDto;
 import com.df.dolphinpos.entities.PenjualanMasterEntity;
 import java.util.Date;
@@ -19,30 +20,32 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Minami
  */
+@Repository
 public interface PenjualanMasterRepository extends PagingAndSortingRepository<PenjualanMasterEntity, UUID> {
-    
+
     @Query("SELECT new com.df.dolphinpos.dto.PenjualanMasterListDTO("
             + "pme.id,pme.idOutlet,pme.tanggalPenjualan,pme.kodePenjualanMaster,"
             + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
             + "FROM PenjualanMasterEntity pme "
             + "WHERE pme.idOutlet = ?1 ORDER BY pme.dateCreated DESC")
-    Page<PenjualanMasterListDTO> findAllPenjualan(Pageable page,UUID idOutlet);
-    
+    Page<PenjualanMasterListDTO> findAllPenjualan(Pageable page, UUID idOutlet);
+
     @Query("SELECT new com.df.dolphinpos.dto.PenjualanMasterListDTO("
             + "pme.id,pme.idOutlet,pme.tanggalPenjualan,pme.kodePenjualanMaster,"
             + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
             + "FROM PenjualanMasterEntity pme "
             + "WHERE pme.idOutlet = ?1 AND lower(pme.kodePenjualanMaster) LIKE %?2% ")
-    Page<PenjualanMasterListDTO> findAllPenjualanByKey(Pageable page,UUID idOutlet,String keyword);
-    
+    Page<PenjualanMasterListDTO> findAllPenjualanByKey(Pageable page, UUID idOutlet, String keyword);
+
     Page<PenjualanMasterEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
-    Optional<PenjualanMasterEntity> findByIdOutletAndId(UUID idOutlet,UUID id);
+    Optional<PenjualanMasterEntity> findByIdOutletAndId(UUID idOutlet, UUID id);
 
     Page<PenjualanMasterEntity> findByIdOutletAndKodePenjualanMasterContainingIgnoreCase(Pageable page, UUID idOutlet, String kodePenjualanMaster);
 
@@ -84,7 +87,24 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
             + "WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan >= ?2 AND pm.tanggalPenjualan <= ?3 "
             + "ORDER BY pm.dateCreated DESC")
     List<PenjualanReportDTO> findPenjualanMasterReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
-    
+
+    @Query("SELECT "
+            + "new com.df.dolphinpos.dto.PenjualanReportV2DTO"
+            + "(pm.tanggalPenjualan, "
+            + "pm.pengguna.username, "
+            + "pd.barang.kodeBarang, "
+            + "pd.barang.namaBarang, "
+            + "pd.barang.satuanBarang, "
+            + "pd.jumlahJual,"
+            + "pd.hargaBeliJual, "
+            + "pd.hargaJualJual, "
+            + "pd.disc) "
+            + "FROM "
+            + "PenjualanDetailEntity pd join pd.penjualanMaster pm "
+            + "WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan >= ?2 AND pm.tanggalPenjualan <= ?3 "
+            + "ORDER BY pm.dateCreated DESC")
+    List<PenjualanReportV2DTO> findPenjualanV2Report(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
+
     @Query("SELECT "
             + "new com.df.dolphinpos.dto.PenjualanReportDTO"
             + "(pm.tanggalPenjualan, "
@@ -100,18 +120,34 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
             + "PenjualanMasterEntity pm "
             + "WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan = ?2 AND pm.tanggalPenjualan >= ?3 AND pm.tanggalPenjualan <= ?4 "
             + "ORDER BY pm.dateCreated DESC")
-    List<PenjualanReportDTO> findPenjualanMasterReportByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan ,Date tanggalDari, Date tanggalHingga);
+    List<PenjualanReportDTO> findPenjualanMasterReportByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan, Date tanggalDari, Date tanggalHingga);
 
+    @Query("SELECT "
+            + "new com.df.dolphinpos.dto.PenjualanReportV2DTO"
+            + "(pm.tanggalPenjualan, "
+            + "pm.pengguna.username, "
+            + "pd.barang.kodeBarang, "
+            + "pd.barang.namaBarang, "
+            + "pd.barang.satuanBarang, "
+            + "pd.jumlahJual,"
+            + "pd.hargaBeliJual, "
+            + "pd.hargaJualJual, "
+            + "pd.disc) "
+            + "FROM "
+            + "PenjualanDetailEntity pd join pd.penjualanMaster pm "
+            + "WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan = ?2 AND pm.tanggalPenjualan >= ?3 AND pm.tanggalPenjualan <= ?4 "
+            + "ORDER BY pm.dateCreated DESC")
+    List<PenjualanReportV2DTO> findPenjualanV2ReportByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan, Date tanggalDari, Date tanggalHingga);
+    
+    
     @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan >= ?2 and pm.tanggalPenjualan <= ?3 ORDER BY pm.dateCreated DESC")
     List<PenjualanMasterEntity> findPenjualanReportDetail(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
-    
-        @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan = ?2 AND pm.tanggalPenjualan >= ?3 and pm.tanggalPenjualan <= ?4 ORDER BY pm.dateCreated DESC")
-    List<PenjualanMasterEntity> findPenjualanReportDetailByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan ,Date tanggalDari, Date tanggalHingga);
-    
-    
+
+    @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan = ?2 AND pm.tanggalPenjualan >= ?3 and pm.tanggalPenjualan <= ?4 ORDER BY pm.dateCreated DESC")
+    List<PenjualanMasterEntity> findPenjualanReportDetailByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan, Date tanggalDari, Date tanggalHingga);
+
     @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan >= ?2 and pm.tanggalPenjualan <= ?3 AND pm.idKartuKontak = ?4 ORDER BY pm.dateCreated DESC")
-    List<PenjualanMasterEntity> findPenjualanReportDetailPerKontak(UUID idOutlet, Date tanggalDari, Date tanggalHingga,UUID idKartuKontak);
-    
+    List<PenjualanMasterEntity> findPenjualanReportDetailPerKontak(UUID idOutlet, Date tanggalDari, Date tanggalHingga, UUID idKartuKontak);
 
     @Query("SELECT pm FROM PenjualanMasterEntity pm WHERE pm.id=?1 AND pm.idOutlet=?2 ORDER BY pm.dateCreated DESC")
     List<PenjualanMasterEntity> findPenjualanFakturById(UUID id, UUID idOutlet);
@@ -161,7 +197,7 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
             + "FROM PenjualanMasterEntity pm "
             + "WHERE pm.idOutlet=?1 AND pm.tanggalPenjualan = CURRENT_DATE ")
     ChartDto findTotalPenjualanHariIni(UUID idOutlet);
-    
+
     Optional<PenjualanMasterEntity> findByIdAndIdOutlet(UUID id, UUID idOutlet);
 
 }

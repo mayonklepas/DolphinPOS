@@ -20,12 +20,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Minami
  */
+@Repository
 public interface PenjualanDetailRepository extends JpaRepository<PenjualanDetailEntity, UUID> {
 
     List<PenjualanDetailEntity> findByIdPenjualanMaster(UUID idPenjualan);

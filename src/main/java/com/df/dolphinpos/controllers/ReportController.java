@@ -104,6 +104,21 @@ public class ReportController {
     public ResponseEntity<InputStreamResource> getpenjualan(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.penjualanV2Report(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-penjualan.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+
+     @GetMapping("/penjualan-perinvoice/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getpenjualanPerInvoice(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
         byte[] bytes = reportservice.penjualanReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();
@@ -115,6 +130,7 @@ public class ReportController {
                 .body(resource);
     }
 
+    
     @GetMapping("/penjualan-detail/{idOutlet}")
     public ResponseEntity<InputStreamResource> getpenjualanDetail(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
@@ -161,7 +177,22 @@ public class ReportController {
     }
 
     @GetMapping("/pembelian/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getpenmbelian(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
+    public ResponseEntity<InputStreamResource> getpembelian(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
+        Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
+        Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
+        byte[] bytes = reportservice.pembelianV2Report(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, String.format("inline; filename=laporan-pembelian.pdf"));
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(bytes.length)
+                .body(resource);
+    }
+    
+     @GetMapping("/pembelian-perinvoice/{idOutlet}")
+    public ResponseEntity<InputStreamResource> getpembelianPerInvoice(@PathVariable UUID idOutlet, @RequestParam String dari, @RequestParam String hingga, @RequestParam String idAkunKeuangan) throws FileNotFoundException, JRException, ParseException, IOException {
         Date tanggalDari = new SimpleDateFormat("yyyy-MM-dd").parse(dari);
         Date tanggalHingga = new SimpleDateFormat("yyyy-MM-dd").parse(hingga);
         byte[] bytes = reportservice.pembelianReport(idOutlet, tanggalDari, tanggalHingga, idAkunKeuangan);

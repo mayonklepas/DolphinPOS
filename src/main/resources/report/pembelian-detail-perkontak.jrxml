@@ -27,31 +27,37 @@
 	<subDataset name="subds" uuid="9dc0e249-b8fd-4300-9b16-fae9e4451e98">
 		<parameter name="gdisc" class="java.lang.Double"/>
 		<parameter name="gtax" class="java.lang.Double"/>
-		<field name="jumlahJual" class="java.lang.Double"/>
-		<field name="hargaJualJual" class="java.lang.Double"/>
+		<field name="jumlahBeli" class="java.lang.Double"/>
+		<field name="hargaBeliBeli" class="java.lang.Double"/>
 		<field name="disc" class="java.lang.Double"/>
 		<field name="barang.namaBarang" class="java.lang.String"/>
 		<field name="barang.kodeBarang" class="java.lang.String"/>
 		<field name="barang.satuanBarang" class="java.lang.String"/>
-		<field name="barang.hargaBeli" class="java.lang.Double"/>
+		<field name="barang.hargaJual" class="java.lang.Double"/>
+		<field name="namaBarang" class="java.lang.String"/>
+		<field name="kodeBarang" class="java.lang.String"/>
 		<variable name="totalpenjualan" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[($F{hargaJualJual}*$F{jumlahJual})-($F{disc}*$F{jumlahJual})]]></variableExpression>
+			<variableExpression><![CDATA[($F{hargaBeliBeli}*$F{jumlahBeli})-($F{disc}*$F{jumlahBeli})]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="tanggalDari" class="java.util.Date"/>
 	<parameter name="tanggalHingga" class="java.util.Date"/>
 	<parameter name="namaOutlet" class="java.lang.String"/>
 	<field name="kartuKontak.namaKontak" class="java.lang.String"/>
-	<field name="kartuKontak.nohp" class="java.lang.String"/>
+	<field name="kartuKontak.nohpKontak" class="java.lang.String"/>
 	<field name="kartuKontak.deskripsi" class="java.lang.String"/>
-	<field name="penjualanDetail" class="java.util.Collection"/>
+	<field name="pembelianDetail" class="java.util.Collection"/>
 	<field name="tax" class="java.lang.Double"/>
 	<field name="disc" class="java.lang.Double"/>
+	<field name="totalBelanja" class="java.lang.Double"/>
+	<variable name="totalBelanja1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalBelanja}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="69" splitType="Stretch">
+		<band height="172" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="555" height="30" uuid="063ef49f-4bf4-418c-9d68-479767e75dd7"/>
 				<textElement markup="none">
@@ -64,7 +70,7 @@
 				<textElement textAlignment="Right" markup="none">
 					<font size="15"/>
 				</textElement>
-				<text><![CDATA[Laporan Penjualan Per Kontak]]></text>
+				<text><![CDATA[Laporan Pembelian Per Kontak]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="52" width="50" height="15" uuid="ecf1b829-be7e-46e0-b091-7ec64e4fc984"/>
@@ -72,188 +78,26 @@
 				<text><![CDATA[Periode :]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="50" y="52" width="60" height="15" uuid="e8cae9ab-f42f-4f0e-94d3-168fc19d729d"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<reportElement x="50" y="52" width="70" height="15" uuid="e8cae9ab-f42f-4f0e-94d3-168fc19d729d">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalDari}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="110" y="52" width="16" height="15" uuid="b84edfb3-a0c5-431b-b564-c212084ec007"/>
+				<reportElement x="120" y="52" width="16" height="15" uuid="b84edfb3-a0c5-431b-b564-c212084ec007"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[-]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="126" y="52" width="60" height="15" uuid="da739bf9-cf46-4cef-a954-d04035c848b9"/>
-				<textElement verticalAlignment="Middle"/>
+				<reportElement x="136" y="52" width="70" height="15" uuid="da739bf9-cf46-4cef-a954-d04035c848b9">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{tanggalHingga}]]></textFieldExpression>
 			</textField>
-		</band>
-	</title>
-	<detail>
-		<band height="102" splitType="Stretch">
-			<property name="com.jaspersoft.studio.layout"/>
-			<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy">
-				<reportElement x="0" y="24" width="160" height="15" uuid="aab264a2-8603-45dc-9f2b-89547a942e6b">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{kartuKontak.namaKontak}]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight">
-				<reportElement x="310" y="24" width="244" height="15" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{kartuKontak.deskripsi}]]></textFieldExpression>
-			</textField>
-			<componentElement>
-				<reportElement key="table" style="table" x="0" y="39" width="554" height="62" uuid="da20d441-caed-4c8b-bab9-fe503f9bda54"/>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="subds" uuid="54fdf027-46cb-4943-ac42-918908acca76">
-						<datasetParameter name="gdisc">
-							<datasetParameterExpression><![CDATA[$F{disc}]]></datasetParameterExpression>
-						</datasetParameter>
-						<datasetParameter name="gtax">
-							<datasetParameterExpression><![CDATA[$F{tax}]]></datasetParameterExpression>
-						</datasetParameter>
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{penjualanDetail})]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="90" uuid="5a254d0e-fc89-4403-8e18-957f81ef6d26">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="90" height="20" uuid="086028ad-3197-4134-831f-b48104d14b15"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Kode]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="20" rowSpan="1"/>
-						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="90" height="21" uuid="ccb86a3c-e03e-4ba6-adfc-82cd6532f5e6"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{barang.kodeBarang}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="160" uuid="720377c7-c401-43e8-b15d-62cfd8774878">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="160" height="20" uuid="40512306-bf21-40f8-a56d-bbd9e948a436"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Nama]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="160" height="20" uuid="392590fc-c2e8-4490-9e66-bd3987fd7ecf"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="11" isBold="true"/>
-								</textElement>
-								<text><![CDATA[Total]]></text>
-							</staticText>
-						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="160" height="21" uuid="75f060c9-bfcf-41bc-844a-57ff6a94c15b"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{barang.namaBarang}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="50" uuid="553a2416-4690-4529-84e6-0fb23bf58d90">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="50" height="20" uuid="3b22123e-a6e5-4862-83e7-b852bbfb5e45"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[ Jumlah]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="20" rowSpan="1"/>
-						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0;-#,##0">
-								<reportElement x="0" y="0" width="50" height="21" uuid="db3b88f5-aeaa-4109-9a3d-dd3fa32139b5"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{jumlahJual}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="e4c6964f-b9a6-415b-bf6b-61327d0ca962">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="90" height="20" uuid="6cd754c2-08e2-4f45-b36c-9622f8f937d5"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Harga]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="20" rowSpan="1"/>
-						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0;-#,##0">
-								<reportElement x="0" y="0" width="90" height="21" uuid="0c3fa4f1-38ab-4f50-9f58-33c1497d95f2"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{hargaJualJual}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="60" uuid="8424b09f-0ecf-4519-ac86-f163ed94d9ae">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="60" height="20" uuid="96c18d37-ca68-404a-9f77-35daaa2f1acc"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Disc]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="20" rowSpan="1"/>
-						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0;-#,##0">
-								<reportElement x="0" y="0" width="60" height="21" uuid="0869f10c-54ff-4567-a26b-74b5637d8b74"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{disc}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="100" uuid="04ee6e65-b793-401c-ab38-c9ce2f6d14f6">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
-						<jr:columnHeader style="table_TH" height="20" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="100" height="20" uuid="071b3cb2-853a-463d-8d50-b53b440a61ae"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Total Penjualan ]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="20" rowSpan="1">
-							<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
-								<pen lineWidth="0.5"/>
-								<topPen lineWidth="0.5"/>
-								<leftPen lineWidth="0.5"/>
-								<bottomPen lineWidth="0.5"/>
-								<rightPen lineWidth="0.5"/>
-							</box>
-							<textField pattern="#,##0;-#,##0">
-								<reportElement x="0" y="0" width="100" height="20" uuid="79dd4916-fc78-4679-beb5-6ed04bcc3854"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$V{totalpenjualan}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="21" rowSpan="1">
-							<textField pattern="#,##0;-#,##0">
-								<reportElement x="0" y="0" width="100" height="21" uuid="e472f16c-cdeb-4bb8-bd37-b81abd8a9aae"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[($F{hargaJualJual}*$F{jumlahJual})-($F{disc}*$F{jumlahJual})]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
 			<staticText>
-				<reportElement x="0" y="2" width="160" height="20" uuid="8a5b1d31-31f1-4af2-9a61-a7bffca4ff59">
+				<reportElement x="0" y="81" width="110" height="20" uuid="8a5b1d31-31f1-4af2-9a61-a7bffca4ff59">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -262,7 +106,16 @@
 				<text><![CDATA[Nama Kontak]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="310" y="2" width="245" height="20" uuid="5d2426dc-b629-4895-8be8-f7d8a97f842d">
+				<reportElement x="0" y="101" width="110" height="20" uuid="a5b7cc4a-a166-472d-8254-1c1f0569e4ed">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Handphone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="121" width="110" height="20" uuid="5d2426dc-b629-4895-8be8-f7d8a97f842d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -270,27 +123,179 @@
 				</textElement>
 				<text><![CDATA[Deskripsi]]></text>
 			</staticText>
-			<line>
-				<reportElement x="0" y="23" width="555" height="1" uuid="fb0314b1-9fd9-466e-9a67-1abe1f1e796b"/>
-			</line>
-			<staticText>
-				<reportElement x="160" y="2" width="150" height="20" uuid="a5b7cc4a-a166-472d-8254-1c1f0569e4ed">
+			<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy">
+				<reportElement x="126" y="80" width="160" height="20" uuid="aab264a2-8603-45dc-9f2b-89547a942e6b">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="12"/>
 				</textElement>
-				<text><![CDATA[No HP]]></text>
-			</staticText>
-			<textField textAdjust="StretchHeight" pattern="dd/MM/yy">
-				<reportElement x="160" y="24" width="150" height="15" uuid="ebee5ac3-8782-4369-8a5b-831eac32a42c">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{kartuKontak.nohp}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{kartuKontak.namaKontak}]]></textFieldExpression>
 			</textField>
+			<textField textAdjust="StretchHeight" pattern="dd/MM/yy">
+				<reportElement x="126" y="101" width="160" height="20" uuid="ebee5ac3-8782-4369-8a5b-831eac32a42c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="87fc44dc-1916-461d-b119-cc464944041e"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kartuKontak.nohpKontak}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="126" y="123" width="429" height="18" uuid="932669f3-aba5-45e6-9ca8-5258b984728d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="35b46aae-cf37-41c2-b33f-f17e46c4c914"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kartuKontak.deskripsi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="110" y="80" width="16" height="21" uuid="36495b90-a3e7-4daa-a605-b183dfc3648e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="101" width="16" height="20" uuid="e25035b2-64f3-46af-90e0-df50acef5c49"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="121" width="16" height="20" uuid="85c44c21-e94d-4a0f-82b2-f9f75e115ebc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table" x="0" y="152" width="90" height="20" uuid="9981f3f8-2681-4c19-9cc7-1f15fbe58a2b"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table" x="90" y="152" width="160" height="20" uuid="b979dcdd-47c1-4ece-8fb8-9d4332dade6d"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table" x="250" y="152" width="50" height="20" uuid="665665ab-07c5-4a65-a444-9de50e4b1e7e"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jumlah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table" x="300" y="152" width="90" height="20" uuid="1f3af83a-cc69-49a4-a709-728051d71516"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table" x="390" y="152" width="60" height="20" uuid="54f70a6d-086f-4005-8474-6f09c290a866"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diskon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="table" x="450" y="152" width="104" height="20" uuid="8b99c84f-81ee-4da3-bf00-b4973f0dd887"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout"/>
+			<componentElement>
+				<reportElement key="table" style="table" x="0" y="0" width="554" height="21" uuid="da20d441-caed-4c8b-bab9-fe503f9bda54"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="subds" uuid="54fdf027-46cb-4943-ac42-918908acca76">
+						<datasetParameter name="gdisc">
+							<datasetParameterExpression><![CDATA[$F{disc}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="gtax">
+							<datasetParameterExpression><![CDATA[$F{tax}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{pembelianDetail})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="5a254d0e-fc89-4403-8e18-957f81ef6d26">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<textField textAdjust="ScaleFont">
+								<reportElement x="0" y="0" width="90" height="21" uuid="ccb86a3c-e03e-4ba6-adfc-82cd6532f5e6"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{barang.kodeBarang}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="160" uuid="720377c7-c401-43e8-b15d-62cfd8774878">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<textField textAdjust="ScaleFont">
+								<reportElement x="0" y="0" width="160" height="21" uuid="75f060c9-bfcf-41bc-844a-57ff6a94c15b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{namaBarang}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="50" uuid="553a2416-4690-4529-84e6-0fb23bf58d90">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<textField textAdjust="ScaleFont" pattern="#,##0;-#,##0">
+								<reportElement x="0" y="0" width="50" height="21" uuid="db3b88f5-aeaa-4109-9a3d-dd3fa32139b5"/>
+								<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{jumlahBeli}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="e4c6964f-b9a6-415b-bf6b-61327d0ca962">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<textField textAdjust="ScaleFont" pattern="#,##0;-#,##0">
+								<reportElement x="0" y="0" width="90" height="21" uuid="0c3fa4f1-38ab-4f50-9f58-33c1497d95f2"/>
+								<box leftPadding="5" rightPadding="5"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{hargaBeliBeli}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="8424b09f-0ecf-4519-ac86-f163ed94d9ae">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<textField textAdjust="ScaleFont" pattern="#,##0;-#,##0">
+								<reportElement x="0" y="0" width="60" height="21" uuid="0869f10c-54ff-4567-a26b-74b5637d8b74"/>
+								<box leftPadding="5" rightPadding="5"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{disc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="104" uuid="04ee6e65-b793-401c-ab38-c9ce2f6d14f6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<textField textAdjust="ScaleFont" pattern="#,##0;-#,##0">
+								<reportElement x="0" y="0" width="104" height="21" uuid="e472f16c-cdeb-4bb8-bd37-b81abd8a9aae"/>
+								<box leftPadding="5" rightPadding="5"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[($F{hargaBeliBeli}*$F{jumlahBeli})-($F{disc}*$F{jumlahBeli})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</detail>
 	<pageFooter>
@@ -315,6 +320,18 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="50"/>
+		<band height="20">
+			<textField pattern="#,##0;-#,##0">
+				<reportElement style="table" x="450" y="0" width="105" height="20" uuid="b8c54e61-dbdb-4c50-ace7-609e12d548e0"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalBelanja1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="table" x="0" y="0" width="450" height="20" uuid="bbb28e4a-9de8-4522-8974-dd8eb1aa614d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
 	</summary>
 </jasperReport>

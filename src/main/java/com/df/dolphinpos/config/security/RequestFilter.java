@@ -4,8 +4,12 @@
  */
 package com.df.dolphinpos.config.security;
 
+import com.df.dolphinpos.config.multitenant.MultitenantContext;
 import com.df.dolphinpos.service.UserService;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.FilterChain;
@@ -26,7 +30,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * @author mulyadi
  */
 @Component
-class JwtRequestFilter extends OncePerRequestFilter {
+class RequestFilter extends OncePerRequestFilter {
 
     @Autowired
     JwtUtil jwtUtil;
@@ -36,10 +40,16 @@ class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest hsr, HttpServletResponse hsr1, FilterChain fc) throws ServletException, IOException {
-        final String authorizationHeader = hsr.getHeader("Authorization");
-
         String jwtToken = null;
         String userName = null;
+
+        String tenantId = hsr.getHeader("tenantId");
+        MultitenantContext.setTenant(tenantId);
+        
+        if (MultitenantContext.getTenant() == null) {
+            throw new RuntimeException("Kode tidak ditemukan");
+        } 
+        
 
         String bearerToken = hsr.getHeader("Authorization");
 
@@ -58,7 +68,7 @@ class JwtRequestFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(JwtRequestFilter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RequestFilter.class.getName()).log(Level.SEVERE, null, ex);
         }
         fc.doFilter(hsr, hsr1);
     }

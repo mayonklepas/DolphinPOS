@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     private UserService userService;
     
     @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    private RequestFilter jwtRequestFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

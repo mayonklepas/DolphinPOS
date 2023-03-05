@@ -14,11 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Minami
  */
+@Repository
 public interface PiutangRepository extends PagingAndSortingRepository<PiutangEntity, UUID> {
 
     Page<PiutangEntity> findByIdOutlet(Pageable page, UUID idOutlet);

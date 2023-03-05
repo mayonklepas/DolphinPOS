@@ -4,11 +4,34 @@
  */
 package com.df.dolphinpos.config;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 /**
  *
  * @author mulyadi
  */
+@Component
 public class Appconfig {
     
+    @Bean
+    public WebMvcConfigurer config() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:8080",
+                                "http://103.226.139.97:80",
+                                "http://dolphin.digitalfantasi.com",
+                                "http://ranimutiara.digitalfantasi.com"
+                        )
+                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
+            }
+            
+        };
+    }
 
 }

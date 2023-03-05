@@ -79,20 +79,19 @@ public class PembelianController {
         }
 
         for (int i = 0; i < data.getDetail().size(); i++) {
-
-            UUID uid = new UUID(0, 0);
-            if (data.getDetail().get(i).getIdBarang() != null) {
-                uid = data.getDetail().get(i).getIdBarang();
-            }
-            boolean isExist = barangrepo.existsById(uid);
+            boolean isExist = barangrepo.existsByIdOutletAndKodeBarang(data.getMaster().getIdOutlet(), data.getDetail().get(i).getKodeBarang());
             int tipeBarang = data.getDetail().get(i).getTipeBarang();
 
             if (isExist) {
                 if (tipeBarang != 3) {
-                    BarangEntity barang = barangrepo.findById(data.getDetail().get(i).getIdBarang()).get();
+                    BarangEntity barang = barangrepo.findByIdOutletAndKodeBarang(data.getMaster().getIdOutlet(), data.getDetail().get(i).getKodeBarang()).get();
                     double jumlahbarangtambahi = barang.getJumlahBarang() + data.getDetail().get(i).getJumlahBeli();
                     barang.setJumlahBarang(jumlahbarangtambahi);
                     barangrepo.save(barang);
+                    data.getDetail().get(i).setIdBarang(barang.getId());
+                    data.getDetail().get(i).setNamaBarang(barang.getNamaBarang());
+                    data.getDetail().get(i).setSatuanBarang(barang.getSatuanBarang());
+                    data.getDetail().get(i).setTipeBarang(barang.getTipeBarang());
                 }
             } else {
                 BarangEntity barang = new BarangEntity();
@@ -154,13 +153,8 @@ public class PembelianController {
         }
 
         for (int i = 0; i < data.getDetail().size(); i++) {
-            UUID uid = new UUID(0, 0);
-            if (data.getDetail().get(i).getIdBarang() != null) {
-                uid = data.getDetail().get(i).getIdBarang();
-            }
 
-            boolean isExist = barangrepo.existsById(uid);
-
+            boolean isExist = barangrepo.existsByIdOutletAndKodeBarang(data.getMaster().getIdOutlet(), data.getDetail().get(i).getKodeBarang());
             int tipeBarang = data.getDetail().get(i).getTipeBarang();
 
             if (isExist) {
@@ -169,6 +163,10 @@ public class PembelianController {
                     double jumlahbarangkurangi = barang.getJumlahBarang() + data.getDetail().get(i).getJumlahBeli();
                     barang.setJumlahBarang(jumlahbarangkurangi);
                     barangrepo.save(barang);
+                    data.getDetail().get(i).setIdBarang(barang.getId());
+                    data.getDetail().get(i).setNamaBarang(barang.getNamaBarang());
+                    data.getDetail().get(i).setSatuanBarang(barang.getSatuanBarang());
+                    data.getDetail().get(i).setTipeBarang(barang.getTipeBarang());
                 }
             } else {
                 BarangEntity barang = new BarangEntity();

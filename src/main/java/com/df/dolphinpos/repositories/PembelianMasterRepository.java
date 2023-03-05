@@ -8,6 +8,7 @@ package com.df.dolphinpos.repositories;
 import com.df.dolphinpos.dto.ChartDto;
 import com.df.dolphinpos.dto.PembelianMasterListDTO;
 import com.df.dolphinpos.dto.PembelianReportDTO;
+import com.df.dolphinpos.dto.PembelianReportV2DTO;
 import com.df.dolphinpos.dto.PenjualanReportDTO;
 import com.df.dolphinpos.entities.PembelianDetailEntity;
 import com.df.dolphinpos.entities.PembelianMasterEntity;
@@ -19,30 +20,32 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Minami
  */
+@Repository
 public interface PembelianMasterRepository extends PagingAndSortingRepository<PembelianMasterEntity, UUID> {
-    
+
     @Query("SELECT new com.df.dolphinpos.dto.PembelianMasterListDTO("
             + "pme.id,pme.idOutlet,pme.tanggalPembelian,pme.kodePembelianMaster,"
             + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
             + "FROM PembelianMasterEntity pme "
             + "WHERE pme.idOutlet = ?1 ")
-    Page<PembelianMasterListDTO> findAllPembelian(Pageable page,UUID idOutlet);
-    
+    Page<PembelianMasterListDTO> findAllPembelian(Pageable page, UUID idOutlet);
+
     @Query("SELECT new com.df.dolphinpos.dto.PembelianMasterListDTO("
             + "pme.id,pme.idOutlet,pme.tanggalPembelian,pme.kodePembelianMaster,"
             + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
             + "FROM PembelianMasterEntity pme "
             + "WHERE pme.idOutlet = ?1 AND lower(pme.kodePembelianMaster) LIKE %?2%")
-    Page<PembelianMasterListDTO> findAllPembelianByKey(Pageable page,UUID idOutlet,String keyword);
+    Page<PembelianMasterListDTO> findAllPembelianByKey(Pageable page, UUID idOutlet, String keyword);
 
     Page<PembelianMasterEntity> findByIdOutlet(Pageable page, UUID idOutlet);
 
-    Optional<PembelianMasterEntity> findByIdOutletAndId(UUID idOutlet,UUID id);
+    Optional<PembelianMasterEntity> findByIdOutletAndId(UUID idOutlet, UUID id);
 
     Page<PembelianMasterEntity> findByIdOutletAndKodePembelianMasterContainingIgnoreCase(Pageable page, UUID idOutlet, String kodePembelianMaster);
 
@@ -65,7 +68,7 @@ public interface PembelianMasterRepository extends PagingAndSortingRepository<Pe
             + "WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 AND pm.tanggalPembelian <= ?3 "
             + "ORDER BY pm.dateCreated DESC")
     List<PembelianReportDTO> findPembelianReport(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
-    
+
     @Query("SELECT "
             + "new com.df.dolphinpos.dto.PembelianReportDTO"
             + "(pm.tanggalPembelian, "
@@ -81,17 +84,48 @@ public interface PembelianMasterRepository extends PagingAndSortingRepository<Pe
             + "PembelianMasterEntity pm "
             + "WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan=?2 AND pm.tanggalPembelian >= ?3 AND pm.tanggalPembelian <= ?4 "
             + "ORDER BY pm.dateCreated DESC")
-    List<PembelianReportDTO> findPembelianReportByIdAkunKeuangan(UUID idOutlet,UUID idAkunKeuangan,Date tanggalDari, Date tanggalHingga);
+    List<PembelianReportDTO> findPembelianReportByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan, Date tanggalDari, Date tanggalHingga);
+
+    @Query("SELECT "
+            + "new com.df.dolphinpos.dto.PembelianReportV2DTO"
+            + "(pm.tanggalPembelian, "
+            + "pm.pengguna.username, "
+            + "pd.kodeBarang, "
+            + "pd.namaBarang,"
+            + "pd.satuanBarang,"
+            + "pd.jumlahBeli,"
+            + "pd.hargaBeliBeli,"
+            + "pd.disc) "
+            + "FROM "
+            + "PembelianMasterEntity pm join pm.pembelianDetail pd "
+            + "WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 AND pm.tanggalPembelian <= ?3 "
+            + "ORDER BY pm.dateCreated DESC")
+    List<PembelianReportV2DTO> findPembelianV2Report(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
+
+    @Query("SELECT "
+            + "new com.df.dolphinpos.dto.PembelianReportV2DTO"
+            + "(pm.tanggalPembelian, "
+            + "pm.pengguna.username, "
+            + "pd.kodeBarang, "
+            + "pd.namaBarang,"
+            + "pd.satuanBarang,"
+            + "pd.jumlahBeli,"
+            + "pd.hargaBeliBeli,"
+            + "pd.disc) "
+            + "FROM "
+            + "PembelianMasterEntity pm join pm.pembelianDetail pd "
+            + "WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan=?2 AND pm.tanggalPembelian >= ?3 AND pm.tanggalPembelian <= ?4 "
+            + "ORDER BY pm.dateCreated DESC")
+    List<PembelianReportV2DTO> findPembelianV2ReportByIdAkunKeuangan(UUID idOutlet, UUID idAkunKeuangan, Date tanggalDari, Date tanggalHingga);
 
     @Query("SELECT pm FROM PembelianMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 and pm.tanggalPembelian <= ?3 ORDER BY pm.dateCreated DESC")
     List<PembelianMasterEntity> findPembelianReportDetail(UUID idOutlet, Date tanggalDari, Date tanggalHingga);
-    
+
     @Query("SELECT pm FROM PembelianMasterEntity pm WHERE pm.idOutlet=?1 AND pm.idAkunKeuangan=?2 AND pm.tanggalPembelian >= ?3 and pm.tanggalPembelian <= ?4 ORDER BY pm.dateCreated DESC")
     List<PembelianMasterEntity> findPembelianReportDetailByIdAkunKeuangan(UUID idOutlet, UUID idAKunKeuangan, Date tanggalDari, Date tanggalHingga);
-    
+
     @Query("SELECT pm FROM PembelianMasterEntity pm WHERE pm.idOutlet=?1 AND pm.tanggalPembelian >= ?2 AND pm.tanggalPembelian <= ?3 AND pm.idKartuKontak = ?4 ORDER BY pm.dateCreated DESC")
     List<PembelianMasterEntity> findPembelianReportDetailPerkontak(UUID idOutlet, Date tanggalDari, Date tanggalHingga, UUID idKartuKontakÏ);
-
 
     @Query("SELECT new com.df.dolphinpos.dto.ChartDto('label',"
             + "SUM(pm.totalBelanja)) "

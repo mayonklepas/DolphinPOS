@@ -7,40 +7,18 @@ package com.df.dolphinpos;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  *
  * @author Minami
  */
-@SpringBootApplication
-public class App{
+@SpringBootApplication()
+public class App {
 
     public static void main(String[] args) {
-       new SpringApplicationBuilder(App.class).web(WebApplicationType.SERVLET).run(args);
+        new SpringApplicationBuilder(App.class).web(WebApplicationType.SERVLET).run(args);
     }
-
-    @Bean
-    public WebMvcConfigurer config() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080",
-                                "http://103.226.139.97:80",
-                                "http://dolphin.digitalfantasi.com",
-                                "http://ranimutiara.digitalfantasi.com"
-                        )
-                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
-            }
-            
-        };
-    }
-    
-    
 
 }

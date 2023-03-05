@@ -16,12 +16,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Minami
  */
+@Repository
 public interface RacikanRepository extends PagingAndSortingRepository<RacikanEntity, UUID> {
 
     Page<RacikanEntity> findByIdOutlet(Pageable page, UUID idOutlet);

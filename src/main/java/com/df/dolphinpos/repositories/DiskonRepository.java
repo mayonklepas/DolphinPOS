@@ -12,11 +12,13 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Minami
  */
+@Repository
 public interface DiskonRepository extends PagingAndSortingRepository<DiskonEntity, UUID> {
 
     Page<DiskonEntity> findByIdOutlet(Pageable page, UUID idOutlet);
