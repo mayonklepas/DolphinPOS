@@ -68,6 +68,12 @@ public class PenjualanController {
         return result;
     }
 
+    @GetMapping("/getdatabymonth/{idOutlet}/{bulan}/{tahun}")
+    public Page<PenjualanMasterListDTO> getdatabydmonth(Pageable pg, @PathVariable UUID idOutlet, @PathVariable int bulan,@PathVariable int tahun) {
+        Page<PenjualanMasterListDTO> result = penjualanmasterrepo.findAllPenjualanByMonth(pg, idOutlet,bulan,tahun);
+        return result;
+    }
+
     @GetMapping("/getdatabyid/{idOutlet}/{id}")
     public Optional<PenjualanMasterEntity> getdatabyid(@PathVariable UUID idOutlet, @PathVariable UUID id) {
         return penjualanmasterrepo.findByIdOutletAndId(idOutlet, id);
@@ -87,7 +93,7 @@ public class PenjualanController {
     @PostMapping("/adddata")
     public ResponseResult adddata(@RequestBody MasterDetailPenjualanDTO data) {
         ResponseResult res = new ResponseResult();
-        data.getMaster().setKodePenjualanMaster(utilServ.getNoInvoice(data.getMaster().getIdOutlet(),"penjualan_master"));
+        data.getMaster().setKodePenjualanMaster(utilServ.getNoInvoice(data.getMaster().getIdOutlet(), "penjualan_master"));
         PenjualanMasterEntity entityMaster = penjualanmasterrepo.save(data.getMaster());
         for (int i = 0; i < data.getDetail().size(); i++) {
             data.getDetail().get(i).setIdPenjualanMaster(entityMaster.getId());

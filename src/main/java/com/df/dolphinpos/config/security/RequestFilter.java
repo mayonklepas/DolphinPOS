@@ -44,6 +44,13 @@ class RequestFilter extends OncePerRequestFilter {
         String userName = null;
 
         String tenantId = hsr.getHeader("tenantId");
+        String clientUrl = hsr.getRequestURI();
+        boolean isStruk = clientUrl.contains("struk");
+        
+        if(isStruk){
+            tenantId = clientUrl.split("/")[6];
+        }
+        
         MultitenantContext.setTenant(tenantId);
         
         if (MultitenantContext.getTenant() == null) {

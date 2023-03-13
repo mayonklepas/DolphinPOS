@@ -42,7 +42,7 @@ public class MultiTenantConfiguration {
                 dataSourceBuilder.driverClassName("org.postgresql.Driver");
                 dataSourceBuilder.username("dolphin");
                 dataSourceBuilder.password("Bk201!@#");
-                dataSourceBuilder.url("jdbc:postgresql://digitalfantasi.com:5432/"+tenantDb);
+                dataSourceBuilder.url("jdbc:postgresql://localhost:5432/"+tenantDb);
                 resolvedDataSource.put(tenantId, dataSourceBuilder.build());
             }
 

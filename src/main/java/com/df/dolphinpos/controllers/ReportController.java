@@ -279,8 +279,8 @@ public class ReportController {
                 .body(resource);
     }
 
-    @GetMapping("/struk/{id}/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getstruk(@PathVariable UUID id, @PathVariable UUID idOutlet) throws FileNotFoundException, JRException, ParseException, IOException {
+    @GetMapping("/struk/{id}/{idOutlet}/{tenant}")
+    public ResponseEntity<InputStreamResource> getstruk(@PathVariable UUID id, @PathVariable UUID idOutlet,@PathVariable String tenant) throws FileNotFoundException, JRException, ParseException, IOException {
         byte[] bytes = reportservice.struk(id, idOutlet);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();

@@ -35,6 +35,13 @@ public interface PenjualanMasterRepository extends PagingAndSortingRepository<Pe
             + "FROM PenjualanMasterEntity pme "
             + "WHERE pme.idOutlet = ?1 ORDER BY pme.dateCreated DESC")
     Page<PenjualanMasterListDTO> findAllPenjualan(Pageable page, UUID idOutlet);
+    
+     @Query("SELECT new com.df.dolphinpos.dto.PenjualanMasterListDTO("
+            + "pme.id,pme.idOutlet,pme.tanggalPenjualan,pme.kodePenjualanMaster,"
+            + "pme.status,pme.deskripsi,pme.totalBelanja,pme.isPosting) "
+            + "FROM PenjualanMasterEntity pme "
+            + "WHERE pme.idOutlet = ?1 AND EXTRACT(MONTH FROM pme.tanggalPenjualan) = ?2 AND EXTRACT(YEAR FROM pme.tanggalPenjualan) =?3  ORDER BY pme.dateCreated DESC")
+    Page<PenjualanMasterListDTO> findAllPenjualanByMonth(Pageable page, UUID idOutlet, int bulan,int tahun);
 
     @Query("SELECT new com.df.dolphinpos.dto.PenjualanMasterListDTO("
             + "pme.id,pme.idOutlet,pme.tanggalPenjualan,pme.kodePenjualanMaster,"
