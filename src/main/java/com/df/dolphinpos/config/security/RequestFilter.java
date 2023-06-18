@@ -43,13 +43,23 @@ class RequestFilter extends OncePerRequestFilter {
         String jwtToken = null;
         String userName = null;
 
+        
+        
         String tenantId = hsr.getHeader("tenantId");
         String clientUrl = hsr.getRequestURI();
+        
         boolean isStruk = clientUrl.contains("struk");
+        boolean isImageRequest = clientUrl.contains("getimage");
         
         if(isStruk){
             tenantId = clientUrl.split("/")[6];
         }
+        
+        if(isImageRequest){
+            tenantId = clientUrl.split("/")[4];
+        }
+        
+        System.out.println(tenantId);
         
         MultitenantContext.setTenant(tenantId);
         

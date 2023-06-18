@@ -19,15 +19,17 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  *
  * @author mulyadi
  */
 @Configuration
+@EnableScheduling
 public class MultiTenantConfiguration {
 
-    @Bean
+   @Bean
     public DataSource dataSource() throws IOException {
         try {
             Map<Object, Object> resolvedDataSource = new HashMap<>();
@@ -56,4 +58,6 @@ public class MultiTenantConfiguration {
         }
 
     }
+    
+   
 }

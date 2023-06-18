@@ -11,11 +11,18 @@ import com.df.dolphinpos.entities.OutletEntity;
 import com.df.dolphinpos.entities.OutletEntity;
 import com.df.dolphinpos.repositories.OutletRepository;
 import com.df.dolphinpos.repositories.OutletRepository;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -104,7 +111,23 @@ public class OutletController {
         }
         return res;
     }
-    
-  
+
+    @GetMapping(value = "/getimage/{kodeOutlet}/{imagename}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getFile(@PathVariable String kodeOutlet, @PathVariable String imagename) {
+        Path path = null;
+        byte[] databyte = null;
+        try {
+            path = Paths.get("images/" + kodeOutlet + "/" + imagename);
+            databyte = Files.readAllBytes(path);
+        } catch (Exception e) {
+            path = Paths.get("images/digiposid.png");
+            try {
+                databyte = Files.readAllBytes(path);
+            } catch (IOException ex) {
+                Logger.getLogger(BarangController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return databyte;
+    }
 
 }

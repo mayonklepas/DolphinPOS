@@ -1,4 +1,4 @@
-/*
+  /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -56,7 +56,6 @@ public class AccountingService {
 
     @Transactional
     public void postingData(UUID idOutlet, UUID pengguna) throws JsonProcessingException, JSONException, ParseException {
-
         /*String sqlgetSetting = "SELECT settings FROM outlet WHERE id=?";
         Query querySelectSetting = enma.createNativeQuery(sqlgetSetting);
         querySelectSetting.setParameter(1, outlet);

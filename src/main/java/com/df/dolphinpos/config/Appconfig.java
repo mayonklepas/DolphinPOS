@@ -16,21 +16,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Component
 public class Appconfig {
-    
+
     @Bean
     public WebMvcConfigurer config() {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080",
-                                "http://103.226.139.97:80",
-                                "http://dolphin.digitalfantasi.com",
-                                "http://ranimutiara.digitalfantasi.com"
+                        .allowedOrigins("http://103.226.139.97",
+                                "http://digiposid.my.id",
+                                "http://localhost:8080"
                         )
                         .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS");
             }
-            
+
         };
     }
 
