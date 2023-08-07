@@ -48,16 +48,15 @@ class RequestFilter extends OncePerRequestFilter {
         String tenantId = hsr.getHeader("tenantId");
         String clientUrl = hsr.getRequestURI();
         
-        boolean isStruk = clientUrl.contains("struk");
-        boolean isImageRequest = clientUrl.contains("getimage");
         
-        if(isStruk){
+        if(clientUrl.contains("struk") || clientUrl.contains("faktur")){
             tenantId = clientUrl.split("/")[6];
+        }else if(clientUrl.contains("getimage")){
+           tenantId = clientUrl.split("/")[4];
+        }else if(clientUrl.contains("barcodebarang")){
+            tenantId = clientUrl.split("/")[5];
         }
         
-        if(isImageRequest){
-            tenantId = clientUrl.split("/")[4];
-        }
         
         System.out.println(tenantId);
         

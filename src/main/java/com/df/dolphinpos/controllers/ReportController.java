@@ -74,7 +74,7 @@ public class ReportController {
                 .body(resource);
     }
 
-    @GetMapping("/barcodebarang/{idOutlet}")
+    @GetMapping("/barcodebarang/{idOutlet}/{tenant}")
     public ResponseEntity<InputStreamResource> getBarcodeBarang(@PathVariable UUID idOutlet, @RequestParam String kodeBarang) throws FileNotFoundException, JRException, IOException {
         byte[] bytes = reportservice.barcodeBarangReport(idOutlet, kodeBarang);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
@@ -266,8 +266,8 @@ public class ReportController {
                 .body(resource);
     }
 
-    @GetMapping("/faktur/{id}/{idOutlet}")
-    public ResponseEntity<InputStreamResource> getfakturpenjualan(@PathVariable UUID id, @PathVariable UUID idOutlet) throws FileNotFoundException, JRException, ParseException, IOException {
+    @GetMapping("/faktur/{id}/{idOutlet}/{tenant}")
+    public ResponseEntity<InputStreamResource> getfakturpenjualan(@PathVariable UUID id, @PathVariable UUID idOutlet,@PathVariable String tenant) throws FileNotFoundException, JRException, ParseException, IOException {
         byte[] bytes = reportservice.fakturPenjualan(id, idOutlet);
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(bytes));
         HttpHeaders headers = new HttpHeaders();

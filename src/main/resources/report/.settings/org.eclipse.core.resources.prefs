@@ -19,6 +19,7 @@ encoding/penjualan-barang.jrxml=UTF-8
 encoding/penjualan-detail-dengan-refrensi-pengeluaran.jrxml=UTF-8
 encoding/penjualan-detail-perkontak.jrxml=UTF-8
 encoding/penjualan-detail.jrxml=UTF-8
+encoding/penjualan-faktur.jrxml=UTF-8
 encoding/penjualan-v2.jrxml=UTF-8
 encoding/penjualan.jrxml=UTF-8
 encoding/struk.jrxml=UTF-8
